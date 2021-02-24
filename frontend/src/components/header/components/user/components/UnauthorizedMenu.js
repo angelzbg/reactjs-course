@@ -11,7 +11,7 @@ import { toggles } from '../../../constants';
 
 export default observer(({ wrapperRef, toggle, setToggle }) => {
   return (
-    <div id="user-menu" ref={wrapperRef} className={`unauthorized-user-menu-wrapper ${toggle ? 'active' : 'inactive'}`}>
+    <div id="user-menu" ref={wrapperRef} className={`user-menu-wrapper ${toggle ? 'active' : 'inactive'}`}>
       <div className="profile-icon" onClick={() => setToggle(!toggle ? toggles.main : toggles.closed)}>
         <PersonIcon />
       </div>

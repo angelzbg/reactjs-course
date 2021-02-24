@@ -1,20 +1,20 @@
-.unauthorized-user-menu-wrapper {
+.user-menu-wrapper {
   top: 8px;
   right: 16px;
   position: absolute;
   cursor: pointer;
 }
 
-.unauthorized-user-menu-wrapper.inactive:hover {
+.user-menu-wrapper.inactive:hover {
   opacity: 0.9;
 }
 
-.unauthorized-user-menu-wrapper.active .profile-icon {
+.user-menu-wrapper.active .profile-icon {
   background-color: var(--active-bgr);
   color: var(--active);
 }
 
-.unauthorized-user-menu-wrapper .profile-icon {
+.user-menu-wrapper .profile-icon {
   background-color: var(--medium);
   width: 40px;
   height: 40px;
@@ -22,7 +22,7 @@
   color: var(--light);
 }
 
-.unauthorized-user-menu-wrapper .profile-icon svg {
+.user-menu-wrapper .profile-icon svg {
   margin-top: 8px;
   margin-left: 8px;
   width: 25px;
