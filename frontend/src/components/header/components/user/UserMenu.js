@@ -9,18 +9,19 @@ import { useStore } from '../../../../store/store';
 import AuthorizedMenu from './components/AuthorizedMenu';
 import UnauthorizedMenu from './components/UnauthorizedMenu';
 
+import { toggles } from '../../constants';
+
 export default observer(() => {
   const store = useStore();
 
-  const [toggle, setToggle] = useState('');
-  const closeToggle = () => setToggle('');
+  const [toggle, setToggle] = useState(toggles.closed);
 
   const wrapperRef = useRef(null);
 
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (wrapperRef && wrapperRef.current && !wrapperRef.current.contains(e.target) && e.target.id !== 'user-menu') {
-        closeToggle();
+        setToggle(toggles.closed);
       }
     };
 
@@ -32,8 +33,8 @@ export default observer(() => {
   }, []);
 
   return store.user ? (
-    <AuthorizedMenu {...{ wrapperRef, toggle, setToggle, closeToggle }} />
+    <AuthorizedMenu {...{ wrapperRef, toggle, setToggle }} />
   ) : (
-    <UnauthorizedMenu {...{ wrapperRef, toggle, setToggle, closeToggle }} />
+    <UnauthorizedMenu {...{ wrapperRef, toggle, setToggle }} />
   );
 });

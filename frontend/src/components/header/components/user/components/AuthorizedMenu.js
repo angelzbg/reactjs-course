@@ -6,13 +6,15 @@ import { useStore } from '../../../../../store/store';
 
 import { PersonIcon } from '@primer/octicons-react';
 
-export default observer(({ wrapperRef, toggle, setToggle, closeToggle }) => {
+import { toggles } from '../../../constants';
+
+export default observer(({ wrapperRef, toggle, setToggle }) => {
   return (
     <div
       id="user-menu"
       ref={wrapperRef}
       className={`authorized-user-menu-wrapper ${toggle ? 'active' : 'inactive'}`}
-      onClick={() => (!toggle ? setToggle('main') : closeToggle())}
+      onClick={() => setToggle(!toggle ? toggles.main : toggles.closed)}
     >
       <PersonIcon size="small" />
     </div>

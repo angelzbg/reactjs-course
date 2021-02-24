@@ -8,6 +8,8 @@ import { SunIcon, MoonIcon, ChevronLeftIcon } from '@primer/octicons-react';
 
 import { setColorScheme } from '../../../../../utils/themes';
 
+import { toggles } from '../../../constants';
+
 export default observer(({ setToggle }) => {
   const store = useStore();
 
@@ -26,7 +28,7 @@ export default observer(({ setToggle }) => {
             onMouseEnter={() => setColorScheme(name)}
             onClick={() => {
               store.nextTheme(name);
-              setToggle('main');
+              setToggle(toggles.main);
             }}
           >
             <div className={`user-menu-icon ${name}`}>{icon}</div> <div className="user-menu-title">{name} theme</div>
@@ -34,7 +36,7 @@ export default observer(({ setToggle }) => {
         ))}
       </div>
       <div className="user-menu-separator" />
-      <div className="user-menu-item" onClick={() => setToggle('main')}>
+      <div className="user-menu-item" onClick={() => setToggle(toggles.main)}>
         <div className="user-menu-icon">
           <ChevronLeftIcon />
         </div>{' '}

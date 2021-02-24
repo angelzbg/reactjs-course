@@ -6,19 +6,11 @@ import { Link, withRouter } from 'react-router-dom';
 import { observer } from 'mobx-react';
 import { useStore } from '../../../../store/store';
 
-import { FlameIcon, OctofaceIcon, OrganizationIcon, SearchIcon, HistoryIcon } from '@primer/octicons-react';
+import { links } from '../../constants';
 
 export default observer(
   withRouter(({ location: { pathname } }) => {
     const store = useStore();
-
-    const links = [
-      { path: '/', name: 'Home', icon: FlameIcon },
-      { path: '/developers', name: 'Developers', icon: OctofaceIcon },
-      { path: '/organizations', name: 'Organizations', icon: OrganizationIcon },
-      { path: '/search', name: 'Search', icon: SearchIcon },
-      { path: '/activity', name: 'Activity', icon: HistoryIcon, auth: '/login' },
-    ];
 
     return (
       <div className="navigation-wrapper">

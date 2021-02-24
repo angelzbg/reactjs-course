@@ -7,15 +7,17 @@ import { PersonIcon, NorthStarIcon, SignInIcon, GlobeIcon } from '@primer/octico
 
 import Themes from './Themes';
 
-export default observer(({ wrapperRef, toggle, setToggle, closeToggle }) => {
+import { toggles } from '../../../constants';
+
+export default observer(({ wrapperRef, toggle, setToggle }) => {
   return (
     <div id="user-menu" ref={wrapperRef} className={`unauthorized-user-menu-wrapper ${toggle ? 'active' : 'inactive'}`}>
-      <div className="profile-icon" onClick={() => (!toggle ? setToggle('main') : closeToggle())}>
+      <div className="profile-icon" onClick={() => setToggle(!toggle ? toggles.main : toggles.closed)}>
         <PersonIcon />
       </div>
-      {toggle === 'main' && (
+      {toggle === toggles.main && (
         <div className="user-menu-pop">
-          <div className="user-menu-item" onClick={() => setToggle('themes')}>
+          <div className="user-menu-item" onClick={() => setToggle(toggles.themes)}>
             <div className="user-menu-icon">
               <NorthStarIcon />
             </div>{' '}
@@ -36,7 +38,7 @@ export default observer(({ wrapperRef, toggle, setToggle, closeToggle }) => {
           </Link>
         </div>
       )}
-      {toggle === 'themes' && <Themes {...{ setToggle }} />}
+      {toggle === toggles.themes && <Themes {...{ setToggle }} />}
     </div>
   );
 });
