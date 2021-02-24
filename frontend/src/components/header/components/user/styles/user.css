@@ -1,0 +1,99 @@
+.unauthorized-user-menu-wrapper {
+  top: 8px;
+  right: 16px;
+  position: absolute;
+  cursor: pointer;
+}
+
+.unauthorized-user-menu-wrapper.inactive:hover {
+  opacity: 0.9;
+}
+
+.unauthorized-user-menu-wrapper.active .profile-icon {
+  background-color: var(--active-bgr);
+  color: var(--active);
+}
+
+.unauthorized-user-menu-wrapper .profile-icon {
+  background-color: var(--medium);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  color: var(--light);
+}
+
+.unauthorized-user-menu-wrapper .profile-icon svg {
+  margin-top: 8px;
+  margin-left: 8px;
+  width: 25px;
+  height: 25px;
+}
+
+.user-menu-pop {
+  -webkit-animation: popup 0.2s;
+          animation: popup 0.2s;
+  cursor: default;
+  padding: 6px;
+  width: 280px;
+  background-color: var(--dark);
+  position: absolute;
+  right: 0;
+  top: 46px;
+  border-radius: 10px;
+  -webkit-box-shadow: 15px 15px 50px rgba(0, 0, 0, 0.2);
+  box-shadow: 15px 15px 50px rgba(0, 0, 0, 0.2);
+}
+
+.user-menu-pop .user-menu-separator {
+  height: 1px;
+  margin: 8px;
+  background-color: var(--medium);
+}
+
+.user-menu-pop .user-menu-item {
+  border-radius: 8px;
+  padding: 6px;
+  cursor: pointer;
+  display: block;
+  text-decoration: none;
+}
+
+.user-menu-pop .user-menu-item:hover {
+  background-color: var(--medium);
+}
+
+.user-menu-pop .user-menu-item .user-menu-icon {
+  width: 36px;
+  height: 36px;
+  color: var(--lightest);
+  background-color: var(--medium2);
+  display: inline-block;
+  border-radius: 50%;
+  background-clip: padding-box;
+}
+
+.user-menu-pop .user-menu-item .user-menu-icon.Light {
+  color: #ebcc67;
+}
+
+.user-menu-pop .user-menu-item .user-menu-icon.Dark {
+  color: #4e00ba;
+}
+
+.user-menu-pop .user-menu-item .user-menu-icon svg {
+  width: 20px;
+  height: 20px;
+  margin-top: 8px;
+  margin-left: 8px;
+}
+
+.user-menu-pop .user-menu-item .user-menu-title {
+  display: inline-block;
+  font-size: 15px;
+  line-height: 36px;
+  height: 36px;
+  margin-left: 12px;
+  font-weight: bold;
+  color: var(--lightest);
+}
+/*# sourceMappingURL=user.css.map */

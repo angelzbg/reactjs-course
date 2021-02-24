@@ -1,13 +1,14 @@
-.navigation-wrapper {
+.header-wrapper {
   width: 100vw;
   height: 56px;
   background-color: var(--dark);
 }
 
 .header-logo {
-  width: 40px;
-  height: 40px;
-  margin-top: 8px;
-  margin-left: 16px;
+  width: 36px;
+  height: 44px;
+  position: absolute;
+  top: 6px;
+  left: 16px;
 }
 /*# sourceMappingURL=header.css.map */
