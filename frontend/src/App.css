@@ -4,13 +4,66 @@
   background-color: var(--darker);
 }
 
-@keyframes popup {
+.content-wrapper {
+  position: absolute;
+  top: 56px;
+  width: 657px;
+  height: calc(100vh - 56px);
+  left: calc((100vw - 657px) / 2);
+}
+
+.scroll-h {
+  overflow-y: auto;
+  /* width */
+  /* Track */
+  /* Handle */
+}
+
+.scroll-h::-webkit-scrollbar {
+  width: 10px;
+}
+
+.scroll-h::-webkit-scrollbar-track {
+  background-color: var(--darker);
+  width: 10px;
+}
+
+.scroll-h::-webkit-scrollbar-track:hover {
+  background-color: var(--scroll);
+}
+
+.scroll-h::-webkit-scrollbar-thumb {
+  background-color: var(--scroll1);
+  border-radius: 4px;
+}
+
+.scroll-h::-webkit-scrollbar-thumb:hover {
+  background-color: var(--scroll2);
+}
+
+@-webkit-keyframes popup {
   0% {
     opacity: 0.5;
-    transform: scaleX(0) scaleY(0);
+    -webkit-transform: scaleX(0) scaleY(0);
+            transform: scaleX(0) scaleY(0);
   }
   100% {
     opacity: 1;
-    transform: scaleX(1) scaleY(1);
+    -webkit-transform: scaleX(1) scaleY(1);
+            transform: scaleX(1) scaleY(1);
   }
 }
+
+@keyframes popup {
+  0% {
+    opacity: 0.5;
+    -webkit-transform: scaleX(0) scaleY(0);
+            transform: scaleX(0) scaleY(0);
+  }
+  100% {
+    opacity: 1;
+    -webkit-transform: scaleX(1) scaleY(1);
+            transform: scaleX(1) scaleY(1);
+  }
+}
+/*# sourceMappingURL=app.css.map */

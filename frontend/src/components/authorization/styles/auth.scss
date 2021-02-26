@@ -1,0 +1,104 @@
+.login-wrapper {
+  background-color: var(--dark);
+  border-radius: 16px;
+  -webkit-box-shadow: 0 1px 4px var(--shadow1), 0 0 40px var(--shadow2);
+  -moz-box-shadow: 0 1px 4px var(--shadow1), 0 0 40px var(--shadow2);
+  box-shadow: 0 1px 4px var(--shadow1), 0 0 40px var(--shadow2);
+  width: max-content;
+  text-align: center;
+  //left: calc((100% - 382px) / 2);
+  //top: 56px;
+  padding: 32px;
+  //position: absolute;
+  margin: 0 auto;
+  margin-top: calc((100vh - 56px - 50%) / 2);
+}
+
+.auth-form {
+  display: block;
+}
+
+.auth-input {
+  outline: none;
+  display: block;
+  background-color: var(--medium);
+  color: var(--lightest);
+  font-size: 16px;
+  border-radius: 16px;
+  border: 1px solid var(--light);
+  &.error {
+    border: 1px solid var(--error);
+  }
+  padding: 6px 12px;
+  width: 260px;
+  &::placeholder {
+    color: var(--light);
+  }
+}
+
+.auth-btn {
+  outline: none;
+  display: block;
+  font-size: 15px;
+  font-weight: bold;
+  background-color: var(--medium);
+  color: var(--lightest);
+  border: 2px solid var(--dark);
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin: 0 auto;
+  &:hover {
+    color: var(--light);
+    background-color: var(--dark);
+    border: 2px solid var(--darker);
+  }
+}
+
+.auth-info {
+  font-size: 17px;
+  color: var(--light);
+  margin-top: 16px;
+  a {
+    color: var(--link2);
+    text-decoration: none;
+  }
+}
+
+.auth-error-network-wrap {
+  margin: 0 auto;
+  margin-top: 4px;
+  width: max-content;
+  height: 28px;
+}
+
+.auth-error-network {
+  margin: 0 auto;
+  font-weight: bold;
+  font-size: 15px;
+  color: var(--lightest);
+  background-color: var(--error);
+  width: max-content;
+  padding: 4px 16px;
+  border-radius: 6px;
+  border: 1px solid var(--darker);
+}
+
+.auth-error-wrap {
+  margin: 0 auto;
+  margin-top: 2px;
+  margin-bottom: 4px;
+  width: max-content;
+  height: 25px;
+}
+
+.auth-error {
+  padding: 4px 8px;
+  font-size: 13px;
+  margin: 0 auto;
+  font-weight: bold;
+  color: var(--lightest);
+  background-color: var(--error);
+  border-radius: 6px;
+  border: 1px solid var(--darker);
+}

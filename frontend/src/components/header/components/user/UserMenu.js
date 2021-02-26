@@ -20,7 +20,7 @@ export default observer(() => {
 
   useEffect(() => {
     const handleClickOutside = (e) => {
-      if (wrapperRef && wrapperRef.current && !wrapperRef.current.contains(e.target) && e.target.id !== 'user-menu') {
+      if (!wrapperRef?.current?.contains(e.target) && e.target.id !== 'user-menu') {
         setToggle(toggles.closed);
       }
     };

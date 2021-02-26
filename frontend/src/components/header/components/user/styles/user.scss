@@ -3,6 +3,7 @@
   right: 16px;
   position: absolute;
   cursor: pointer;
+  z-index: 3;
   &.inactive {
     &:hover {
       opacity: 0.9;
@@ -10,6 +11,9 @@
   }
   &.active {
     .profile-icon {
+      -webkit-box-shadow: 0 0px 2px var(--shadow1), 0 0 10px var(--shadow2);
+      -moz-box-shadow: 0 0px 2px var(--shadow1), 0 0 10px var(--shadow2);
+      box-shadow: 0 0px 2px var(--shadow1), 0 0 10px var(--shadow2);
       background-color: var(--active-bgr);
       color: var(--active);
     }
@@ -30,6 +34,9 @@
 }
 
 .user-menu-pop {
+  -webkit-box-shadow: 0 0px 2px var(--shadow1), 0 0 10px var(--shadow2);
+  -moz-box-shadow: 0 0px 2px var(--shadow1), 0 0 10px var(--shadow2);
+  box-shadow: 0 0px 2px var(--shadow1), 0 0 10px var(--shadow2);
   animation: popup 0.2s;
   cursor: default;
   padding: 6px;

@@ -24,13 +24,13 @@ export default observer(({ wrapperRef, toggle, setToggle }) => {
             <div className="user-menu-title">Change theme</div>
           </div>
           <div className="user-menu-separator" />
-          <Link to="/login" className="user-menu-item">
+          <Link to="/login" className="user-menu-item" onClick={() => setToggle(toggles.closed)}>
             <div className="user-menu-icon">
               <SignInIcon />
             </div>{' '}
             <div className="user-menu-title">Sign in</div>
           </Link>
-          <Link to="/register" className="user-menu-item">
+          <Link to="/register" className="user-menu-item" onClick={() => setToggle(toggles.closed)}>
             <div className="user-menu-icon">
               <GlobeIcon />
             </div>{' '}

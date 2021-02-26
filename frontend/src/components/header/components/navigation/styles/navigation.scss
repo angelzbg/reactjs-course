@@ -7,7 +7,7 @@
   text-align: center;
 
   .nav-icon-link {
-    width: 105px;
+    width: 125px;
     height: 41px;
     margin-top: 4px;
     display: inline-block;
@@ -40,7 +40,7 @@
       color: var(--light);
     }
     .tip-navigation {
-      width: 89px;
+      width: 109px;
       border-radius: 8px;
       padding: 4px 8px 5px 8px;
       color: var(--darker);
@@ -50,6 +50,7 @@
       opacity: 0.85;
       position: absolute;
       display: none;
+      z-index: 2;
     }
   }
 }

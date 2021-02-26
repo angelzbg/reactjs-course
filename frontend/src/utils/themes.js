@@ -5,10 +5,6 @@ const colors = {
     '--medium': '#3a3b3c',
     '--dark': '#242526',
     '--darker': '#18191a',
-    '--link1': '#2398eb',
-    '--link2': '#29a6ff',
-    '--shadow1': 'rgba(0, 0, 0, 0.3)',
-    '--shadow2': 'rgba(0, 0, 0, 0.1)',
     '--active': 'rgba(61, 174, 255, 1)',
     '--active-bgr': 'rgba(61, 174, 255, 0.1)',
     '--medium2': '#4a4a4a',
@@ -19,15 +15,24 @@ const colors = {
     '--medium': '#becae6',
     '--dark': '#8b9dc3',
     '--darker': '#3b5998',
-    '--link1': '#2398eb',
-    '--link2': '#29a6ff',
-    '--shadow1': 'rgba(0, 0, 0, 0.3)',
-    '--shadow2': 'rgba(0, 0, 0, 0.1)',
     '--active': 'rgba(255, 255, 255, 1)',
     '--active-bgr': 'rgba(255, 255, 255, 0.2)',
     '--medium2': '#b0bad4',
   },
 };
+
+const sameColors = {
+  '--link1': '#2398eb',
+  '--link2': '#29a6ff',
+  '--shadow1': 'rgba(0, 0, 0, 0.3)',
+  '--shadow2': 'rgba(0, 0, 0, 0.1)',
+  '--scroll': 'rgba(255, 255, 255, 0.01)',
+  '--scroll1': 'rgba(255, 255, 255, 0.1)',
+  '--scroll2': 'rgba(255, 255, 255, 0.15)',
+  '--error': '#961b0b',
+};
+
+Object.values(colors).forEach((holder) => Object.assign(holder, sameColors));
 
 const themes = Object.keys(colors);
 const fallback = themes[0];

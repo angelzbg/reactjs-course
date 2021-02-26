@@ -1,0 +1,53 @@
+.app-wrapper {
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--darker);
+}
+
+.content-wrapper {
+  //background-color: yellowgreen;
+  position: absolute;
+  top: 56px;
+  width: 657px;
+  height: calc(100vh - 56px);
+  left: calc((100vw - 657px) / 2);
+}
+
+.scroll-h {
+  overflow-y: auto;
+
+  /* width */
+  &::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  /* Track */
+  &::-webkit-scrollbar-track {
+    //border-radius: 4px;
+    background-color: var(--darker);
+    width: 10px;
+    &:hover {
+      background-color: var(--scroll);
+    }
+  }
+
+  /* Handle */
+  &::-webkit-scrollbar-thumb {
+    background-color: var(--scroll1);
+    border-radius: 4px;
+    &:hover {
+      background-color: var(--scroll2);
+    }
+  }
+}
+
+@keyframes popup {
+  0% {
+    opacity: 0.5;
+    transform: scaleX(0) scaleY(0);
+  }
+  100% {
+    opacity: 1;
+    transform: scaleX(1) scaleY(1);
+  }
+}
