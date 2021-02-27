@@ -25,10 +25,10 @@ export default observer(() => {
       }
     };
 
-    document.addEventListener('click', handleClickOutside, { capture: true });
+    document.addEventListener('mousedown', handleClickOutside, { capture: true });
 
     return () => {
-      document.removeEventListener('click', handleClickOutside, { capture: true });
+      document.removeEventListener('mousedown', handleClickOutside, { capture: true });
     };
   }, []);
 
