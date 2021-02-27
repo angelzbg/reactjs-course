@@ -2,10 +2,10 @@ import { PersonIcon, ShieldLockIcon, ShieldIcon } from '@primer/octicons-react';
 
 export const loginFields = [
   {
-    name: 'logon',
+    name: 'login',
     el: 'input',
     type: 'text',
-    placeholder: 'Logon name',
+    placeholder: 'Login name',
     value: '',
     validate: (value) => !!value.length,
     errorMsg: 'Field is required',
@@ -27,10 +27,10 @@ export const loginFields = [
 
 export const registerFields = [
   {
-    name: 'logon',
+    name: 'login',
     el: 'input',
     type: 'text',
-    placeholder: 'Logon name',
+    placeholder: 'Login name',
     value: '',
     validate: (value) => !!value.match(/^[0-9a-zA-Z]{3,}$/),
     errorMsg: '3 to 14 non special characters',

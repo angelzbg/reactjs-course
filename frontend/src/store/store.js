@@ -12,9 +12,9 @@ const store = {
     store.theme = setTheme(theme);
   },
 
-  signIn: async ({ logon = '', password = '' }) => {
+  signIn: async ({ login = '', password = '' }) => {
     runInAction(() => (store.isLoading = true));
-    console.log(logon, password);
+    console.log(login, password);
     const result = await new Promise((resolve, reject) => {
       setTimeout(() => {
         resolve('Successful sign in mock');
@@ -24,9 +24,9 @@ const store = {
     return result;
   },
 
-  signUp: async ({ logon = '', password = '', repeatPassword = '' }) => {
+  signUp: async ({ login = '', password = '', repeatPassword = '' }) => {
     runInAction(() => (store.isLoading = true));
-    console.log(logon, password, repeatPassword);
+    console.log(login, password, repeatPassword);
     const result = await new Promise((resolve, reject) => {
       setTimeout(() => {
         resolve('Successful sign up mock');
