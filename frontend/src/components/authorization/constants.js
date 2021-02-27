@@ -57,7 +57,7 @@ export const registerFields = [
       const password = observable.fields.find(({ name }) => name === 'password').value;
       return password === value && !!password;
     },
-    errorMsg: 'Dont match',
+    errorMsg: "Don't match",
     icon: ShieldIcon,
   },
 ];
