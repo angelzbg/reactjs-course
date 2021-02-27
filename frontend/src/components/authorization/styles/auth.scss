@@ -1,4 +1,4 @@
-.login-wrapper {
+.auth-form-wrapper {
   background-color: var(--dark);
   border-radius: 16px;
   -webkit-box-shadow: 0 1px 4px var(--shadow1), 0 0 40px var(--shadow2);
@@ -8,10 +8,11 @@
   text-align: center;
   //left: calc((100% - 382px) / 2);
   //top: 56px;
-  padding: 32px;
+  padding: 16px 32px;
   //position: absolute;
   margin: 0 auto;
   margin-top: calc((100vh - 56px - 50%) / 2);
+  animation: popup 0.2s;
 }
 
 .auth-form {
@@ -48,6 +49,7 @@
   border-radius: 8px;
   cursor: pointer;
   margin: 0 auto;
+  margin-top: 18px;
   &:hover {
     color: var(--light);
     background-color: var(--dark);
@@ -58,10 +60,13 @@
 .auth-info {
   font-size: 17px;
   color: var(--light);
-  margin-top: 16px;
+  margin-top: 12px;
   a {
     color: var(--link2);
     text-decoration: none;
+    &:hover {
+      color: var(--link1);
+    }
   }
 }
 
@@ -86,19 +91,21 @@
 
 .auth-error-wrap {
   margin: 0 auto;
-  margin-top: 2px;
-  margin-bottom: 4px;
+  //margin-top: 2px;
+  margin-top: 4px;
+  margin-bottom: -2px;
   width: max-content;
   height: 25px;
 }
 
 .auth-error {
+  width: 240px;
   padding: 4px 8px;
   font-size: 13px;
   margin: 0 auto;
   font-weight: bold;
-  color: var(--lightest);
+  color: var(--light);
   background-color: var(--error);
-  border-radius: 6px;
-  border: 1px solid var(--darker);
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
 }
