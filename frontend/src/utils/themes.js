@@ -9,6 +9,8 @@ const colors = {
     '--active-bgr': 'rgba(61, 174, 255, 0.1)',
     '--medium2': '#4a4a4a',
     '--blur': 'rgba(24, 25, 26, 0.2)',
+    '--error': '#990000',
+    '--error2': '#800000',
   },
   Light: {
     '--lightest': '#ffffff',
@@ -20,6 +22,8 @@ const colors = {
     '--active-bgr': 'rgba(255, 255, 255, 0.2)',
     '--medium2': '#b0bad4',
     '--blur': 'rgba(59, 89, 152, 0.2)',
+    '--error': '#cc0000',
+    '--error2': '#b30000',
   },
 };
 
@@ -31,8 +35,6 @@ const sameColors = {
   '--scroll': 'rgba(255, 255, 255, 0.01)',
   '--scroll1': 'rgba(255, 255, 255, 0.1)',
   '--scroll2': 'rgba(255, 255, 255, 0.15)',
-  '--error': '#cc0000',
-  '--error2': '#b30000',
 };
 
 Object.values(colors).forEach((holder) => Object.assign(holder, sameColors));
