@@ -8,6 +8,7 @@ const colors = {
     '--active': 'rgba(61, 174, 255, 1)',
     '--active-bgr': 'rgba(61, 174, 255, 0.1)',
     '--medium2': '#4a4a4a',
+    '--blur': 'rgba(24, 25, 26, 0.2)',
   },
   Light: {
     '--lightest': '#ffffff',
@@ -18,6 +19,7 @@ const colors = {
     '--active': 'rgba(255, 255, 255, 1)',
     '--active-bgr': 'rgba(255, 255, 255, 0.2)',
     '--medium2': '#b0bad4',
+    '--blur': 'rgba(59, 89, 152, 0.2)',
   },
 };
 
