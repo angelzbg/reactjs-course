@@ -7,7 +7,7 @@ const store = {
   user: null,
 
   theme: getTheme(),
-  themes: themes,
+  themes,
   nextTheme: async (theme) => {
     store.theme = setTheme(theme);
   },
