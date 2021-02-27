@@ -30,7 +30,7 @@ export const registerFields = [
     value: '',
     validate: (value) => value.length > 2,
     errorMsg: 'Must be at least 3 characters',
-    highlight: ['USER_EXISTS'],
+    highlight: ['LOGON_EXISTS'],
   },
   {
     name: 'password',
@@ -47,7 +47,10 @@ export const registerFields = [
     type: 'password',
     placeholder: 'Repeat password',
     value: '',
-    validate: (value, observable) => observable.fields[1].value === value && !!observable.fields[1].value,
+    validate: (value, observable) => {
+      const password = observable.fields.find(({ name }) => name === 'password').value;
+      return password === value && !!password;
+    },
     errorMsg: "Passwords don't match",
   },
 ];

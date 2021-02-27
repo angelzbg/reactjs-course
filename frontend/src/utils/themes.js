@@ -29,7 +29,8 @@ const sameColors = {
   '--scroll': 'rgba(255, 255, 255, 0.01)',
   '--scroll1': 'rgba(255, 255, 255, 0.1)',
   '--scroll2': 'rgba(255, 255, 255, 0.15)',
-  '--error': '#961b0b',
+  '--error': '#cc0000',
+  '--error2': '#b30000',
 };
 
 Object.values(colors).forEach((holder) => Object.assign(holder, sameColors));

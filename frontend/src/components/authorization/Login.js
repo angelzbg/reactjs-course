@@ -27,27 +27,36 @@ export default observer(() => {
   return (
     <div className="auth-form-wrapper">
       <form onSubmit={onSubmit} className="auth-form" autoComplete="new-password">
-        {fieldsObs.fields.map(({ name, el, value, type, placeholder, error, errorMsg, highlight }, i) => (
-          <div key={`input-wrapper-${i}`}>
-            <div className="auth-error-wrap">
-              <span className="auth-error" style={{ display: error ? 'block' : 'none' }}>
-                {errorMsg}
-              </span>
+        {fieldsObs.fields.map(({ name, el, value, type, placeholder, error, errorMsg, highlight }, i) => {
+          const [errorClass, setInput] = [
+            error || highlight?.includes(fieldsObs.error) ? 'error' : '',
+            fieldsObs.setInput,
+          ];
+
+          return (
+            <div key={`input-wrapper-${i}`}>
+              <div className="auth-error-wrap">
+                <span className="auth-error" style={{ display: error ? 'block' : 'none' }}>
+                  {errorMsg}
+                </span>
+              </div>
+              {el === 'input' && (
+                <div className={`auth-input-wrap ${errorClass}`}>
+                  <Input
+                    {...{
+                      className: `auth-input ${errorClass}`,
+                      value,
+                      name,
+                      type,
+                      placeholder,
+                      setInput,
+                    }}
+                  />
+                </div>
+              )}
             </div>
-            {el === 'input' && (
-              <Input
-                {...{
-                  className: `auth-input ${error || highlight?.includes(fieldsObs.error) ? 'error' : ''}`,
-                  value,
-                  name,
-                  type,
-                  placeholder,
-                  setInput: fieldsObs.setInput,
-                }}
-              />
-            )}
-          </div>
-        ))}
+          );
+        })}
         <button className="auth-btn" type="submit">
           Sign in
         </button>

@@ -13,10 +13,23 @@
   margin: 0 auto;
   margin-top: calc((100vh - 56px - 50%) / 2);
   animation: popup 0.2s;
+  position: relative;
 }
 
 .auth-form {
   display: block;
+}
+
+.auth-input-wrap {
+  border-radius: 17px;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+  border: 1px solid transparent;
+  border-top: none;
+  &.error {
+    border: 1px solid var(--darker);
+    border-top: none;
+  }
 }
 
 .auth-input {
@@ -29,6 +42,9 @@
   border: 1px solid var(--light);
   &.error {
     border: 1px solid var(--error);
+    &::placeholder {
+      color: var(--error2);
+    }
   }
   padding: 6px 12px;
   width: 260px;
@@ -62,11 +78,8 @@
   color: var(--light);
   margin-top: 12px;
   a {
-    color: var(--link2);
+    color: var(--link1);
     text-decoration: none;
-    &:hover {
-      color: var(--link1);
-    }
   }
 }
 
@@ -93,9 +106,12 @@
   margin: 0 auto;
   //margin-top: 2px;
   margin-top: 4px;
-  margin-bottom: -2px;
+  //margin-bottom: -3px;
   width: max-content;
   height: 25px;
+  z-index: 5;
+  //border-bottom: 2px solid var(--darker);
+  margin-bottom: -1px;
 }
 
 .auth-error {
@@ -108,4 +124,7 @@
   background-color: var(--error);
   border-top-left-radius: 6px;
   border-top-right-radius: 6px;
+  border-top: 1px solid var(--darker);
+  border-left: 1px solid var(--darker);
+  border-right: 1px solid var(--darker);
 }
