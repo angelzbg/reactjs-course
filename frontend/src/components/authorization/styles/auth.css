@@ -168,6 +168,7 @@
 .auth-input-icon {
   color: var(--light);
   padding: 8px;
+  padding-left: 0;
   width: 24px;
   height: 24px;
   display: inline-block;
