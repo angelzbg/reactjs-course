@@ -32,9 +32,9 @@ export const registerFields = [
     type: 'text',
     placeholder: 'Logon name',
     value: '',
-    validate: (value) => value.length > 2,
-    errorMsg: 'Must be at least 3 characters',
-    highlight: ['LOGON_EXISTS'],
+    validate: (value) => !!value.match(/^[0-9a-zA-Z]{3,}$/),
+    errorMsg: '3 to 14 non special characters',
+    highlight: ['LOGON_TAKEN'],
     icon: PersonIcon,
   },
   {
@@ -43,8 +43,8 @@ export const registerFields = [
     type: 'password',
     placeholder: 'Password',
     value: '',
-    validate: (value) => value.length > 4,
-    errorMsg: 'Must be at least 5 characters',
+    validate: (value) => !!value.match(/^\S{5,}$/),
+    errorMsg: '5+ non whitespace characters',
     icon: ShieldLockIcon,
   },
   {
@@ -57,7 +57,7 @@ export const registerFields = [
       const password = observable.fields.find(({ name }) => name === 'password').value;
       return password === value && !!password;
     },
-    errorMsg: "Passwords don't match",
+    errorMsg: 'Dont match',
     icon: ShieldIcon,
   },
 ];
