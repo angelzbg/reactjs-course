@@ -27,7 +27,7 @@ export default observer(() => {
   return (
     <div className="auth-form-wrapper">
       <form onSubmit={onSubmit} className="auth-form" autoComplete="new-password">
-        {fieldsObs.fields.map(({ name, el, value, type, placeholder, error, errorMsg, highlight }, i) => {
+        {fieldsObs.fields.map(({ name, el, value, type, placeholder, error, errorMsg, highlight, icon }, i) => {
           const [errorClass, setInput] = [
             error || highlight?.includes(fieldsObs.error) ? 'error' : '',
             fieldsObs.setInput,
@@ -35,25 +35,28 @@ export default observer(() => {
 
           return (
             <div key={`input-wrapper-${i}`}>
-              <div className="auth-error-wrap">
-                <span className="auth-error" style={{ display: error ? 'block' : 'none' }}>
-                  {errorMsg}
-                </span>
-              </div>
-              {el === 'input' && (
-                <div className={`auth-input-wrap ${errorClass}`}>
-                  <Input
-                    {...{
-                      className: `auth-input ${errorClass}`,
-                      value,
-                      name,
-                      type,
-                      placeholder,
-                      setInput,
-                    }}
-                  />
+              {icon({ className: `auth-input-icon ${errorClass}` })}
+              <div style={{ display: 'inline-block' }}>
+                <div className="auth-error-wrap">
+                  <span className="auth-error" style={{ display: error ? 'block' : 'none' }}>
+                    {errorMsg}
+                  </span>
                 </div>
-              )}
+                {el === 'input' && (
+                  <div className={`auth-input-wrap ${errorClass}`}>
+                    <Input
+                      {...{
+                        className: `auth-input ${errorClass}`,
+                        value,
+                        name,
+                        type,
+                        placeholder,
+                        setInput,
+                      }}
+                    />
+                  </div>
+                )}
+              </div>
             </div>
           );
         })}

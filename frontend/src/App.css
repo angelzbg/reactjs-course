@@ -6,9 +6,9 @@
 
 .content-wrapper {
   position: absolute;
-  top: 56px;
+  top: 57px;
   width: 657px;
-  height: calc(100vh - 56px);
+  height: calc(100vh - 57px);
   left: calc((100vw - 657px) / 2);
 }
 

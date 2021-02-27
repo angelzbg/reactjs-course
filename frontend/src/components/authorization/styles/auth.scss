@@ -80,6 +80,9 @@
   a {
     color: var(--link1);
     text-decoration: none;
+    &:hover {
+      text-decoration: underline;
+    }
   }
 }
 
@@ -127,4 +130,16 @@
   border-top: 1px solid var(--darker);
   border-left: 1px solid var(--darker);
   border-right: 1px solid var(--darker);
+}
+
+.auth-input-icon {
+  color: var(--light);
+  padding: 8px;
+  width: 24px;
+  height: 24px;
+  display: inline-block;
+  margin-bottom: -15px;
+  &.error {
+    color: var(--error);
+  }
 }

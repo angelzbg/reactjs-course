@@ -1,3 +1,5 @@
+import { PersonIcon, ShieldLockIcon, ShieldIcon } from '@primer/octicons-react';
+
 export const loginFields = [
   {
     name: 'logon',
@@ -8,6 +10,7 @@ export const loginFields = [
     validate: (value) => !!value.length,
     errorMsg: 'Field is required',
     highlight: ['WRONG_CREDENTIALS'],
+    icon: PersonIcon,
   },
   {
     name: 'password',
@@ -18,6 +21,7 @@ export const loginFields = [
     validate: (value) => !!value.length,
     errorMsg: 'Field is required',
     highlight: ['WRONG_CREDENTIALS'],
+    icon: ShieldLockIcon,
   },
 ];
 
@@ -31,6 +35,7 @@ export const registerFields = [
     validate: (value) => value.length > 2,
     errorMsg: 'Must be at least 3 characters',
     highlight: ['LOGON_EXISTS'],
+    icon: PersonIcon,
   },
   {
     name: 'password',
@@ -40,6 +45,7 @@ export const registerFields = [
     value: '',
     validate: (value) => value.length > 4,
     errorMsg: 'Must be at least 5 characters',
+    icon: ShieldLockIcon,
   },
   {
     name: 'repeatPassword',
@@ -52,5 +58,6 @@ export const registerFields = [
       return password === value && !!password;
     },
     errorMsg: "Passwords don't match",
+    icon: ShieldIcon,
   },
 ];
