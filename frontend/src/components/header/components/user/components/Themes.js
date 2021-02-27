@@ -14,8 +14,8 @@ export default observer(({ setToggle }) => {
   const store = useStore();
 
   const themes = [
-    { name: store.themes[0], icon: <SunIcon /> },
-    { name: store.themes[1], icon: <MoonIcon /> },
+    { name: store.themes[0], icon: <MoonIcon /> },
+    { name: store.themes[1], icon: <SunIcon /> },
   ];
 
   return (
