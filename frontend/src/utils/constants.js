@@ -1,4 +1,4 @@
 export const errorCodes = {
   WRONG_CREDENTIALS: 'Wrong credentials!',
-  USER_EXISTS: 'User already exists!',
+  LOGON_TAKEN: 'Logon name already taken!',
 };

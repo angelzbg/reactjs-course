@@ -16,11 +16,13 @@ export default observer(() => {
   const store = useStore();
   const fieldsObs = FieldsObservable(loginFields);
 
-  const onSubmit = (event) => {
+  const onSubmit = async (event) => {
     event.preventDefault();
     if (!fieldsObs.validateFields()) {
       // Send login request
-      console.log('Send login request');
+      // console.log('Send login request');
+      const result = await store.signIn(fieldsObs.getBody());
+      console.log(result);
     }
   };
 
@@ -35,7 +37,7 @@ export default observer(() => {
 
           return (
             <div key={`input-wrapper-${i}`}>
-              {icon({ className: `auth-input-icon ${errorClass}` })}
+              {icon({ size: 'medium', className: `auth-input-icon ${errorClass}` })}
               <div style={{ display: 'inline-block' }}>
                 <div className="auth-error-wrap">
                   <span className="auth-error" style={{ display: error ? 'block' : 'none' }}>

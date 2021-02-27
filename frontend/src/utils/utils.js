@@ -24,6 +24,7 @@ const FieldsObservable = (fields = []) => {
 
       return error;
     },
+    getBody: () => Object.fromEntries(observable.fields.map(({ name, value }) => [name, value])),
   }));
 
   return observable;
