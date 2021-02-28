@@ -1,6 +1,6 @@
 import './styles/auth.css';
 
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Link, Redirect } from 'react-router-dom';
 
 import { useStore } from '../../store/store';
@@ -10,7 +10,7 @@ import { loginFields } from './constants';
 import { FieldsObservable } from '../../utils/utils';
 import Input from './partials/Input';
 
-import { errorCodes } from '../../utils/constants';
+import { networkCodes } from '../../utils/constants';
 
 export default observer(() => {
   const store = useStore();
@@ -19,9 +19,9 @@ export default observer(() => {
   const onSubmit = async (event) => {
     event.preventDefault();
     if (!fieldsObs.validateFields()) {
-      const result = await store.signIn(fieldsObs.getBody());
-      if (result.error) {
-        fieldsObs.setError(result.error);
+      const response = await store.signIn(fieldsObs.getBody());
+      if (response.error) {
+        fieldsObs.setError(response.error);
       }
     }
   };
@@ -72,7 +72,7 @@ export default observer(() => {
       </form>
       <div className="auth-error-network-wrap">
         <span className="auth-error-network" style={{ display: fieldsObs.error ? 'block' : 'none' }}>
-          {errorCodes[fieldsObs.error]}
+          {networkCodes[fieldsObs.error]}
         </span>
       </div>
       <div className="auth-info">

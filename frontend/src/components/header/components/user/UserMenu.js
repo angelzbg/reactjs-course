@@ -1,7 +1,6 @@
 import './styles/user.css';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Link, withRouter } from 'react-router-dom';
 
 import { observer } from 'mobx-react';
 import { useStore } from '../../../../store/store';

@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import React from 'react';
 
 import { observer } from 'mobx-react';
 import { useStore } from '../../../../../store/store';

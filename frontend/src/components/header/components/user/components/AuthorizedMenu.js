@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link, withRouter } from 'react-router-dom';
 
 import { observer } from 'mobx-react';
@@ -30,11 +30,9 @@ export default observer(({ wrapperRef, toggle, setToggle }) => {
           <div
             className="user-menu-item"
             onClick={async () => {
-              const result = await store.signOut();
-              if (result.okay) {
+              const response = await store.signOut();
+              if (response.okay) {
                 setToggle(toggles.closed);
-              } else {
-                // pub sub error
               }
             }}
           >
