@@ -1,4 +1,8 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+.sass-cache/
+*.css.map
+*.sass.map
+*.scss.map
 
 # dependencies
 /node_modules
