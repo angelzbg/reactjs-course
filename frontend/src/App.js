@@ -1,6 +1,6 @@
 import './app.css';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { HashRouter, Route } from 'react-router-dom';
 
 import { observer } from 'mobx-react';

@@ -12,32 +12,88 @@ const store = {
     store.theme = setTheme(theme);
   },
 
-  signIn: async ({ login = '', password = '' }) => {
+  signIn: async (body) => {
     runInAction(() => (store.isLoading = true));
-    console.log(login, password);
-    const result = await new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve('Successful sign in mock');
-      }, 2000);
-    });
-    runInAction(() => (store.isLoading = false));
+
+    const result = await (
+      await fetch('/api/login', {
+        method: 'POST',
+        body: JSON.stringify(body),
+        headers: { 'Content-Type': 'application/json' },
+      })
+    ).json();
+
+    if (result.okay) {
+      store.getUserInfo();
+    } else {
+      runInAction(() => (store.isLoading = false));
+    }
+
     return result;
   },
 
-  signUp: async ({ login = '', password = '', repeatPassword = '' }) => {
+  signUp: async (body) => {
     runInAction(() => (store.isLoading = true));
-    console.log(login, password, repeatPassword);
-    const result = await new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve('Successful sign up mock');
-      }, 2000);
-    });
+
+    const result = await (
+      await fetch('/api/register', {
+        method: 'POST',
+        body: JSON.stringify(body),
+        headers: { 'Content-Type': 'application/json' },
+      })
+    ).json();
+
+    if (result.okay) {
+      store.getUserInfo();
+    } else {
+      runInAction(() => (store.isLoading = false));
+    }
+
+    return result;
+  },
+
+  signOut: async () => {
+    runInAction(() => (store.isLoading = true));
+
+    const result = await (
+      await fetch('/api/logout', {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+      })
+    ).json();
+
+    if (result.okay) {
+      runInAction(() => (store.user = null));
+    }
+
     runInAction(() => (store.isLoading = false));
+
+    return result;
+  },
+
+  getUserInfo: async () => {
+    runInAction(() => (store.isLoading = true));
+
+    const result = await (
+      await fetch('/api/userInfo', {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+      })
+    ).json();
+
+    if (result.okay) {
+      runInAction(() => (store.user = result.okay));
+    }
+
+    runInAction(() => (store.isLoading = false));
+
     return result;
   },
 };
 
 makeAutoObservable(store);
+
+store.getUserInfo();
 
 const StoreContext = createContext(store);
 const useStore = () => useContext(StoreContext);

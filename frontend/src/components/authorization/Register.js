@@ -1,7 +1,7 @@
 import './styles/auth.css';
 
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Link, Redirect } from 'react-router-dom';
 
 import { useStore } from '../../store/store';
 import { observer } from 'mobx-react';
@@ -19,12 +19,16 @@ export default observer(() => {
   const onSubmit = async (event) => {
     event.preventDefault();
     if (!fieldsObs.validateFields()) {
-      // Send register request
-      // console.log('Send register request');
       const result = await store.signUp(fieldsObs.getBody());
-      console.log(result);
+      if (result.error) {
+        fieldsObs.setError(result.error);
+      }
     }
   };
+
+  if (store.user) {
+    return <Redirect to="/" />;
+  }
 
   return (
     <div className="auth-form-wrapper">

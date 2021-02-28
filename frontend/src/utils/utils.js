@@ -4,6 +4,7 @@ const FieldsObservable = (fields = []) => {
   const observable = useLocalObservable(() => ({
     fields,
     error: false,
+    setError: (errorCode = '') => (observable.error = errorCode),
     setInput: (f = '', val = '') => {
       const field = observable.fields.find(({ name }) => name === f);
       field.value = val;
