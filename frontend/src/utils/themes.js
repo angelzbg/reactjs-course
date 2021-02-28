@@ -10,7 +10,7 @@ const colors = {
     '--medium2': '#4a4a4a',
     '--blur': 'rgba(24, 25, 26, 0.2)',
     '--error': '#990000',
-    '--error2': '#800000',
+    '--error2': '#cc0000',
   },
   Light: {
     '--lightest': '#ffffff',
