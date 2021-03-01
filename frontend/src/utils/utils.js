@@ -31,4 +31,14 @@ const FieldsObservable = (fields = []) => {
   return observable;
 };
 
-export { FieldsObservable };
+const networkCall = async ({ path = '', method = '', body = {} }) => {
+  const req = { method, headers: { 'Content-Type': 'application/json' } };
+
+  if (method !== 'GET') {
+    req.body = JSON.stringify(body);
+  }
+
+  return await (await fetch(path, req)).json();
+};
+
+export { FieldsObservable, networkCall };

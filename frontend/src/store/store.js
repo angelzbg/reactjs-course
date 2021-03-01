@@ -2,6 +2,7 @@ import { makeAutoObservable, runInAction } from 'mobx';
 import { themes, getTheme, setTheme } from '../utils/themes';
 import { createContext, useContext } from 'react';
 import events from '../utils/events';
+import { networkCall } from '../utils/utils';
 
 const store = {
   isLoading: false,
@@ -16,13 +17,7 @@ const store = {
   signIn: async (body) => {
     runInAction(() => (store.isLoading = true));
 
-    const response = await (
-      await fetch('/api/login', {
-        method: 'POST',
-        body: JSON.stringify(body),
-        headers: { 'Content-Type': 'application/json' },
-      })
-    ).json();
+    const response = await networkCall({ path: '/api/login', method: 'POST', body });
 
     if (response.okay) {
       store.getUserInfo();
@@ -37,13 +32,7 @@ const store = {
   signUp: async (body) => {
     runInAction(() => (store.isLoading = true));
 
-    const response = await (
-      await fetch('/api/register', {
-        method: 'POST',
-        body: JSON.stringify(body),
-        headers: { 'Content-Type': 'application/json' },
-      })
-    ).json();
+    const response = await networkCall({ path: '/api/register', method: 'POST', body });
 
     if (response.okay) {
       events.trigger('notify', response);
@@ -58,12 +47,7 @@ const store = {
   signOut: async () => {
     runInAction(() => (store.isLoading = true));
 
-    const response = await (
-      await fetch('/api/logout', {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
-      })
-    ).json();
+    const response = await networkCall({ path: '/api/logout', method: 'GET' });
 
     if (response.okay) {
       runInAction(() => (store.user = null));
@@ -79,20 +63,15 @@ const store = {
   getUserInfo: async () => {
     runInAction(() => (store.isLoading = true));
 
-    const result = await (
-      await fetch('/api/userInfo', {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
-      })
-    ).json();
+    const response = await networkCall({ path: '/api/userInfo', method: 'GET' });
 
-    if (result.okay) {
-      runInAction(() => (store.user = result.okay));
+    if (response.okay) {
+      runInAction(() => (store.user = response.okay));
     }
 
     runInAction(() => (store.isLoading = false));
 
-    return result;
+    return response;
   },
 };
 
