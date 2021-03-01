@@ -1,7 +1,10 @@
-import { PersonIcon, ShieldLockIcon, ShieldIcon } from '@primer/octicons-react';
+import Input from '../elements/Input';
+import Select from '../elements/Select';
+import { PersonIcon, ShieldLockIcon, ShieldIcon, FlameIcon, SmileyIcon, LocationIcon } from '@primer/octicons-react';
 
 export const loginFields = [
   {
+    component: Input,
     name: 'login',
     el: 'input',
     type: 'text',
@@ -13,6 +16,7 @@ export const loginFields = [
     icon: PersonIcon,
   },
   {
+    component: Input,
     name: 'password',
     el: 'input',
     type: 'password',
@@ -27,6 +31,7 @@ export const loginFields = [
 
 export const registerFields = [
   {
+    component: Input,
     name: 'login',
     el: 'input',
     type: 'text',
@@ -38,6 +43,7 @@ export const registerFields = [
     icon: PersonIcon,
   },
   {
+    component: Input,
     name: 'password',
     el: 'input',
     type: 'password',
@@ -48,6 +54,7 @@ export const registerFields = [
     icon: ShieldLockIcon,
   },
   {
+    component: Input,
     name: 'repeatPassword',
     el: 'input',
     type: 'password',
@@ -59,5 +66,39 @@ export const registerFields = [
     },
     errorMsg: "Don't match",
     icon: ShieldIcon,
+  },
+  {
+    component: Select,
+    name: 'type',
+    el: 'select',
+    placeholder: 'Account type...',
+    value: '',
+    values: ['Developer', 'Organization'],
+    validate: (value) => !!value.length,
+    errorMsg: 'Not selected',
+    icon: FlameIcon,
+  },
+  {
+    component: Input,
+    name: 'name',
+    el: 'input',
+    type: 'text',
+    placeholder: 'Name',
+    value: '',
+    validate: (value) => value.length > 1,
+    errorMsg: '2+ characters',
+    highlight: ['NAME_TAKEN'],
+    icon: SmileyIcon,
+  },
+  {
+    component: Input,
+    name: 'city',
+    el: 'input',
+    type: 'text',
+    placeholder: 'City',
+    value: '',
+    validate: (value) => !!value.length,
+    errorMsg: 'Required',
+    icon: LocationIcon,
   },
 ];

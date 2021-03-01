@@ -11,7 +11,12 @@
   padding: 16px 32px;
   //position: absolute;
   margin: 0 auto;
-  margin-top: calc((100vh - 56px - 50%) / 2);
+  &.login {
+    margin-top: calc((100vh - 56px - 273px) / 2);
+  }
+  &.register {
+    margin-top: calc((100vh - 56px - 632px) / 2);
+  }
   animation: popup 0.2s;
   position: relative;
 }
@@ -45,11 +50,17 @@
     &::placeholder {
       color: var(--error2);
     }
+    &.select {
+      color: var(--error2);
+    }
   }
   padding: 6px 12px;
   width: 260px;
   &::placeholder {
     color: var(--light);
+  }
+  &.select {
+    width: 290px;
   }
 }
 
@@ -142,5 +153,39 @@
   margin-bottom: -15px;
   &.error {
     color: var(--error);
+  }
+}
+
+.auth-avatar-wrapper {
+  width: 100px;
+  height: 100px;
+  margin: 0 auto;
+  border: 3px solid var(--link1);
+  border-radius: 50%;
+  position: relative;
+  margin-bottom: 8px;
+  &.uploaded {
+    border-color: var(--link2);
+  }
+}
+
+.auth-media-icon {
+  position: absolute;
+  bottom: -14px;
+  left: calc((100px - 28px) / 2);
+  color: var(--link1);
+  background-color: var(--medium);
+  border-radius: 50%;
+  padding: 4px;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+  &:hover {
+    color: var(--link2);
+    background-color: var(--medium2);
   }
 }

@@ -50,15 +50,23 @@ app.get('/api/userInfo', (req, res) => {
 });
 
 app.post('/api/register', async (req, res) => {
-  const { login, password } = req.body;
-
+  let { login, password, type, name, avatar, city } = req.body;
   const found = await User.findOne({ login });
   if (found) {
     res.status(200).json({ error: 'LOGON_TAKEN' });
     return;
   }
 
-  const user = new User({ login, password });
+  const user = new User({
+    login,
+    password,
+    type,
+    name,
+    city,
+    created: new Date().getTime(),
+    ...(avatar ? { avatar } : {}),
+  });
+
   user.save((err) => {
     if (err) {
       res.status(200).json({ error: 'UNEXPECTED_ERROR' });

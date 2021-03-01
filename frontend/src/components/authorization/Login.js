@@ -1,15 +1,11 @@
 import './styles/auth.css';
-
 import React from 'react';
 import { Link, Redirect } from 'react-router-dom';
-
 import { useStore } from '../../store/store';
 import { observer } from 'mobx-react';
-
 import { loginFields } from './constants';
 import { FieldsObservable } from '../../utils/utils';
-import Input from './partials/Input';
-
+import FormField from './components/FormField';
 import { networkCodes } from '../../utils/constants';
 
 export default observer(() => {
@@ -31,41 +27,11 @@ export default observer(() => {
   }
 
   return (
-    <div className="auth-form-wrapper">
+    <div className="auth-form-wrapper login">
       <form onSubmit={onSubmit} className="auth-form" autoComplete="new-password">
-        {fieldsObs.fields.map(({ name, el, value, type, placeholder, error, errorMsg, highlight, icon }, i) => {
-          const [errorClass, setInput] = [
-            error || highlight?.includes(fieldsObs.error) ? 'error' : '',
-            fieldsObs.setInput,
-          ];
-
-          return (
-            <div key={`input-wrapper-${i}`}>
-              {icon({ size: 'medium', className: `auth-input-icon ${errorClass}` })}
-              <div style={{ display: 'inline-block' }}>
-                <div className="auth-error-wrap">
-                  <span className="auth-error" style={{ display: error ? 'block' : 'none' }}>
-                    {errorMsg}
-                  </span>
-                </div>
-                {el === 'input' && (
-                  <div className={`auth-input-wrap ${errorClass}`}>
-                    <Input
-                      {...{
-                        className: `auth-input ${errorClass}`,
-                        value,
-                        name,
-                        type,
-                        placeholder,
-                        setInput,
-                      }}
-                    />
-                  </div>
-                )}
-              </div>
-            </div>
-          );
-        })}
+        {fieldsObs.fields.map((field, i) => (
+          <FormField key={`input-wrapper-${i}`} {...{ field, fieldsObs }} />
+        ))}
         <button className="auth-btn" type="submit">
           Sign in
         </button>
