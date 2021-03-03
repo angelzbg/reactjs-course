@@ -7,7 +7,7 @@
 .content-wrapper {
   position: absolute;
   top: 57px;
-  width: 657px;
+  width: 670px;
   height: calc(100vh - 57px);
   left: calc((100vw - 657px) / 2);
 }
