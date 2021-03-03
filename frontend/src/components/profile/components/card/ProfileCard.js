@@ -1,3 +1,4 @@
+import './styles/profile-card.css';
 import React, { useEffect } from 'react';
 import { useStore } from '../../../../store/store';
 import { observer, useLocalObservable } from 'mobx-react';

@@ -1,5 +1,4 @@
 import React from 'react';
-import './styles/profile.css';
 import { observer } from 'mobx-react';
 import { useStore } from '../../store/store';
 import { withRouter } from 'react-router';
