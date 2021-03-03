@@ -1,17 +1,12 @@
 import React from 'react';
-
 import { observer } from 'mobx-react';
 import { useStore } from '../../../../../store/store';
-
 import { SunIcon, MoonIcon, ChevronLeftIcon } from '@primer/octicons-react';
-
 import { setColorScheme } from '../../../../../utils/themes';
-
 import { toggles } from '../../../constants';
 
 export default observer(({ setToggle }) => {
   const store = useStore();
-
   const themes = [
     { name: store.themes[0], icon: <MoonIcon /> },
     { name: store.themes[1], icon: <SunIcon /> },

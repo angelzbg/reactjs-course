@@ -23,6 +23,26 @@
           animation: rotation 2.3s infinite linear;
 }
 
+.profile-loader {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  z-index: 9999;
+  -webkit-animation: opacity-keyframe 0.4s ease-out;
+          animation: opacity-keyframe 0.4s ease-out;
+}
+
+.profile-loader svg {
+  color: var(--link2);
+  width: 75px;
+  height: 75px;
+  -webkit-animation: rotation 2.3s infinite linear;
+          animation: rotation 2.3s infinite linear;
+  position: absolute;
+  top: calc((100% - 75px) / 2);
+  right: calc((100% - 75px) / 2);
+}
+
 @-webkit-keyframes opacity-keyframe {
   0% {
     opacity: 0;
@@ -76,4 +96,4 @@
     color: var(--link2);
   }
 }
-/*# sourceMappingURL=app-loader.css.map */
+/*# sourceMappingURL=loaders.css.map */

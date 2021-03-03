@@ -16,13 +16,11 @@ const RegisterAvatar = ({ avatar, setAvatar, avatarRef }) => (
       accept="image/*"
       style={{ display: 'none' }}
       onChange={(e) => {
-        if (!e.target.files || !e.target.files[0]) {
-          return;
+        if (e.target.files && e.target.files[0]) {
+          const reader = new FileReader();
+          reader.onload = async (ev) => setAvatar(await resizeBase64Img(ev.target.result, 100, 100));
+          reader.readAsDataURL(e.target.files[0]);
         }
-
-        const reader = new FileReader();
-        reader.onload = async (ev) => setAvatar(await resizeBase64Img(ev.target.result, 100, 100));
-        reader.readAsDataURL(e.target.files[0]);
       }}
     />
   </div>

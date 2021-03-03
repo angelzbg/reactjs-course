@@ -50,12 +50,11 @@ const store = {
     const response = await networkCall({ path: '/api/logout', method: 'GET' });
 
     if (response.okay) {
+      runInAction(() => (store.isLoading = false));
       runInAction(() => (store.user = null));
     }
 
     events.trigger('notify', response);
-
-    runInAction(() => (store.isLoading = false));
 
     return response;
   },
@@ -70,6 +69,60 @@ const store = {
     }
 
     runInAction(() => (store.isLoading = false));
+
+    return response;
+  },
+
+  updateUserProperty: async (property = '', value = '') => {
+    const response = await networkCall({
+      path: `/api/userInfo/${store.user._id}`,
+      method: 'POST',
+      body: { [property]: value },
+    });
+
+    if (response.error) {
+      events.trigger('notify', response);
+    } else {
+      runInAction(() => {
+        store.user[property] = response.okay;
+        if (store.profile && store.profile._id === store.user._id) {
+          store.profile[property] = response.okay;
+        }
+      });
+    }
+
+    return response;
+  },
+
+  rateUser: async (stars = 1) => {
+    const response = await networkCall({ path: `/api/rateUser/${store.profile._id}`, method: 'POST', body: { stars } });
+    if (response.error) {
+      events.trigger('notify', response);
+    }
+
+    return response;
+  },
+
+  loadingProfile: false,
+  profile: null,
+  getUserProfile: async (id = '') => {
+    runInAction(() => {
+      store.loadingProfile = true;
+      if (store.profile && store.profile._id !== id) {
+        store.profile = null;
+      }
+    });
+
+    const response = await networkCall({ path: `/api/profile/${id}`, method: 'GET' });
+
+    runInAction(() => {
+      store.profile = response.okay ?? null;
+      store.loadingProfile = false;
+    });
+
+    if (response.error) {
+      events.trigger('notify', response);
+    }
 
     return response;
   },

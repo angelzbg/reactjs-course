@@ -1,25 +1,34 @@
 import React from 'react';
-import { Link, withRouter } from 'react-router-dom';
-
 import { observer } from 'mobx-react';
 import { useStore } from '../../../../../store/store';
-
 import { PersonIcon, NorthStarIcon, SignOutIcon } from '@primer/octicons-react';
-
 import Themes from './Themes';
-
+import AuthCard from './AuthCard';
 import { toggles } from '../../../constants';
+import no_profile from '../../../../../images/no_profile.png';
 
 export default observer(({ wrapperRef, toggle, setToggle }) => {
-  const store = useStore();
+  const { user, signOut } = useStore();
 
   return (
     <div id="user-menu" ref={wrapperRef} className={`user-menu-wrapper ${toggle ? 'active' : 'inactive'}`}>
-      <div className="profile-icon" onClick={() => setToggle(!toggle ? toggles.main : toggles.closed)}>
-        <PersonIcon />
+      <div
+        className={`profile-icon ${user ? 'logged' : ''}`}
+        onClick={() => setToggle(!toggle ? toggles.main : toggles.closed)}
+      >
+        {user ? (
+          <>
+            <div className="user-menu-name">{user.name.split(' ').shift()}</div>
+            <img className="user-menu-avatar" src={user.avatar ? `avatars/${user.avatar}` : no_profile} alt="avatar" />
+          </>
+        ) : (
+          <PersonIcon />
+        )}
       </div>
       {toggle === toggles.main && (
         <div className="user-menu-pop">
+          <AuthCard {...{ setToggle }} />
+          <div className="user-menu-separator" />
           <div className="user-menu-item" onClick={() => setToggle(toggles.themes)}>
             <div className="user-menu-icon">
               <NorthStarIcon />
@@ -30,7 +39,7 @@ export default observer(({ wrapperRef, toggle, setToggle }) => {
           <div
             className="user-menu-item"
             onClick={async () => {
-              const response = await store.signOut();
+              const response = await signOut();
               if (response.okay) {
                 setToggle(toggles.closed);
               }

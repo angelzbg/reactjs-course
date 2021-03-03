@@ -17,12 +17,44 @@
   color: var(--active);
 }
 
+.user-menu-wrapper.active .profile-icon .user-menu-name {
+  color: var(--lightest);
+}
+
 .user-menu-wrapper .profile-icon {
   background-color: var(--medium);
   width: 40px;
   height: 40px;
-  border-radius: 50%;
+  border-radius: 20px;
   color: var(--light);
+}
+
+.user-menu-wrapper .profile-icon.logged {
+  width: -webkit-max-content;
+  width: -moz-max-content;
+  width: max-content;
+}
+
+.user-menu-wrapper .profile-icon .user-menu-avatar {
+  background-color: var(--medium);
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin-top: 5px;
+  margin-right: 5px;
+}
+
+.user-menu-wrapper .profile-icon .user-menu-name {
+  display: inline-block;
+  font-size: 14px;
+  font-weight: bold;
+  color: var(--lightest);
+  line-height: 40px;
+  height: 40px;
+  position: relative;
+  top: -10px;
+  margin-left: 10px;
+  margin-right: 10px;
 }
 
 .user-menu-wrapper .profile-icon svg {
@@ -53,6 +85,72 @@
   height: 1px;
   margin: 8px;
   background-color: var(--medium);
+}
+
+.user-menu-pop .user-menu-item-me {
+  border-radius: 8px;
+  padding: 6px;
+  cursor: pointer;
+  display: block;
+  text-decoration: none;
+  position: relative;
+}
+
+.user-menu-pop .user-menu-item-me:hover {
+  background-color: var(--medium);
+}
+
+.user-menu-pop .user-menu-item-me .user-menu-item-me-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+}
+
+.user-menu-pop .user-menu-item-me .user-menu-item-me-info-wrapper {
+  display: inline-block;
+  position: absolute;
+  top: 14px;
+  left: 96px;
+  width: 176px;
+  margin: 0 auto;
+}
+
+.user-menu-pop .user-menu-item-me .user-menu-item-me-info-wrapper .me-name {
+  color: var(--lightest);
+  font-size: 16px;
+  font-weight: bold;
+  display: block;
+}
+
+.user-menu-pop .user-menu-item-me .user-menu-item-me-info-wrapper .me-type {
+  color: var(--light);
+  font-size: 15px;
+  display: block;
+}
+
+.user-menu-pop .user-menu-item-me .user-menu-item-me-info-wrapper .me-star-count {
+  color: var(--link1);
+  font-size: 14px;
+  position: relative;
+  top: -2px;
+}
+
+.user-menu-pop .user-menu-item-me .user-menu-item-me-info-wrapper .me-star {
+  padding-top: 6px;
+  display: inline-block;
+}
+
+.user-menu-pop .user-menu-item-me .user-menu-item-me-info-wrapper .me-star svg {
+  width: 16px;
+  height: 16px;
+}
+
+.user-menu-pop .user-menu-item-me .user-menu-item-me-info-wrapper .me-star.voted svg {
+  color: var(--link2);
+}
+
+.user-menu-pop .user-menu-item-me .user-menu-item-me-info-wrapper .me-star.notvoted svg {
+  color: var(--light);
 }
 
 .user-menu-pop .user-menu-item {

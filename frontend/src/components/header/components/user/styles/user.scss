@@ -16,13 +16,43 @@
       box-shadow: 0 0px 2px var(--shadow1), 0 0 10px var(--shadow2);
       background-color: var(--active-bgr);
       color: var(--active);
+      .user-menu-name {
+        color: var(--lightest);
+      }
     }
   }
+
   .profile-icon {
     background-color: var(--medium);
     width: 40px;
     height: 40px;
-    border-radius: 50%;
+    border-radius: 20px;
+    &.logged {
+      width: max-content;
+    }
+
+    .user-menu-avatar {
+      background-color: var(--medium);
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      margin-top: 5px;
+      margin-right: 5px;
+    }
+
+    .user-menu-name {
+      display: inline-block;
+      font-size: 14px;
+      font-weight: bold;
+      color: var(--lightest);
+      line-height: 40px;
+      height: 40px;
+      position: relative;
+      top: -10px;
+      margin-left: 10px;
+      margin-right: 10px;
+    }
+
     svg {
       margin-top: 8px;
       margin-left: 8px;
@@ -53,6 +83,71 @@
     height: 1px;
     margin: 8px;
     background-color: var(--medium);
+  }
+
+  .user-menu-item-me {
+    border-radius: 8px;
+    padding: 6px;
+    cursor: pointer;
+    display: block;
+    text-decoration: none;
+    position: relative;
+
+    &:hover {
+      background-color: var(--medium);
+    }
+
+    .user-menu-item-me-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+    }
+
+    .user-menu-item-me-info-wrapper {
+      display: inline-block;
+      position: absolute;
+      //top: 8px;
+      top: 14px;
+      left: 96px;
+      width: 176px;
+      margin: 0 auto;
+      //background-color: red;
+      .me-name {
+        color: var(--lightest);
+        font-size: 16px;
+        font-weight: bold;
+        display: block;
+      }
+      .me-type {
+        color: var(--light);
+        font-size: 15px;
+        display: block;
+      }
+      .me-star-count {
+        color: var(--link1);
+        font-size: 14px;
+        position: relative;
+        top: -2px;
+      }
+      .me-star {
+        padding-top: 6px;
+        display: inline-block;
+        svg {
+          width: 16px;
+          height: 16px;
+        }
+        &.voted {
+          svg {
+            color: var(--link2);
+          }
+        }
+        &.notvoted {
+          svg {
+            color: var(--light);
+          }
+        }
+      }
+    }
   }
 
   .user-menu-item {

@@ -3,8 +3,10 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const jwt = require('jsonwebtoken');
+const { getId } = require('./utils/utils');
 
 const User = require('./models/User.js');
+const AccountRating = require('./models/Rating');
 
 const PORT = 3000;
 const connectionStr = 'mongodb://localhost:27017/webby';
@@ -15,7 +17,7 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
-//app.use(express.static('public'));
+app.use(express.static('public'));
 
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
@@ -36,17 +38,111 @@ app.use((req, res, next) => {
       return;
     }
 
-    req.user = await User.findOne({ login: decoded.login }).lean();
+    req.user = await User.findOne({ login: decoded.login });
     next();
   });
 });
 
-app.get('/api/userInfo', (req, res) => {
+app.get('/api/profile/:id', async (req, res) => {
+  const id = req.params.id;
+  const profile = await User.findById(id).populate('ratings').lean();
+  if (profile) {
+    const { _id, city, created, type, name, avatar, ratings } = profile;
+    res.status(200).json({ okay: { _id, city, created, type, name, avatar, ratings } });
+    return;
+  }
+
+  res.status(200).json({ error: 'USER_PROFILE_NOT_FOUND' });
+});
+
+app.get('/api/userInfo', async (req, res) => {
   if (req.user) {
-    res.status(200).json({ okay: req.user });
+    const user = await User.findById(req.user.id).populate('ratings').lean();
+    res.status(200).json({ okay: user });
   } else {
     res.status(200).json({ error: 'TOKEN_NOT_FOUND' });
   }
+});
+
+app.post('/api/rateUser/:id', async (req, res) => {
+  if (!req.user) {
+    res.status(200).json({ error: 'TOKEN_NOT_FOUND' });
+  }
+
+  const stars = parseInt(req.body.stars);
+  const ratingUserId = req.user._id.toString();
+  const ratedUserId = req.params.id;
+  const ratedUser = User.findById(ratedUserId);
+  if (!ratedUser) {
+    res.status(200).json({ error: 'USER_PROFILE_NOT_FOUND' });
+  }
+
+  const foundRating = await AccountRating.findOne({ userId: ratingUserId, accountId: ratedUserId });
+  const created = new Date().getTime();
+  if (foundRating) {
+    await AccountRating.findByIdAndUpdate(foundRating._id, { stars, created });
+    res.status(200).json({ okay: 'USER_PROFILE_RATED' });
+    return;
+  } else {
+    const accountRating = new AccountRating({ userId: ratingUserId, accountId: ratedUserId, stars, created });
+    accountRating.save(async (err, doc) => {
+      if (err) {
+        res.status(200).json({ error: 'UNEXPECTED_ERROR' });
+      } else {
+        await User.findByIdAndUpdate(ratedUserId, { $push: { ratings: doc._id } });
+        res.status(200).json({ okay: 'USER_PROFILE_RATED' });
+      }
+    });
+  }
+});
+
+app.post('/api/userInfo/:id', async (req, res) => {
+  const id = req.params.id;
+
+  if (!req.user || req.user._id.toString() !== id) {
+    res.status(200).json({ error: 'TOKEN_NOT_FOUND' });
+    return;
+  }
+
+  const found = await User.findById(id).lean();
+  if (!found) {
+    res.status(200).json({ error: 'USER_PROFILE_NOT_FOUND' });
+    return;
+  }
+
+  let { name, city, avatar } = req.body;
+
+  if (name) {
+    await User.findByIdAndUpdate(id, { name });
+    res.status(200).json({ okay: name });
+    return;
+  } else if (city) {
+    await User.findByIdAndUpdate(id, { city });
+    res.status(200).json({ okay: city });
+    return;
+  } else if (avatar) {
+    const imgId = getId();
+    try {
+      require('fs').writeFileSync(
+        `public/avatars/${imgId}.jpg`,
+        avatar.replace(/^data:image\/jpeg;base64,/, ''),
+        'base64'
+      );
+      avatar = `${imgId}.jpg`;
+
+      if (found.avatar) {
+        require('fs').unlinkSync(`public/avatars/${found.avatar}`);
+      }
+    } catch (ex) {
+      avatar = '';
+    }
+
+    await User.findByIdAndUpdate(id, { avatar });
+    res.status(200).json({ okay: avatar });
+    return;
+  }
+
+  res.status(200).json({ error: 'UNEXPECTED_ERROR' });
 });
 
 app.post('/api/register', async (req, res) => {
@@ -55,6 +151,20 @@ app.post('/api/register', async (req, res) => {
   if (found) {
     res.status(200).json({ error: 'LOGON_TAKEN' });
     return;
+  }
+
+  if (avatar) {
+    const id = getId();
+    try {
+      require('fs').writeFileSync(
+        `public/avatars/${id}.jpg`,
+        avatar.replace(/^data:image\/jpeg;base64,/, ''),
+        'base64'
+      );
+      avatar = `${id}.jpg`;
+    } catch (ex) {
+      avatar = '';
+    }
   }
 
   const user = new User({
