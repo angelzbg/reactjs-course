@@ -4,16 +4,16 @@ import { useStore } from '../../../../store/store';
 import { StarIcon, StarFillIcon } from '@primer/octicons-react';
 
 export default observer(({ id, profile, isSelf, syncing, sync, setSync }) => {
-  const store = useStore();
+  const { user, rateUser } = useStore();
   const { votes, rating, ratingRound } = profile;
-  const [canVote, isVoted] = [!!store.user && store.user._id !== id && !!profile, votes !== 0];
+  const [canVote, isVoted] = [!!user && user._id !== id && !!profile, votes !== 0];
 
   const observable = useLocalObservable(() => ({
     hoveredStar: -1,
     setHoveredStar: (number = 0) => (observable.hoveredStar = number),
     rate: async (stars = 0, isSelf, id) => {
       setSync(true);
-      (await store.rateUser(stars)).okay ? sync(!isSelf ? id : false) : setSync(false);
+      (await rateUser(stars)).okay ? sync(!isSelf ? id : false) : setSync(false);
     },
   }));
 

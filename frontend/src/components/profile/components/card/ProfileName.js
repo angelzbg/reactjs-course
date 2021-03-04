@@ -4,7 +4,7 @@ import { useStore } from '../../../../store/store';
 import { CheckCircleIcon, XCircleIcon, PencilIcon } from '@primer/octicons-react';
 
 export default observer(({ profile, isSelf, setSync, setEditField, editField, syncing }) => {
-  const store = useStore();
+  const { updateUserProperty } = useStore();
   const observable = useLocalObservable(() => ({
     value: '',
     error: '',
@@ -17,7 +17,7 @@ export default observer(({ profile, isSelf, setSync, setEditField, editField, sy
       const oldValue = profile.name;
       const newValue = observable.value;
       if (newValue !== oldValue) {
-        const response = await store.updateUserProperty('name', newValue);
+        const response = await updateUserProperty('name', newValue);
         if (response.okay) {
           setEditField(false);
           setSync(false);

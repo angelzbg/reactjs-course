@@ -5,7 +5,7 @@ import { useStore } from '../../../../store/store';
 import { resizeBase64Img } from '../../../../utils/utils';
 
 export default observer(({ setSync, isSelf, avatar }) => {
-  const store = useStore();
+  const { updateUserProperty } = useStore();
   const avatarRef = useRef(null);
   const updateAvatar = (files) => {
     if (files && files[0]) {
@@ -13,7 +13,7 @@ export default observer(({ setSync, isSelf, avatar }) => {
       const reader = new FileReader();
       reader.onload = async (ev) => {
         const base64String = await resizeBase64Img(ev.target.result, 100, 100);
-        const response = await store.updateUserProperty('avatar', base64String);
+        const response = await updateUserProperty('avatar', base64String);
         if (response.okay) {
           setSync(false);
         }
