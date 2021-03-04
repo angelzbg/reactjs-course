@@ -2,12 +2,11 @@ import React from 'react';
 import { observer, useLocalObservable } from 'mobx-react';
 import { useStore } from '../../../../store/store';
 import { StarIcon, StarFillIcon } from '@primer/octicons-react';
-import { getUserRating } from '../../../../utils/utils';
 
 export default observer(({ id, profile, isSelf, syncing, sync, setSync }) => {
   const store = useStore();
-  const { rating, rounded, voters } = getUserRating(profile ? profile.ratings : []);
-  const [canVote, isVoted] = [!!store.user && store.user._id !== id && !!profile, voters !== 0];
+  const { votes, rating, ratingRound } = profile;
+  const [canVote, isVoted] = [!!store.user && store.user._id !== id && !!profile, votes !== 0];
 
   const observable = useLocalObservable(() => ({
     hoveredStar: -1,
@@ -22,7 +21,8 @@ export default observer(({ id, profile, isSelf, syncing, sync, setSync }) => {
     <div className="profile-card-stars">
       {new Array(5).fill(0).map((_, i) => {
         const isFilled =
-          (isVoted && i < /*=*/ rounded && observable.hoveredStar === -1) || (canVote && i <= observable.hoveredStar);
+          (isVoted && i < /*=*/ ratingRound && observable.hoveredStar === -1) ||
+          (canVote && i <= observable.hoveredStar);
         return (
           <div
             className={`profile-card-star ${observable.hoveredStar === -1 ? (isVoted ? 'voted' : 'notvoted') : ''} ${
@@ -38,7 +38,7 @@ export default observer(({ id, profile, isSelf, syncing, sync, setSync }) => {
         );
       })}
       <div className="profile-card-rating-text">
-        /{rating.toFixed(2)} | {voters} rating(s)
+        /{rating.toFixed(2)} | {votes} rating(s)
       </div>
     </div>
   );

@@ -79,16 +79,4 @@ const resizeBase64Img = (srcData, width, height) => {
   });
 };
 
-const getUserRating = (ratings = []) => {
-  const voters = ratings.length;
-  if (!ratings.length) {
-    return { rating: 0, rounded: 0, voters };
-  }
-
-  const rating = ratings.reduce((sum, { stars }) => sum + stars, 0) / ratings.length;
-  const rounded = Math.round(rating);
-
-  return { rating, rounded, voters };
-};
-
-export { FieldsObservable, networkCall, resizeBase64Img, getUserRating };
+export { FieldsObservable, networkCall, resizeBase64Img };

@@ -12,11 +12,6 @@ import ProfileRating from './ProfileRating';
 
 export default observer(({ id }) => {
   const store = useStore();
-
-  const isSelf = !!store.user && store.user._id === id;
-  const isLoading = (!store.profile && !isSelf) || store.isLoading;
-  const profile = isSelf ? store.user : store.profile;
-
   const observable = useLocalObservable(() => ({
     syncing: false,
     setSync: (isSync = true) => runInAction(() => (observable.syncing = isSync)),
@@ -29,8 +24,6 @@ export default observer(({ id }) => {
     editField: false,
     setEditField: (field = '') => runInAction(() => (observable.editField = field)),
   }));
-
-  const { syncing, setSync, sync, editField, setEditField } = observable;
 
   useEffect(() => {
     if (store.user && store.user._id === id && !store.isLoading) {
@@ -45,6 +38,11 @@ export default observer(({ id }) => {
       store.getUserProfile(id);
     }
   }, [store, store.isLoading, id]);
+
+  const { syncing, setSync, sync, editField, setEditField } = observable;
+  const isSelf = !!store.user && store.user._id === id;
+  const isLoading = (!store.profile && !isSelf) || store.isLoading;
+  const profile = isSelf ? store.user : store.profile;
 
   return (
     <div className="profile-card">

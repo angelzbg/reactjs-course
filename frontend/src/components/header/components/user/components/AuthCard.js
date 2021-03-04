@@ -5,12 +5,10 @@ import { useStore } from '../../../../../store/store';
 import { StarIcon, StarFillIcon } from '@primer/octicons-react';
 import { toggles } from '../../../constants';
 import no_profile from '../../../../../images/no_profile.png';
-import { getUserRating } from '../../../../../utils/utils';
 
 export default observer(({ setToggle }) => {
-  const store = useStore();
-  const { user } = store;
-  const { rating, rounded, voters } = getUserRating(user.ratings);
+  const { user } = useStore();
+  const { votes, rating, ratingRound } = user;
 
   return (
     <Link className="user-menu-item-me" to={`/profile/${user._id}`} onClick={() => setToggle(toggles.closed)}>
@@ -23,8 +21,8 @@ export default observer(({ setToggle }) => {
         <span className="me-name">{user.name}</span>
         <span className="me-type">{user.type}</span>
         {new Array(5).fill(0).map((_, i) => {
-          const isVoted = voters !== 0;
-          const isFilled = isVoted && i <= rounded;
+          const isVoted = votes !== 0;
+          const isFilled = isVoted && i <= ratingRound;
           return (
             <span className={`me-star ${isVoted ? 'voted' : 'notvoted'}`} key={`user-menu-me-star-${i}`}>
               {(isFilled ? StarFillIcon : StarIcon)({ size: 'medium' })}

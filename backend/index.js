@@ -47,8 +47,8 @@ app.get('/api/profile/:id', async (req, res) => {
   const id = req.params.id;
   const profile = await User.findById(id).populate('ratings').lean();
   if (profile) {
-    const { _id, city, created, type, name, avatar, ratings } = profile;
-    res.status(200).json({ okay: { _id, city, created, type, name, avatar, ratings } });
+    const { _id, city, created, type, name, avatar, rating, ratingRound, votes, stars } = profile;
+    res.status(200).json({ okay: { _id, city, created, type, name, avatar, rating, ratingRound, votes, stars } });
     return;
   }
 
@@ -64,7 +64,7 @@ app.get('/api/userInfo', async (req, res) => {
   }
 });
 
-app.post('/api/rateUser/:id', async (req, res) => {
+app.post('/api/rateUser/:id', async (req, res, next) => {
   if (!req.user) {
     res.status(200).json({ error: 'TOKEN_NOT_FOUND' });
   }
@@ -72,7 +72,7 @@ app.post('/api/rateUser/:id', async (req, res) => {
   const stars = parseInt(req.body.stars);
   const ratingUserId = req.user._id.toString();
   const ratedUserId = req.params.id;
-  const ratedUser = User.findById(ratedUserId);
+  const ratedUser = await User.findById(ratedUserId);
   if (!ratedUser) {
     res.status(200).json({ error: 'USER_PROFILE_NOT_FOUND' });
   }
@@ -80,16 +80,32 @@ app.post('/api/rateUser/:id', async (req, res) => {
   const foundRating = await AccountRating.findOne({ userId: ratingUserId, accountId: ratedUserId });
   const created = new Date().getTime();
   if (foundRating) {
-    await AccountRating.findByIdAndUpdate(foundRating._id, { stars, created });
-    res.status(200).json({ okay: 'USER_PROFILE_RATED' });
-    return;
+    const newStars = ratedUser.stars - (foundRating.stars - stars);
+    const newRating = newStars / ratedUser.votes;
+    const newRatingRound = Math.round(newRating);
+
+    Promise.all([
+      User.findByIdAndUpdate(ratedUserId, { stars: newStars, rating: newRating, ratingRound: newRatingRound }),
+      AccountRating.findByIdAndUpdate(foundRating._id, { stars, created }),
+    ])
+      .then(() => res.status(200).json({ okay: 'USER_PROFILE_RATED' }))
+      .catch(next);
   } else {
     const accountRating = new AccountRating({ userId: ratingUserId, accountId: ratedUserId, stars, created });
     accountRating.save(async (err, doc) => {
       if (err) {
         res.status(200).json({ error: 'UNEXPECTED_ERROR' });
       } else {
-        await User.findByIdAndUpdate(ratedUserId, { $push: { ratings: doc._id } });
+        const newVotes = ratedUser.votes + 1;
+        const newStars = ratedUser.stars + stars;
+        const newRating = newStars / newVotes;
+        const newRatingRound = Math.round(newRating);
+        await User.findByIdAndUpdate(ratedUserId, {
+          votes: newVotes,
+          stars: newStars,
+          rating: newRating,
+          ratingRound: newRatingRound,
+        });
         res.status(200).json({ okay: 'USER_PROFILE_RATED' });
       }
     });

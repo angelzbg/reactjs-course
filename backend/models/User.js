@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
-const Types = mongoose.Schema.Types;
 
 const UserSchema = new mongoose.Schema({
   login: { type: String, required: true, unique: true, minlength: 3, maxlength: 14 },
@@ -10,8 +9,11 @@ const UserSchema = new mongoose.Schema({
   created: { type: Number, required: true },
   type: { type: String, required: true },
   name: { type: String, required: true },
-  ratings: { type: [{ type: Types.ObjectId, ref: 'AccountRating' }] },
   avatar: { type: String },
+  stars: { type: Number, default: 0 },
+  votes: { type: Number, default: 0 },
+  rating: { type: Number, default: 0 },
+  ratingRound: { type: Number, default: 0 },
 });
 
 UserSchema.pre('save', function (next) {
