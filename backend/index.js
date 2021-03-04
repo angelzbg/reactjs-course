@@ -55,10 +55,9 @@ app.get('/api/profile/:id', async (req, res) => {
   res.status(200).json({ error: 'USER_PROFILE_NOT_FOUND' });
 });
 
-app.get('/api/userInfo', async (req, res) => {
+app.get('/api/userInfo', (req, res) => {
   if (req.user) {
-    const user = await User.findById(req.user.id).populate('ratings').lean();
-    res.status(200).json({ okay: user });
+    res.status(200).json({ okay: req.user });
   } else {
     res.status(200).json({ error: 'TOKEN_NOT_FOUND' });
   }
