@@ -20,16 +20,14 @@ export default observer(({ id }) => {
   const observable = useLocalObservable(() => ({
     syncing: false,
     setSync: (isSync = true) => runInAction(() => (observable.syncing = isSync)),
-    sync: async () => {
-      runInAction(() => {
-        observable.syncing = true;
-        observable.editField = false;
-      });
-      await (isSelf ? store.getUserInfo() : store.getUserProfile(id));
+    sync: async (id) => {
+      observable.setSync(true);
+      observable.setEditField(false);
+      await (id ? store.getUserProfile(id) : store.getUserInfo());
       observable.setSync(false);
     },
     editField: false,
-    setEditField: (field = '') => (observable.editField = field),
+    setEditField: (field = '') => runInAction(() => (observable.editField = field)),
   }));
 
   const { syncing, setSync, sync, editField, setEditField } = observable;
@@ -54,13 +52,13 @@ export default observer(({ id }) => {
         <ProfileLoader />
       ) : (
         <>
-          <ProfileSync {...{ syncing, sync }} />
+          <ProfileSync {...{ syncing, sync, isSelf, id }} />
           <ProfileAvatar {...{ setSync, isSelf, avatar: profile.avatar }} />
           <div className="profile-card-info">
             <ProfileName {...{ profile, isSelf, setSync, setEditField, editField, syncing }} />
             <div className="profile-card-account-type">{profile.type}</div>
             <ProfileLocation {...{ profile, isSelf, setSync, setEditField, editField, syncing }} />
-            <ProfileRating {...{ id, profile, sync, setSync, syncing }} />
+            <ProfileRating {...{ id, profile, isSelf, sync, setSync, syncing }} />
           </div>
         </>
       )}

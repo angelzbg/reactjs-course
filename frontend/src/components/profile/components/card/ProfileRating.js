@@ -4,7 +4,7 @@ import { useStore } from '../../../../store/store';
 import { StarIcon, StarFillIcon } from '@primer/octicons-react';
 import { getUserRating } from '../../../../utils/utils';
 
-export default observer(({ id, profile, syncing, sync, setSync }) => {
+export default observer(({ id, profile, isSelf, syncing, sync, setSync }) => {
   const store = useStore();
   const { rating, rounded, voters } = getUserRating(profile ? profile.ratings : []);
   const [canVote, isVoted] = [!!store.user && store.user._id !== id && !!profile, voters !== 0];
@@ -12,9 +12,9 @@ export default observer(({ id, profile, syncing, sync, setSync }) => {
   const observable = useLocalObservable(() => ({
     hoveredStar: -1,
     setHoveredStar: (number = 0) => (observable.hoveredStar = number),
-    rate: async (stars = 0) => {
+    rate: async (stars = 0, isSelf, id) => {
       setSync(true);
-      (await store.rateUser(stars)).okay ? sync() : setSync(false);
+      (await store.rateUser(stars)).okay ? sync(!isSelf ? id : false) : setSync(false);
     },
   }));
 
@@ -31,7 +31,7 @@ export default observer(({ id, profile, syncing, sync, setSync }) => {
             key={`profile-card-star-${i}`}
             onMouseEnter={() => (canVote ? observable.setHoveredStar(i) : null)}
             onMouseLeave={() => observable.setHoveredStar(-1)}
-            onClick={() => (canVote && !syncing ? observable.rate(i + 1) : null)}
+            onClick={() => (canVote && !syncing ? observable.rate(i + 1, isSelf, id) : null)}
           >
             {(isFilled ? StarFillIcon : StarIcon)({ size: 'medium' })}
           </div>
