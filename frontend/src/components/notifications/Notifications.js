@@ -27,6 +27,7 @@ export default observer(() => {
       setTimeout(() => {
         manager.remove(notification.id);
       }, 5000);
+      console.log(`%c${notification.msg}`, `color: ${notification.type === 'error' ? '#e60000' : '#005ce6'}`);
     },
     remove: (removeId) => {
       const foundIndex = manager.notifications.findIndex(({ id }) => id === removeId);
