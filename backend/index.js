@@ -57,10 +57,19 @@ app.get('/api/profile/:id', async (req, res) => {
 
 app.get('/api/userInfo', (req, res) => {
   if (req.user) {
-    res.status(200).json({ okay: req.user });
+    const { _id, city, created, type, name, avatar, rating, ratingRound, votes, stars } = req.user;
+    res.status(200).json({ okay: { _id, city, created, type, name, avatar, rating, ratingRound, votes, stars } });
   } else {
     res.status(200).json({ error: 'TOKEN_NOT_FOUND' });
   }
+});
+
+app.get('/api/ratings/:id', async (req, res, next) => {
+  const accountId = req.params.id;
+  const ratings = await AccountRating.find({ accountId })
+    .populate('userId', 'avatar city name created rating ratingRound stars type votes')
+    .lean();
+  res.status(200).json({ okay: ratings ?? [] });
 });
 
 app.post('/api/rateUser/:id', async (req, res, next) => {
@@ -85,7 +94,7 @@ app.post('/api/rateUser/:id', async (req, res, next) => {
 
     Promise.all([
       User.findByIdAndUpdate(ratedUserId, { stars: newStars, rating: newRating, ratingRound: newRatingRound }),
-      AccountRating.findByIdAndUpdate(foundRating._id, { stars, created }),
+      AccountRating.findByIdAndUpdate(foundRating._id, { stars, ...(foundRating.stars !== stars ? { created } : {}) }),
     ])
       .then(() => res.status(200).json({ okay: 'USER_PROFILE_RATED' }))
       .catch(next);

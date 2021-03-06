@@ -98,6 +98,8 @@ const store = {
     const response = await networkCall({ path: `/api/rateUser/${store.profile._id}`, method: 'POST', body: { stars } });
     if (response.error) {
       events.trigger('notify', response);
+    } else {
+      events.trigger('rated', store.profile._id);
     }
 
     return response;
@@ -118,6 +120,26 @@ const store = {
     runInAction(() => {
       store.profile = response.okay ?? null;
       store.loadingProfile = false;
+    });
+
+    if (response.error) {
+      events.trigger('notify', response);
+    }
+
+    return response;
+  },
+
+  loadingRatings: true,
+  ratings: [],
+  getRatings: async (id = '', inSync = false) => {
+    if (!inSync) {
+      runInAction(() => (store.loadingRatings = true));
+    }
+
+    const response = await networkCall({ path: `/api/ratings/${id}`, method: 'GET' });
+    runInAction(() => {
+      store.ratings = response.okay ?? [];
+      store.loadingRatings = false;
     });
 
     if (response.error) {

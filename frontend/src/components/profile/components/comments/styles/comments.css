@@ -1,0 +1,13 @@
+.comments-profile-wrapper {
+  width: 420px;
+  height: 400px;
+  display: inline-block;
+  position: relative;
+  vertical-align: top;
+  margin-top: 16px;
+  border-radius: 10px;
+  -webkit-box-shadow: 0 1px 4px var(--shadow1), 0 0 40px var(--shadow2);
+  box-shadow: 0 1px 4px var(--shadow1), 0 0 40px var(--shadow2);
+  background-color: var(--dark);
+}
+/*# sourceMappingURL=comments.css.map */

@@ -1,3 +1,5 @@
+import { OctofaceIcon, OrganizationIcon } from '@primer/octicons-react';
+
 export const networkCodes = {
   UNEXPECTED_ERROR: 'Unexpected error occured!',
   TOKEN_NOT_FOUND: 'Invalid user!',
@@ -14,4 +16,15 @@ export const networkCodes = {
 export const profileTypes = {
   Developer: 'Developer',
   Oragnization: 'Organization',
+};
+
+export const toggles = {
+  main: 'main',
+  themes: 'themes',
+  closed: '',
+};
+
+export const iconsByType = {
+  [profileTypes.Developer]: OctofaceIcon,
+  [profileTypes.Oragnization]: OrganizationIcon,
 };
