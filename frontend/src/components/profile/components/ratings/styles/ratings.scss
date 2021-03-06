@@ -114,7 +114,7 @@
         height: 73px;
         background-color: transparent;
         z-index: 1;
-        animation: popup 0.2s;
+        animation: popup-r-p 0.4s;
 
         .arrow {
           position: absolute;
@@ -322,5 +322,20 @@
   100% {
     transform: rotate(0deg) scale(1);
     color: var(--link2);
+  }
+}
+
+@keyframes popup-r-p {
+  0% {
+    opacity: 0;
+    transform: scaleX(0) scaleY(0);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scaleX(0) scaleY(0);
+  }
+  100% {
+    opacity: 1;
+    transform: scaleX(1) scaleY(1);
   }
 }

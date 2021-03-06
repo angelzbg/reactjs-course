@@ -127,8 +127,8 @@
   height: 73px;
   background-color: transparent;
   z-index: 1;
-  -webkit-animation: popup 0.2s;
-          animation: popup 0.2s;
+  -webkit-animation: popup-r-p 0.4s;
+          animation: popup-r-p 0.4s;
 }
 
 .ratings-profile-wrapper .ratings-wrapper .rating .profile-pop-wrap .arrow {
@@ -374,6 +374,42 @@
     -webkit-transform: rotate(0deg) scale(1);
             transform: rotate(0deg) scale(1);
     color: var(--link2);
+  }
+}
+
+@-webkit-keyframes popup-r-p {
+  0% {
+    opacity: 0;
+    -webkit-transform: scaleX(0) scaleY(0);
+            transform: scaleX(0) scaleY(0);
+  }
+  50% {
+    opacity: 0.5;
+    -webkit-transform: scaleX(0) scaleY(0);
+            transform: scaleX(0) scaleY(0);
+  }
+  100% {
+    opacity: 1;
+    -webkit-transform: scaleX(1) scaleY(1);
+            transform: scaleX(1) scaleY(1);
+  }
+}
+
+@keyframes popup-r-p {
+  0% {
+    opacity: 0;
+    -webkit-transform: scaleX(0) scaleY(0);
+            transform: scaleX(0) scaleY(0);
+  }
+  50% {
+    opacity: 0.5;
+    -webkit-transform: scaleX(0) scaleY(0);
+            transform: scaleX(0) scaleY(0);
+  }
+  100% {
+    opacity: 1;
+    -webkit-transform: scaleX(1) scaleY(1);
+            transform: scaleX(1) scaleY(1);
   }
 }
 /*# sourceMappingURL=ratings.css.map */
