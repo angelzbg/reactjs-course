@@ -102,6 +102,7 @@
   font-size: 14px;
   margin-top: 4px;
   color: var(--light);
+  padding-left: 28px;
 }
 
 .ratings-profile-wrapper .ratings-wrapper .rating .how svg {
