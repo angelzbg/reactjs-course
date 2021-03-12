@@ -169,18 +169,18 @@
             .name {
               font-size: 15px;
               font-weight: bold;
-              color: var(--link2);
+              color: var(--lightest);
               text-align: top;
               text-decoration: none;
               &:hover {
-                color: var(--link1);
                 text-decoration: underline;
               }
               svg.type {
                 width: 15px;
                 height: 15px;
-                margin-right: 4px;
+                margin-left: 8px;
                 margin-bottom: -2px;
+                color: var(--light);
               }
             }
             .location {
@@ -197,7 +197,9 @@
             .p-stars {
               margin-top: 2px;
               &.voted {
-                color: var(--link1);
+                svg {
+                  color: var(--link1);
+                }
               }
               svg {
                 color: var(--medium);

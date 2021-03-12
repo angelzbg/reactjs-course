@@ -188,21 +188,21 @@
 .ratings-profile-wrapper .ratings-wrapper .rating .profile-pop-wrap .profile-pop .info .name {
   font-size: 15px;
   font-weight: bold;
-  color: var(--link2);
+  color: var(--lightest);
   text-align: top;
   text-decoration: none;
 }
 
 .ratings-profile-wrapper .ratings-wrapper .rating .profile-pop-wrap .profile-pop .info .name:hover {
-  color: var(--link1);
   text-decoration: underline;
 }
 
 .ratings-profile-wrapper .ratings-wrapper .rating .profile-pop-wrap .profile-pop .info .name svg.type {
   width: 15px;
   height: 15px;
-  margin-right: 4px;
+  margin-left: 8px;
   margin-bottom: -2px;
+  color: var(--light);
 }
 
 .ratings-profile-wrapper .ratings-wrapper .rating .profile-pop-wrap .profile-pop .info .location {
@@ -222,7 +222,7 @@
   margin-top: 2px;
 }
 
-.ratings-profile-wrapper .ratings-wrapper .rating .profile-pop-wrap .profile-pop .info .p-stars.voted {
+.ratings-profile-wrapper .ratings-wrapper .rating .profile-pop-wrap .profile-pop .info .p-stars.voted svg {
   color: var(--link1);
 }
 

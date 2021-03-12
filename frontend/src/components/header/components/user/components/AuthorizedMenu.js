@@ -8,13 +8,19 @@ import { toggles } from '../../../constants';
 import no_profile from '../../../../../images/no_profile.png';
 
 export default observer(({ wrapperRef, toggle, setToggle }) => {
-  const { user, signOut } = useStore();
+  const { user, signOut, getUserInfo } = useStore();
 
   return (
     <div id="user-menu" ref={wrapperRef} className={`user-menu-wrapper ${toggle ? 'active' : 'inactive'}`}>
       <div
         className={`profile-icon ${user ? 'logged' : ''}`}
-        onClick={() => setToggle(!toggle ? toggles.main : toggles.closed)}
+        onClick={() => {
+          if (toggle === toggles.closed) {
+            getUserInfo(true);
+          }
+
+          setToggle(!toggle ? toggles.main : toggles.closed);
+        }}
       >
         {user ? (
           <>

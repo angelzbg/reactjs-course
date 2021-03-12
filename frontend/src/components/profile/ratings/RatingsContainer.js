@@ -1,9 +1,9 @@
 import React, { Fragment } from 'react';
 import { observer, useLocalObservable } from 'mobx-react';
 import { StarFillIcon, StarIcon } from '@primer/octicons-react';
-import { ratingFilter } from '../../constants';
-import { getTimeDifference } from '../../../../utils/utils';
-import no_profile from '../../../../images/no_profile.png';
+import { ratingFilter } from '../constants';
+import { getTimeDifference } from '../../../utils/utils';
+import no_profile from '../../../images/no_profile.png';
 import ProfilePop from './ProfilePop';
 
 export default observer(({ ratings, filter }) => {

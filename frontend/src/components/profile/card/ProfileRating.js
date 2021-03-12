@@ -1,6 +1,6 @@
 import React from 'react';
 import { observer, useLocalObservable } from 'mobx-react';
-import { useStore } from '../../../../store/store';
+import { useStore } from '../../../store/store';
 import { StarIcon, StarFillIcon } from '@primer/octicons-react';
 
 export default observer(({ id, profile, isSelf, syncing, sync, setSync }) => {

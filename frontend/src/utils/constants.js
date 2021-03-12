@@ -11,6 +11,8 @@ export const networkCodes = {
   LOGOUT_SUCCESSFUL: 'Signed out successfully!',
   USER_PROFILE_NOT_FOUND: 'No profile found!',
   PROFILE_UPDATED: 'Profile updated successfully!',
+  COMMENT_CONTENT_ERROR: 'Comment must containt between 10 and 255 characters!',
+  COMMENT_DELETED: 'Comment have been deleted successfully!',
 };
 
 export const profileTypes = {

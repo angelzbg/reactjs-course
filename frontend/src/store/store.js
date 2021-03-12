@@ -59,8 +59,10 @@ const store = {
     return response;
   },
 
-  getUserInfo: async () => {
-    runInAction(() => (store.isLoading = true));
+  getUserInfo: async (isSilent) => {
+    if (!isSilent) {
+      runInAction(() => (store.isLoading = true));
+    }
 
     const response = await networkCall({ path: '/api/userInfo', method: 'GET' });
 
@@ -68,7 +70,9 @@ const store = {
       runInAction(() => (store.user = response.okay));
     }
 
-    runInAction(() => (store.isLoading = false));
+    if (!isSilent) {
+      runInAction(() => (store.isLoading = false));
+    }
 
     return response;
   },
@@ -89,17 +93,6 @@ const store = {
           store.profile[property] = response.okay;
         }
       });
-    }
-
-    return response;
-  },
-
-  rateUser: async (stars = 1) => {
-    const response = await networkCall({ path: `/api/rateUser/${store.profile._id}`, method: 'POST', body: { stars } });
-    if (response.error) {
-      events.trigger('notify', response);
-    } else {
-      events.trigger('rated', store.profile._id);
     }
 
     return response;
@@ -129,6 +122,17 @@ const store = {
     return response;
   },
 
+  rateUser: async (stars = 1) => {
+    const response = await networkCall({ path: `/api/rateUser/${store.profile._id}`, method: 'POST', body: { stars } });
+    if (response.error) {
+      events.trigger('notify', response);
+    } else {
+      events.trigger('rated', store.profile._id);
+    }
+
+    return response;
+  },
+
   loadingRatings: true,
   ratings: [],
   getRatings: async (id = '', inSync = false) => {
@@ -140,6 +144,50 @@ const store = {
     runInAction(() => {
       store.ratings = response.okay ?? [];
       store.loadingRatings = false;
+    });
+
+    if (response.error) {
+      events.trigger('notify', response);
+    }
+
+    return response;
+  },
+
+  commentUser: async (content = '') => {
+    const response = await networkCall({
+      path: `/api/comments/${store.profile._id}`,
+      method: 'POST',
+      body: { content },
+    });
+    if (response.error) {
+      events.trigger('notify', response);
+    } else {
+      events.trigger('commented', store.profile._id);
+    }
+
+    return response;
+  },
+
+  actionComment: async (action, id) => {
+    const response = await networkCall({ path: `/api/comments/action/${id}`, method: 'POST', body: { action } });
+    if (response.error) {
+      events.trigger('notify', response);
+    }
+
+    return response;
+  },
+
+  loadingComments: true,
+  comments: [],
+  getComments: async (id = '', inSync = false) => {
+    if (!inSync) {
+      runInAction(() => (store.loadingComments = true));
+    }
+
+    const response = await networkCall({ path: `/api/comments/${id}`, method: 'GET' });
+    runInAction(() => {
+      store.comments = response.okay ?? [];
+      store.loadingComments = false;
     });
 
     if (response.error) {

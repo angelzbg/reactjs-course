@@ -1,9 +1,9 @@
 import './styles/profile-card.css';
 import React, { useEffect } from 'react';
-import { useStore } from '../../../../store/store';
+import { useStore } from '../../../store/store';
 import { observer, useLocalObservable } from 'mobx-react';
 import { runInAction } from 'mobx';
-import ProfileLoader from '../../../loaders/ProfileLoader';
+import ProfileLoader from '../../loaders/ProfileLoader';
 import ProfileSync from './ProfileSync';
 import ProfileAvatar from './ProfileAvatar';
 import ProfileName from './ProfileName';
@@ -18,7 +18,7 @@ export default observer(({ id }) => {
     sync: async (id) => {
       observable.setSync(true);
       observable.setEditField(false);
-      await (id ? store.getUserProfile(id) : store.getUserInfo());
+      await (id ? store.getUserProfile(id) : store.getUserInfo(true));
       observable.setSync(false);
     },
     editField: false,
@@ -27,7 +27,7 @@ export default observer(({ id }) => {
 
   useEffect(() => {
     if (store.user && store.user._id === id && !store.isLoading) {
-      store.getUserInfo();
+      store.getUserInfo(true);
     } else {
       store.getUserProfile(id);
     }

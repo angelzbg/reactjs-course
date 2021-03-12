@@ -1,10 +1,10 @@
 import './styles/ratings.css';
 import React, { useEffect } from 'react';
-import { useStore } from '../../../../store/store';
+import { useStore } from '../../../store/store';
 import { observer, useLocalObservable } from 'mobx-react';
-import { ratingFilters } from '../../constants';
-import events from '../../../../utils/events';
-import ProfileRatingsLoader from '../../../loaders/ProfileRatingsLoader';
+import { ratingFilters } from '../constants';
+import events from '../../../utils/events';
+import ProfileRatingsLoader from '../../loaders/ProfileRatingsLoader';
 import RatingsHeader from './RatingsHeader';
 import NoRatings from './NoRatings';
 import RatingsContainer from './RatingsContainer';

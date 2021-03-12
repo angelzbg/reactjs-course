@@ -1,6 +1,6 @@
 import React from 'react';
 import { observer, useLocalObservable } from 'mobx-react';
-import { useStore } from '../../../../store/store';
+import { useStore } from '../../../store/store';
 import { CheckCircleIcon, XCircleIcon, PencilIcon, LocationIcon } from '@primer/octicons-react';
 
 export default observer(({ profile, isSelf, setSync, setEditField, editField, syncing }) => {

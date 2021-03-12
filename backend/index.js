@@ -7,6 +7,7 @@ const { getId } = require('./utils/utils');
 
 const User = require('./models/User.js');
 const AccountRating = require('./models/Rating');
+const ProfileComment = require('./models/ProfileComment');
 
 const PORT = 3000;
 const connectionStr = 'mongodb://localhost:27017/webby';
@@ -64,6 +65,98 @@ app.get('/api/userInfo', (req, res) => {
   }
 });
 
+app.post('/api/comments/action/:id', async (req, res, next) => {
+  if (!req.user) {
+    res.status(200).json({ error: 'TOKEN_NOT_FOUND' });
+    return;
+  }
+
+  const id = req.params.id;
+  const action = req.body.action;
+
+  if (action === 'delete') {
+    const found = await ProfileComment.findById(id);
+    if (!found) {
+      res.status(200).json({ error: 'COMMENT_NOT_FOUND' });
+      return;
+    }
+
+    if (found.userId.toString() !== req.user._id.toString()) {
+      res.status(200).json({ error: 'COMMENT_AUTHOR_NOT_MATCHING' });
+      return;
+    }
+
+    ProfileComment.findByIdAndDelete(id, (err, docs) => {
+      if (err) {
+        res.status(200).json({ error: 'UNEXPECTED_ERROR' });
+      } else {
+        res.status(200).json({ okay: 'COMMENT_DELETED' });
+      }
+    });
+    return;
+  }
+
+  if (!['like', 'dislike'].includes(action)) {
+    res.status(200).json({ error: 'COMMENT_ACTION_NOT_PROVIDED' });
+    return;
+  }
+
+  ProfileComment.findByIdAndUpdate(
+    id,
+    {
+      $pull: { [action === 'like' ? 'dislikes' : 'likes']: req.user._id },
+      $push: { [action === 'like' ? 'likes' : 'dislikes']: req.user._id },
+    },
+    (err, result) => {
+      if (err) {
+        res.status(200).json({ error: 'COMMENT_NOT_FOUND' });
+      } else {
+        res.status(200).json({ okay: 'COMMENT_ACTION_SUCCESS' });
+      }
+    }
+  );
+});
+
+app.get('/api/comments/:id', async (req, res, next) => {
+  const accountId = req.params.id;
+  const comments = await ProfileComment.find({ accountId })
+    .populate('userId', 'avatar city name created rating ratingRound stars type votes')
+    .lean();
+  res.status(200).json({ okay: comments ?? [] });
+});
+
+app.post('/api/comments/:id', async (req, res, next) => {
+  const accountId = req.params.id;
+  if (!req.user) {
+    res.status(200).json({ error: 'TOKEN_NOT_FOUND' });
+    return;
+  }
+
+  const { content } = req.body;
+  if (!content || content.length < 10 || content.length > 255) {
+    res.status(200).json({ error: 'COMMENT_CONTENT_ERROR' });
+    return;
+  }
+
+  const userId = req.user._id.toString();
+  const profile = await User.findById(accountId);
+  if (!profile) {
+    res.status(200).json({ error: 'USER_PROFILE_NOT_FOUND' });
+    return;
+  }
+
+  const created = new Date().getTime();
+
+  const profileComment = new ProfileComment({ userId, accountId, content, created });
+  profileComment.save(async (err, doc) => {
+    if (err) {
+      res.status(200).json({ error: 'UNEXPECTED_ERROR' });
+    } else {
+      res.status(200).json({ okay: 'USER_PROFILE_COMMENTED' });
+    }
+  });
+});
+
 app.get('/api/ratings/:id', async (req, res, next) => {
   const accountId = req.params.id;
   const ratings = await AccountRating.find({ accountId })
@@ -72,9 +165,11 @@ app.get('/api/ratings/:id', async (req, res, next) => {
   res.status(200).json({ okay: ratings ?? [] });
 });
 
+// SHOULD BE DONE WITH INCREMENT AND ROUNDED ON THE FRONTEND
 app.post('/api/rateUser/:id', async (req, res, next) => {
   if (!req.user) {
     res.status(200).json({ error: 'TOKEN_NOT_FOUND' });
+    return;
   }
 
   const stars = parseInt(req.body.stars);
@@ -83,6 +178,7 @@ app.post('/api/rateUser/:id', async (req, res, next) => {
   const ratedUser = await User.findById(ratedUserId);
   if (!ratedUser) {
     res.status(200).json({ error: 'USER_PROFILE_NOT_FOUND' });
+    return;
   }
 
   const foundRating = await AccountRating.findOne({ userId: ratingUserId, accountId: ratedUserId });

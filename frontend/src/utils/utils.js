@@ -123,4 +123,36 @@ const getTimeDifference = (date) => {
   return `just now`;
 };
 
-export { FieldsObservable, networkCall, resizeBase64Img, getTimeDifference };
+const screwEvent = (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+  if (e.nativeEvent) {
+    e.nativeEvent.preventDefault();
+    e.nativeEvent.stopImmediatePropagation();
+    e.nativeEvent.stopPropagation();
+  }
+};
+
+const getHashFromEv = (e) => {
+  const element =
+    e.target && e.target.tagName === 'A'
+      ? e.target
+      : e.target && e.target.parentElement && e.target.parentElement.tagName === 'A'
+      ? e.target.parentElement
+      : e.target &&
+        e.target.parentElement &&
+        e.target.parentElement.parentElement &&
+        e.target.parentElement.parentElement.tagName === 'A'
+      ? e.target.parentElement.parentElement
+      : e.currentTarget && e.currentTarget.tagName === 'A'
+      ? e.currentTarget
+      : e.currentTarget && e.currentTarget.parentElement && e.currentTarget.parentElement.tagName === 'A'
+      ? e.currentTarget.parentElement
+      : null;
+
+  if (element) {
+    return element.hash.substring(1);
+  }
+};
+
+export { FieldsObservable, networkCall, resizeBase64Img, getTimeDifference, screwEvent, getHashFromEv };
