@@ -4,7 +4,7 @@ import { HashRouter, Route } from 'react-router-dom';
 import { observer } from 'mobx-react';
 import { useStore } from './store/store';
 import AppLoader from './components/loaders/AppLoader';
-import Notifications from './components/notifications/Notifications';
+import Notifications from './components/notifications/index';
 import Header from './components/header/index';
 import Login from './components/authorization/login/index';
 import Register from './components/authorization/register/index';
