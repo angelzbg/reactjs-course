@@ -1,10 +1,10 @@
 import './styles/user.css';
 import React, { useState, useEffect, useRef } from 'react';
 import { observer } from 'mobx-react';
-import { useStore } from '../../../../store/store';
-import AuthorizedMenu from './components/AuthorizedMenu';
-import UnauthorizedMenu from './components/UnauthorizedMenu';
-import { toggles } from '../../constants';
+import { useStore } from '../../../store/store';
+import AuthorizedMenu from './AuthorizedMenu';
+import UnauthorizedMenu from './UnauthorizedMenu';
+import { toggles } from '../constants';
 
 export default observer(() => {
   const store = useStore();

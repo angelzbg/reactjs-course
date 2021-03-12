@@ -5,9 +5,9 @@ import { observer } from 'mobx-react';
 import { useStore } from './store/store';
 import AppLoader from './components/loaders/AppLoader';
 import Notifications from './components/notifications/Notifications';
-import Header from './components/header/Header';
-import Login from './components/authorization/Login';
-import Register from './components/authorization/Register';
+import Header from './components/header/index';
+import Login from './components/authorization/login/index';
+import Register from './components/authorization/register/index';
 import Profile from './components/profile/index';
 
 export default observer(() => {

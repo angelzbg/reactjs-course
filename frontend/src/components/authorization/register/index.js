@@ -1,21 +1,24 @@
-import './styles/auth.css';
-import React from 'react';
+import '../styles/auth.css';
+import React, { useRef, useState } from 'react';
 import { Link, Redirect } from 'react-router-dom';
-import { useStore } from '../../store/store';
+import { useStore } from '../../../store/store';
 import { observer } from 'mobx-react';
-import { loginFields } from './constants';
-import { FieldsObservable } from '../../utils/utils';
-import FormField from './components/FormField';
-import { networkCodes } from '../../utils/constants';
+import { registerFields } from '../constants';
+import { FieldsObservable } from '../../../utils/utils';
+import RegisterAvatar from './RegisterAvatar';
+import FormField from '../../elements/FormField';
+import { networkCodes } from '../../../utils/constants';
 
 export default observer(() => {
   const store = useStore();
-  const fieldsObs = FieldsObservable(loginFields);
+  const fieldsObs = FieldsObservable(registerFields);
+  const [avatar, setAvatar] = useState('');
+  const avatarRef = useRef(null);
 
   const onSubmit = async (event) => {
     event.preventDefault();
     if (!fieldsObs.validateFields()) {
-      const response = await store.signIn(fieldsObs.getBody());
+      const response = await store.signUp({ ...fieldsObs.getBody(), avatar });
       if (response.error) {
         fieldsObs.setError(response.error);
       }
@@ -27,13 +30,15 @@ export default observer(() => {
   }
 
   return (
-    <div className="auth-form-wrapper login">
+    <div className="auth-form-wrapper register">
       <form onSubmit={onSubmit} className="auth-form" autoComplete="new-password">
+        {RegisterAvatar({ avatar, setAvatar, avatarRef })}
+
         {fieldsObs.fields.map((field, i) => (
           <FormField key={`input-wrapper-${i}`} {...{ field, fieldsObs }} />
         ))}
         <button className="auth-btn" type="submit">
-          Sign in
+          Sign up
         </button>
       </form>
       <div className="auth-error-network-wrap">
@@ -42,7 +47,7 @@ export default observer(() => {
         </span>
       </div>
       <div className="auth-info">
-        Not a member yet? <Link to="/register">Sign up</Link>
+        Already a member? <Link to="/login">Sign in</Link>
       </div>
     </div>
   );

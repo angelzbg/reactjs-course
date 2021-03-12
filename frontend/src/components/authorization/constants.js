@@ -38,7 +38,7 @@ export const registerFields = [
     placeholder: 'Login name',
     value: '',
     validate: (value) => !!value.match(/^[0-9a-zA-Z]{3,}$/),
-    errorMsg: '3 to 14 non special characters',
+    errorMsg: '3 to 14 alphanumeric characters',
     highlight: ['LOGON_TAKEN'],
     icon: PersonIcon,
   },

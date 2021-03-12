@@ -6,7 +6,7 @@ import { StarFillIcon, StarIcon, LocationIcon, TrashIcon } from '@primer/octicon
 
 export default observer(({ user, author, content, syncing, setDeleteId, commentId }) => (
   <div className="comment-content">
-    {user._id === author._id && (
+    {!!user && user._id === author._id && (
       <div className="comment-delete-wrap">
         <div className="comment-delete" onClick={() => (!syncing ? setDeleteId(commentId) : null)}>
           <TrashIcon size="small" />

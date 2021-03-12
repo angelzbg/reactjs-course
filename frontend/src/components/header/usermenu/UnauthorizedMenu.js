@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { observer } from 'mobx-react';
 import { PersonIcon, NorthStarIcon, SignInIcon, GlobeIcon } from '@primer/octicons-react';
 import Themes from './Themes';
-import { toggles } from '../../../constants';
+import { toggles } from '../constants';
 
 export default observer(({ wrapperRef, toggle, setToggle }) => (
   <div id="user-menu" ref={wrapperRef} className={`user-menu-wrapper ${toggle ? 'active' : 'inactive'}`}>

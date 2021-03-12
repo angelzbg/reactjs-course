@@ -1,11 +1,11 @@
 import React from 'react';
 import { observer } from 'mobx-react';
-import { useStore } from '../../../../../store/store';
+import { useStore } from '../../../store/store';
 import { PersonIcon, NorthStarIcon, SignOutIcon } from '@primer/octicons-react';
 import Themes from './Themes';
 import AuthCard from './AuthCard';
-import { toggles } from '../../../constants';
-import no_profile from '../../../../../images/no_profile.png';
+import { toggles } from '../constants';
+import no_profile from '../../../images/no_profile.png';
 
 export default observer(({ wrapperRef, toggle, setToggle }) => {
   const { user, signOut, getUserInfo } = useStore();

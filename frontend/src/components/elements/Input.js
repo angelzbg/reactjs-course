@@ -2,6 +2,7 @@ import React from 'react';
 
 const Input = ({ className, value, name, type, placeholder, setInput }) => (
   <input
+    autoComplete="new-password"
     className={className}
     name={name}
     type={type}

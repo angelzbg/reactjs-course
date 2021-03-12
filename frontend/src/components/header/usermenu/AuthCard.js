@@ -1,10 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { observer } from 'mobx-react';
-import { useStore } from '../../../../../store/store';
+import { useStore } from '../../../store/store';
 import { StarIcon, StarFillIcon } from '@primer/octicons-react';
-import { toggles } from '../../../constants';
-import no_profile from '../../../../../images/no_profile.png';
+import { toggles } from '../constants';
+import no_profile from '../../../images/no_profile.png';
 
 export default observer(({ setToggle }) => {
   const { user } = useStore();
