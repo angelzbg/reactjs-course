@@ -90,20 +90,14 @@ const getTimeDifference = (date, now = new Date().getTime()) => {
     if (days > 30) {
       const months = Math.floor(days % 30);
       if (months < 12) {
-        return `${months > 1 ? 'a month' : `${months} months`}${
-          days - months * 30 > 0 ? ` and ${days - months * 30} day(s)` : ''
-        } ago`;
+        return `${months > 1 ? 'a month' : `${months} months`} ago`;
       } else {
         const years = Math.floor(months % 12);
-        return `${years > 1 ? `${years} years` : 'a year'}${
-          months - years * 12 > 0 ? ` and ${months - years * 12} month(s)` : ''
-        } ago`;
+        return `${years > 1 ? `${years} years` : 'a year'} ago`;
       }
     } else if (days >= 7) {
       const weeks = Math.floor(days % 7);
-      return `${weeks > 1 ? `${weeks} weeks` : 'a week'}${
-        days - weeks * 7 > 0 ? ` and ${days - weeks * 7} day(s)` : ''
-      } ago`;
+      return `${weeks > 1 ? `${weeks} weeks` : 'a week'} ago`;
     } else {
       return `${days > 1 ? `${days} days` : 'a day'} ago`;
     }
