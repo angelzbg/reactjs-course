@@ -13,7 +13,6 @@ export default observer(({ id, filter, setFilter, syncing, sync }) => {
 
   return (
     <div className="comments-filter-profile">
-      {/*<div className="header-hr" />*/}
       <div className="comments-filter" onMouseEnter={() => toggleFilter()} onMouseLeave={() => toggleFilter()}>
         <div className={`filter-name ${filterPop ? 'open' : ''}`}>
           <div className="name">{filter}</div> {commentsIcons[filter]}

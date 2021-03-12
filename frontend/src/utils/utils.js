@@ -79,8 +79,7 @@ const resizeBase64Img = (srcData, width, height) => {
   });
 };
 
-const getTimeDifference = (date) => {
-  const now = new Date().getTime();
+const getTimeDifference = (date, now = new Date().getTime()) => {
   // get total seconds between the times
   let delta = Math.abs(date - now) / 1000;
 

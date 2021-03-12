@@ -5,6 +5,9 @@ import events from '../utils/events';
 import { networkCall } from '../utils/utils';
 
 const store = {
+  time: new Date().getTime(),
+  setTime: () => runInAction(() => (store.time += 60000)),
+
   isLoading: false,
   user: null,
 
@@ -201,6 +204,7 @@ const store = {
 makeAutoObservable(store);
 
 store.getUserInfo();
+setInterval(() => store.setTime(), 60000);
 
 const StoreContext = createContext(store);
 const useStore = () => useContext(StoreContext);

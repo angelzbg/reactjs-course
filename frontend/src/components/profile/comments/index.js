@@ -9,7 +9,7 @@ import CommentsHeader from './CommentsHeader';
 import CommentBox from './CommentBox';
 import NoComments from './NoComments';
 import CommentsContainer from './CommentsContainer';
-import CommentLeaveModal from './CommentLeaveModal';
+import CommentLeaveModal from './modals/CommentLeaveModal';
 import { screwEvent, getHashFromEv } from '../../../utils/utils';
 
 export default observer(({ id }) => {

@@ -1,0 +1,30 @@
+import React from 'react';
+import { observer } from 'mobx-react';
+import { ArrowUpIcon, ArrowDownIcon } from '@primer/octicons-react';
+import { useStore } from '../../../../store/store';
+import { getTimeDifference } from '../../../../utils/utils';
+
+export default observer(({ user, profileId, commentId, likes, dislikes, syncing, action, created }) => {
+  const { time } = useStore();
+  const liked = !!user && likes.indexOf(user._id) !== -1;
+  const disliked = !!user && dislikes.indexOf(user._id) !== -1;
+  return (
+    <div className="comment-status">
+      <div className="ratio">
+        <div
+          className={`likes ${liked ? 'active' : ''}`}
+          onClick={() => (!syncing && !liked ? action('like', profileId, commentId) : null)}
+        >
+          <ArrowUpIcon size="small" /> {likes.length}
+        </div>{' '}
+        <div
+          className={`dislikes ${disliked ? 'active' : ''}`}
+          onClick={() => (!syncing && !disliked ? action('dislike', profileId, commentId) : null)}
+        >
+          <ArrowDownIcon size="small" /> {dislikes.length}
+        </div>
+      </div>{' '}
+      ‧ {getTimeDifference(created, time)}
+    </div>
+  );
+});
