@@ -12,7 +12,7 @@ export default observer(({ id, filter, syncing, setSync, sync, commentRef }) => 
   const observable = useLocalObservable(() => ({
     deleteId: '',
     setDeleteId: (id = '') => (observable.deleteId = id),
-    action: async (action = '', profileId = '', commentId = '') => {
+    action: async (user, action = '', profileId = '', commentId = '') => {
       if (!user) return history.push('/login');
       setSync(true);
       if (action === 'delete') {
@@ -31,7 +31,7 @@ export default observer(({ id, filter, syncing, setSync, sync, commentRef }) => 
 
   return (
     <div className="comments-wrapper" style={{ maxHeight }}>
-      {deleteId && <CommentDeleteModal {...{ id, setDeleteId, action }} />}
+      {deleteId && <CommentDeleteModal {...{ id, setDeleteId, action, user }} />}
       {cmnts.map((item) => (
         <Comment key={`comment-${item._id}`} {...{ item, id, user, syncing, setDeleteId, action }} />
       ))}

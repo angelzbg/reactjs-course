@@ -13,13 +13,13 @@ export default observer(({ user, profileId, commentId, likes, dislikes, syncing,
       <div className="ratio">
         <div
           className={`likes ${liked ? 'active' : ''}`}
-          onClick={() => (!syncing && !liked ? action('like', profileId, commentId) : null)}
+          onClick={() => (!syncing && !liked ? action(user, 'like', profileId, commentId) : null)}
         >
           <ArrowUpIcon size="small" /> {likes.length}
         </div>{' '}
         <div
           className={`dislikes ${disliked ? 'active' : ''}`}
-          onClick={() => (!syncing && !disliked ? action('dislike', profileId, commentId) : null)}
+          onClick={() => (!syncing && !disliked ? action(user, 'dislike', profileId, commentId) : null)}
         >
           <ArrowDownIcon size="small" /> {dislikes.length}
         </div>
