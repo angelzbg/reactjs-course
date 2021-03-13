@@ -63,8 +63,9 @@ export default observer(({ id, setFilter, syncing, setSync, sync, content, setCo
           onPasteCapture={(e) => {
             screwEvent(e);
             const text = (e.clipboardData || window.clipboardData).getData('Text');
-            setContent(content + text.substring(0, 255 - content.length));
-            e.target.textContent = content;
+            const newContent = content + text.substring(0, 255 - content.length);
+            setContent(newContent);
+            commentRef.current.textContent = newContent;
             e.target.focus();
             document.execCommand('selectAll', false, null);
             document.getSelection().collapseToEnd();
