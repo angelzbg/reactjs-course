@@ -257,6 +257,7 @@
       .filter-name {
         color: var(--link2);
         cursor: pointer;
+        text-shadow: 1px 1px 1px var(--darker);
         .name {
           display: inline-block;
           width: 60px;

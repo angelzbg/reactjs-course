@@ -280,6 +280,7 @@
 .ratings-profile-wrapper .rating-filter-profile .rating-filter .filter-name {
   color: var(--link2);
   cursor: pointer;
+  text-shadow: 1px 1px 1px var(--darker);
 }
 
 .ratings-profile-wrapper .rating-filter-profile .rating-filter .filter-name .name {

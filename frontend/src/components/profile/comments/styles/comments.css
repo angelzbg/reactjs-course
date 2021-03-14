@@ -74,6 +74,7 @@
 
 .comments-profile-wrapper .comments-wrapper .comment .comment-status .ratio .likes.active {
   color: var(--link2);
+  text-shadow: 1px 1px 1px var(--darker);
   cursor: default;
 }
 
@@ -89,6 +90,7 @@
 
 .comments-profile-wrapper .comments-wrapper .comment .comment-status .ratio .dislikes.active {
   color: var(--error2);
+  text-shadow: 1px 1px 1px var(--darker);
   cursor: default;
 }
 
@@ -346,6 +348,7 @@
 .comments-profile-wrapper .comments-filter-profile .comments-filter .filter-name {
   color: var(--link2);
   cursor: pointer;
+  text-shadow: 1px 1px 1px var(--darker);
 }
 
 .comments-profile-wrapper .comments-filter-profile .comments-filter .filter-name .name {
