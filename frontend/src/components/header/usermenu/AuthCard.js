@@ -22,7 +22,7 @@ export default observer(({ setToggle }) => {
         <span className="me-type">{user.type}</span>
         {new Array(5).fill(0).map((_, i) => {
           const isVoted = votes !== 0;
-          const isFilled = isVoted && i <= ratingRound;
+          const isFilled = isVoted && i < ratingRound;
           return (
             <span className={`me-star ${isVoted ? 'voted' : 'notvoted'}`} key={`user-menu-me-star-${i}`}>
               {(isFilled ? StarFillIcon : StarIcon)({ size: 'medium' })}
