@@ -4,13 +4,13 @@ import { useStore } from '../../../store/store';
 import { observer, useLocalObservable } from 'mobx-react';
 import { ratingFilters } from '../constants';
 import events from '../../../utils/events';
-import ProfileRatingsLoader from '../../loaders/ProfileRatingsLoader';
+import ProfileRatingsLoader from '../../../components/loaders/ProfileRatingsLoader';
 import RatingsHeader from './RatingsHeader';
 import NoRatings from './NoRatings';
 import RatingsContainer from './RatingsContainer';
 
 export default observer(({ id }) => {
-  const { ratings, loadingRatings, getRatings } = useStore();
+  const { ratings, loadingRatings, getRatings } = useStore().profileStore;
   const observable = useLocalObservable(() => ({
     syncing: false,
     setSync: (isSync = true) => (observable.syncing = isSync),

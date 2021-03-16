@@ -1,4 +1,5 @@
 import { useLocalObservable } from 'mobx-react';
+import events from './events';
 
 const FieldsObservable = (fields = []) => {
   const observable = useLocalObservable(() => ({
@@ -40,6 +41,8 @@ const networkCall = async ({ path = '', method = '', body = {} }) => {
 
   return await (await fetch(path, req)).json();
 };
+
+const notify = (response) => events.trigger('notify', response);
 
 const resizeBase64Img = (srcData, width, height) => {
   return new Promise((resolve, reject) => {
@@ -154,4 +157,4 @@ const getHashFromEv = (e) => {
   }
 };
 
-export { FieldsObservable, networkCall, resizeBase64Img, getTimeDifference, screwEvent, getHashFromEv };
+export { FieldsObservable, networkCall, notify, resizeBase64Img, getTimeDifference, screwEvent, getHashFromEv };

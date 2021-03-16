@@ -7,7 +7,7 @@ import UnauthorizedMenu from './UnauthorizedMenu';
 import { toggles } from '../constants';
 
 export default observer(() => {
-  const store = useStore();
+  const { user } = useStore();
   const [toggle, setToggle] = useState(toggles.closed);
   const wrapperRef = useRef(null);
 
@@ -23,7 +23,7 @@ export default observer(() => {
     };
   }, []);
 
-  return store.user ? (
+  return user ? (
     <AuthorizedMenu {...{ wrapperRef, toggle, setToggle }} />
   ) : (
     <UnauthorizedMenu {...{ wrapperRef, toggle, setToggle }} />

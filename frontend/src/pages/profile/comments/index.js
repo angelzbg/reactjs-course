@@ -4,7 +4,7 @@ import { useStore } from '../../../store/store';
 import { observer, useLocalObservable } from 'mobx-react';
 import { commentsFilters } from '../constants';
 import events from '../../../utils/events';
-import ProfileCommentsLoader from '../../loaders/ProfileCommentsLoader';
+import ProfileCommentsLoader from '../../../components/loaders/ProfileCommentsLoader';
 import CommentsHeader from './CommentsHeader';
 import CommentBox from './CommentBox';
 import NoComments from './NoComments';
@@ -13,7 +13,7 @@ import CommentLeaveModal from './modals/CommentLeaveModal';
 import { screwEvent, getHashFromEv } from '../../../utils/utils';
 
 export default observer(({ id }) => {
-  const { comments, loadingComments, getComments } = useStore();
+  const { comments, getComments, loadingComments } = useStore().profileStore;
   const commentRef = useRef(null);
   const observable = useLocalObservable(() => ({
     syncing: false,

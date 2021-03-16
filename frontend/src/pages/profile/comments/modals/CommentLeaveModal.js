@@ -1,7 +1,7 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { observer } from 'mobx-react';
-import WarningModal from '../../../modals/WarningModal';
+import WarningModal from '../../../../components/modals/WarningModal';
 
 export default observer(({ toggleModal, modalRef, setModalRef, setContent }) => {
   const history = useHistory();

@@ -30,3 +30,10 @@ export const iconsByType = {
   [profileTypes.Developer]: OctofaceIcon,
   [profileTypes.Oragnization]: OrganizationIcon,
 };
+
+export const homeFilters = {
+  Developers: 'Developers',
+  Oragnization: 'Organizations',
+};
+
+export const homeFiltersActive = Object.values(homeFilters);

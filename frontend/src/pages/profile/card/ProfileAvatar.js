@@ -5,7 +5,7 @@ import { useStore } from '../../../store/store';
 import { resizeBase64Img } from '../../../utils/utils';
 
 export default observer(({ setSync, isSelf, avatar }) => {
-  const { updateUserProperty } = useStore();
+  const { updateUserProperty } = useStore().profileStore;
   const avatarRef = useRef(null);
   const updateAvatar = (files) => {
     if (files && files[0]) {

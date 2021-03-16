@@ -6,22 +6,22 @@ import { setColorScheme } from '../../../utils/themes';
 import { toggles } from '../constants';
 
 export default observer(({ setToggle }) => {
-  const store = useStore();
+  const { themeStore } = useStore();
   const themes = [
-    { name: store.themes[0], icon: <MoonIcon /> },
-    { name: store.themes[1], icon: <SunIcon /> },
+    { name: themeStore.themes[0], icon: <MoonIcon /> },
+    { name: themeStore.themes[1], icon: <SunIcon /> },
   ];
 
   return (
     <div className="user-menu-pop">
-      <div onMouseLeave={() => store.nextTheme(store.theme)}>
+      <div onMouseLeave={() => themeStore.nextTheme(themeStore.theme)}>
         {themes.map(({ name, icon }) => (
           <div
             key={`theme-${name}`}
             className="user-menu-item"
             onMouseEnter={() => setColorScheme(name)}
             onClick={() => {
-              store.nextTheme(name);
+              themeStore.nextTheme(name);
               setToggle(toggles.main);
             }}
           >

@@ -8,7 +8,7 @@ import Comment from './comment/index';
 
 export default observer(({ id, filter, syncing, setSync, sync, commentRef }) => {
   const history = useHistory();
-  const { user, comments, actionComment } = useStore();
+  const { user, profileStore } = useStore();
   const observable = useLocalObservable(() => ({
     deleteId: '',
     setDeleteId: (id = '') => (observable.deleteId = id),
@@ -18,16 +18,16 @@ export default observer(({ id, filter, syncing, setSync, sync, commentRef }) => 
       if (action === 'delete') {
         const id = observable.deleteId;
         observable.setDeleteId();
-        (await actionComment('delete', id)).okay ? sync(profileId) : setSync(false);
+        (await profileStore.actionComment('delete', id)).okay ? sync(profileId) : setSync(false);
       } else {
-        (await actionComment(action, commentId)).okay ? sync(profileId) : setSync(false);
+        (await profileStore.actionComment(action, commentId)).okay ? sync(profileId) : setSync(false);
       }
     },
   }));
 
   const { deleteId, setDeleteId, action } = observable;
   const maxHeight = `calc(100vh - 318px - ${commentRef?.current?.clientHeight ?? 0 + 12}px)`;
-  const cmnts = comments.slice().sort(commentsFilter[filter]);
+  const cmnts = profileStore.comments.slice().sort(commentsFilter[filter]);
 
   return (
     <div className="comments-wrapper" style={{ maxHeight }}>

@@ -5,24 +5,24 @@ import { useStore } from '../../../store/store';
 import { observer } from 'mobx-react';
 import { loginFields } from '../constants';
 import { FieldsObservable } from '../../../utils/utils';
-import FormField from '../../elements/FormField';
+import FormField from '../../../components/elements/FormField';
 import { networkCodes } from '../../../utils/constants';
 
 export default observer(() => {
-  const store = useStore();
+  const { user, auth } = useStore();
   const fieldsObs = FieldsObservable(loginFields);
 
   const onSubmit = async (event) => {
     event.preventDefault();
     if (!fieldsObs.validateFields()) {
-      const response = await store.signIn(fieldsObs.getBody());
+      const response = await auth.signIn(fieldsObs.getBody());
       if (response.error) {
         fieldsObs.setError(response.error);
       }
     }
   };
 
-  if (store.user) {
+  if (user) {
     return <Redirect to="/" />;
   }
 

@@ -6,7 +6,7 @@ import { useHistory } from 'react-router';
 
 export default observer(({ id, profile, isSelf, syncing, sync, setSync }) => {
   const history = useHistory();
-  const { user, rateUser } = useStore();
+  const { user, profileStore } = useStore();
   const { votes, rating, ratingRound } = profile;
   const [canVote, isVoted] = [!!user && user._id !== id && !!profile, votes !== 0];
 
@@ -15,7 +15,7 @@ export default observer(({ id, profile, isSelf, syncing, sync, setSync }) => {
     setHoveredStar: (number = 0) => (observable.hoveredStar = number),
     rate: async (stars = 0, isSelf, id) => {
       setSync(true);
-      (await rateUser(stars)).okay ? sync(!isSelf ? id : false) : setSync(false);
+      (await profileStore.rateUser(stars)).okay ? sync(!isSelf ? id : false) : setSync(false);
     },
   }));
 

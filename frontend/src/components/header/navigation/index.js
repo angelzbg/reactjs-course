@@ -7,14 +7,14 @@ import { links } from '../constants';
 
 export default observer(
   withRouter(({ location: { pathname } }) => {
-    const store = useStore();
+    const { user } = useStore();
 
     return (
       <div className="navigation-wrapper">
         {links.map(({ path, name, icon, auth }, i) => (
           <Link
             key={`nav-link-${i}`}
-            to={auth && !store.user ? auth : path}
+            to={auth && !user ? auth : path}
             className={`nav-icon-link ${pathname === path ? 'active' : 'inactive'}`}
           >
             {icon({ size: 'medium' })}

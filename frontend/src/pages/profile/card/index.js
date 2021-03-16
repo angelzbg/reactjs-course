@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import { useStore } from '../../../store/store';
 import { observer, useLocalObservable } from 'mobx-react';
 import { runInAction } from 'mobx';
-import ProfileLoader from '../../loaders/ProfileLoader';
+import ProfileLoader from '../../../components/loaders/ProfileLoader';
 import ProfileSync from './ProfileSync';
 import ProfileAvatar from './ProfileAvatar';
 import ProfileName from './ProfileName';
@@ -18,7 +18,7 @@ export default observer(({ id }) => {
     sync: async (id) => {
       observable.setSync(true);
       observable.setEditField(false);
-      await (id ? store.getUserProfile(id) : store.getUserInfo(true));
+      await (id ? store.profileStore.getUserProfile(id) : store.auth.getUserInfo(true));
       observable.setSync(false);
     },
     editField: false,
@@ -27,22 +27,27 @@ export default observer(({ id }) => {
 
   useEffect(() => {
     if (store.user && store.user._id === id && !store.isLoading) {
-      store.getUserInfo(true);
+      store.auth.getUserInfo(true);
     } else {
-      store.getUserProfile(id);
+      store.profileStore.getUserProfile(id);
     }
   }, [store, id]);
 
   useEffect(() => {
-    if (!store.user && (!store.profile || store.profile._id !== id) && !store.isLoading && !store.loadingProfile) {
-      store.getUserProfile(id);
+    if (
+      !store.user &&
+      (!store.profileStore.profile || store.profileStore.profile._id !== id) &&
+      !store.isLoading &&
+      !store.profileStore.loadingProfile
+    ) {
+      store.profileStore.getUserProfile(id);
     }
   }, [store, store.isLoading, id]);
 
   const { syncing, setSync, sync, editField, setEditField } = observable;
   const isSelf = !!store.user && store.user._id === id;
-  const isLoading = (!store.profile && !isSelf) || store.isLoading;
-  const profile = isSelf ? store.user : store.profile;
+  const isLoading = (!store.profileStore.profile && !isSelf) || store.isLoading;
+  const profile = isSelf ? store.user : store.profileStore.profile;
 
   return (
     <div className="profile-card">

@@ -1,5 +1,5 @@
-import Input from '../elements/Input';
-import Select from '../elements/Select';
+import Input from '../../components/elements/Input';
+import Select from '../../components/elements/Select';
 import { PersonIcon, ShieldLockIcon, ShieldIcon, FlameIcon, SmileyIcon, LocationIcon } from '@primer/octicons-react';
 
 export const loginFields = [

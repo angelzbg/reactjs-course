@@ -1,23 +1,23 @@
 import React from 'react';
 import { observer, useLocalObservable } from 'mobx-react';
 import { useStore } from '../../../store/store';
-import { CheckCircleIcon, XCircleIcon, PencilIcon } from '@primer/octicons-react';
+import { CheckCircleIcon, XCircleIcon, PencilIcon, LocationIcon } from '@primer/octicons-react';
 
 export default observer(({ profile, isSelf, setSync, setEditField, editField, syncing }) => {
-  const { updateUserProperty } = useStore();
+  const { updateUserProperty } = useStore().profileStore;
   const observable = useLocalObservable(() => ({
     value: '',
     error: '',
     setInput: (value = '') => {
       observable.value = value;
-      observable.error = value.length < 2 ? 'error' : '';
+      observable.error = !value.length ? 'error' : '';
     },
     updateField: async () => {
       setSync(true);
-      const oldValue = profile.name;
+      const oldValue = profile.city;
       const newValue = observable.value;
       if (newValue !== oldValue) {
-        const response = await updateUserProperty('name', newValue);
+        const response = await updateUserProperty('city', newValue);
         if (response.okay) {
           setEditField(false);
           setSync(false);
@@ -30,18 +30,21 @@ export default observer(({ profile, isSelf, setSync, setEditField, editField, sy
 
   const { value, error, setInput, updateField } = observable;
 
-  return editField === 'name' ? (
-    <div className="profile-card-name-input-wrap">
+  return editField === 'city' ? (
+    <div className="profile-card-location-input-wrap">
+      <div className="profile-card-icon-location">
+        <LocationIcon size="medium" />
+      </div>
       <input
         className={error}
         type="text"
-        placeholder="Name"
+        placeholder="City"
         value={value}
         onChange={(e) => setInput(e.target.value)}
       />
       {!syncing && (
         <>
-          {!error && value !== profile.name && (
+          {!error && value !== profile.city && (
             <div className="accept-button" onClick={updateField}>
               <CheckCircleIcon size="medium" />
             </div>
@@ -53,10 +56,13 @@ export default observer(({ profile, isSelf, setSync, setEditField, editField, sy
       )}
     </div>
   ) : (
-    <div className="profile-card-name-text">
-      {profile.name}
+    <div className="profile-card-location-text">
+      <div className="profile-card-icon-location">
+        <LocationIcon size="medium" />
+      </div>
+      {profile.city}
       {isSelf && (
-        <div className="edit-button-name" onClick={() => observable.setInput(profile.name) & setEditField('name')}>
+        <div className="edit-button-location" onClick={() => setInput(profile.city) & setEditField('city')}>
           <PencilIcon size="small" />
         </div>
       )}

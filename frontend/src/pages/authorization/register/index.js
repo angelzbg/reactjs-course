@@ -6,11 +6,11 @@ import { observer } from 'mobx-react';
 import { registerFields } from '../constants';
 import { FieldsObservable } from '../../../utils/utils';
 import RegisterAvatar from './RegisterAvatar';
-import FormField from '../../elements/FormField';
+import FormField from '../../../components/elements/FormField';
 import { networkCodes } from '../../../utils/constants';
 
 export default observer(() => {
-  const store = useStore();
+  const { user, auth } = useStore();
   const fieldsObs = FieldsObservable(registerFields);
   const [avatar, setAvatar] = useState('');
   const avatarRef = useRef(null);
@@ -18,14 +18,14 @@ export default observer(() => {
   const onSubmit = async (event) => {
     event.preventDefault();
     if (!fieldsObs.validateFields()) {
-      const response = await store.signUp({ ...fieldsObs.getBody(), avatar });
+      const response = await auth.signUp({ ...fieldsObs.getBody(), avatar });
       if (response.error) {
         fieldsObs.setError(response.error);
       }
     }
   };
 
-  if (store.user) {
+  if (user) {
     return <Redirect to="/" />;
   }
 

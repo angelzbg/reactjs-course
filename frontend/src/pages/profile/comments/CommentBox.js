@@ -8,10 +8,10 @@ import { screwEvent } from '../../../utils/utils';
 
 export default observer(({ id, setFilter, syncing, setSync, sync, content, setContent, commentRef }) => {
   const history = useHistory();
-  const { user, commentUser } = useStore();
+  const { user, profileStore } = useStore();
   const comment = async () => {
     setSync(true);
-    const result = await commentUser(content);
+    const result = await profileStore.commentUser(content);
     if (result.okay) {
       setContent();
       commentRef.current.textContent = '';

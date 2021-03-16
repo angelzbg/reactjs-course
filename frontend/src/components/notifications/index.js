@@ -1,17 +1,10 @@
 import './styles/notifications.css';
-
 import React, { useEffect } from 'react';
 import { observer, useLocalObservable } from 'mobx-react';
 import events from '../../utils/events';
 import { networkCodes } from '../../utils/constants';
-import { SyncIcon, InfoIcon, IssueOpenedIcon } from '@primer/octicons-react';
-
-const getId = () => Date.now().toString(36) + Math.random().toString(36).substring(2);
-
-const icons = {
-  error: IssueOpenedIcon,
-  okay: InfoIcon,
-};
+import { SyncIcon } from '@primer/octicons-react';
+import { getId, icons } from './constants';
 
 export default observer(() => {
   const manager = useLocalObservable(() => ({
@@ -39,7 +32,6 @@ export default observer(() => {
 
   useEffect(() => {
     events.listen('notify', 'notifications', manager.add);
-
     return () => {
       events.unlisten('notify', 'notifications');
     };
