@@ -1,38 +1,23 @@
 import './styles/home.css';
-import { observer, useLocalObservable } from 'mobx-react';
+import { observer } from 'mobx-react';
 import React, { useEffect } from 'react';
 import { useStore } from '../../store/store';
 import PageLoader from '../../components/loaders/PageLoader';
 import HorizontalContainer from './HorizontalContainer';
-import { getContainers } from './constants';
-import { runInAction } from 'mobx';
+import { useHomeObservable, getContainers } from './constants';
 import { SyncIcon } from '@primer/octicons-react';
 
 export default observer(() => {
   const store = useStore();
   const { user, home } = store;
   const { loading, data, getData, filters, filtersActive, setFilter } = home;
+  const { syncing, sync } = useHomeObservable(getData);
 
-  const observable = useLocalObservable(() => ({
-    syncing: false,
-    sync: async () => {
-      runInAction(() => (observable.syncing = true));
-      await getData();
-      runInAction(() => (observable.syncing = false));
-    },
-  }));
-
-  useEffect(() => {
-    if (!store.isLoading) {
-      getData();
-    }
-  }, [store, user, getData]);
+  useEffect(() => (!store.isLoading ? getData() : null), [store, user, getData]);
 
   if (loading) {
     return <PageLoader />;
   }
-
-  const { syncing, sync } = observable;
 
   return (
     <>

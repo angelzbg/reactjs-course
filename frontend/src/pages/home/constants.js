@@ -1,3 +1,19 @@
+import { runInAction } from 'mobx';
+import { useLocalObservable } from 'mobx-react-lite';
+
+export const useHomeObservable = (getData) => {
+  const observable = useLocalObservable(() => ({
+    syncing: false,
+    sync: async () => {
+      runInAction(() => (observable.syncing = true));
+      await getData();
+      runInAction(() => (observable.syncing = false));
+    },
+  }));
+
+  return observable;
+};
+
 export const getContainers = (data = {}, filters = {}, isAuth = false, activeFilters = []) => {
   return [
     {
