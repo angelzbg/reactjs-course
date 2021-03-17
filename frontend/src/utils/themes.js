@@ -1,3 +1,5 @@
+import { SunIcon, MoonIcon } from '@primer/octicons-react';
+
 const colors = {
   Dark: {
     '--lightest': '#e4e6eb',
@@ -28,6 +30,10 @@ const colors = {
     '--error2': '#b30000',
   },
 };
+
+const icons = [<MoonIcon />, <SunIcon />];
+
+const themeIcons = Object.fromEntries(Object.keys(colors).map((color, i) => [color, icons[i]]));
 
 const sameColors = {
   '--link1': '#2398eb',
@@ -69,4 +75,4 @@ const setTheme = (() => {
   };
 })();
 
-export { themes, getTheme, setTheme, setColorScheme };
+export { themes, getTheme, setTheme, setColorScheme, themeIcons };
