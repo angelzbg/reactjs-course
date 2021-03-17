@@ -24,7 +24,7 @@ export default class HomeStore {
 
   data = {};
   getData = async () => {
-    const response = await networkCall({ path: `/home`, method: 'GET' });
+    const response = await networkCall({ path: `/api/home`, method: 'GET' });
     if (response.error) {
       notify(response);
     } else {
