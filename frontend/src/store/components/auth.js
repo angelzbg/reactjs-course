@@ -1,82 +1,82 @@
-import { runInAction } from 'mobx';
+import { makeAutoObservable, runInAction } from 'mobx';
 import { networkCall, notify } from '../../utils/utils';
 
-const auth = [
-  'auth',
-  ({ root, auth }) => ({
-    signIn: async (body) => {
-      runInAction(() => (root().isLoading = true));
+export default class AuthStore {
+  constructor(root) {
+    makeAutoObservable(this);
+    this.root = root;
+  }
 
-      const response = await networkCall({ path: '/api/login', method: 'POST', body });
+  signIn = async (body) => {
+    runInAction(() => (this.root.isLoading = true));
 
-      if (response.okay) {
-        auth().getUserInfo();
-        notify(response);
-      } else {
-        runInAction(() => (root().isLoading = false));
-      }
+    const response = await networkCall({ path: '/api/login', method: 'POST', body });
 
-      return response;
-    },
-
-    signUp: async (body) => {
-      runInAction(() => (root().isLoading = true));
-
-      const response = await networkCall({ path: '/api/register', method: 'POST', body });
-
-      if (response.okay) {
-        notify(response);
-        auth().getUserInfo();
-      } else {
-        runInAction(() => (root().isLoading = false));
-      }
-
-      return response;
-    },
-
-    signOut: async () => {
-      runInAction(() => (root().isLoading = true));
-
-      const response = await networkCall({ path: '/api/logout', method: 'GET' });
-
-      if (response.okay) {
-        runInAction(() => (root().isLoading = false));
-        runInAction(() => (root().user = null));
-      }
-
+    if (response.okay) {
+      this.getUserInfo();
       notify(response);
+    } else {
+      runInAction(() => (this.root.isLoading = false));
+    }
 
-      return response;
-    },
+    return response;
+  };
 
-    getUserInfo: async (isSilent) => {
-      if (!isSilent) {
-        runInAction(() => (root().isLoading = true));
-      }
+  signUp = async (body) => {
+    runInAction(() => (this.root.isLoading = true));
 
-      const response = await networkCall({ path: '/api/userInfo', method: 'GET' });
+    const response = await networkCall({ path: '/api/register', method: 'POST', body });
 
-      if (response.okay) {
-        runInAction(() => {
-          if (!root().user) {
-            root().user = response.okay;
-          } else {
-            Object.assign(root().user, response.okay);
-          }
-        });
-      }
+    if (response.okay) {
+      notify(response);
+      this.getUserInfo();
+    } else {
+      runInAction(() => (this.root.isLoading = false));
+    }
 
-      if (!isSilent) {
-        runInAction(() => (root().isLoading = false));
-      }
+    return response;
+  };
 
-      if (response.error) {
-        runInAction(() => (root().user = root().user === undefined ? null : undefined));
-      }
+  signOut = async () => {
+    runInAction(() => (this.root.isLoading = true));
 
-      return response;
-    },
-  }),
-];
+    const response = await networkCall({ path: '/api/logout', method: 'GET' });
 
-export default auth;
+    if (response.okay) {
+      runInAction(() => (this.root.isLoading = false));
+      runInAction(() => (this.root.user = null));
+    }
+
+    notify(response);
+
+    return response;
+  };
+
+  getUserInfo = async (isSilent) => {
+    if (!isSilent) {
+      runInAction(() => (this.root.isLoading = true));
+    }
+
+    const response = await networkCall({ path: '/api/userInfo', method: 'GET' });
+
+    if (response.okay) {
+      runInAction(() => {
+        if (!this.root.user) {
+          this.root.user = response.okay;
+        } else {
+          Object.assign(this.root.user, response.okay);
+        }
+      });
+    }
+
+    if (!isSilent) {
+      runInAction(() => (this.root.isLoading = false));
+    }
+
+    if (response.error) {
+      runInAction(() => (this.root.user = this.root.user === undefined ? null : undefined));
+    }
+
+    return response;
+  };
+}

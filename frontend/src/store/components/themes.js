@@ -1,12 +1,13 @@
+import { makeAutoObservable } from 'mobx';
 import { themes, getTheme, setTheme } from '../../utils/themes';
 
-const themeStore = [
-  'themeStore',
-  ({ root, themeStore }) => ({
-    theme: getTheme(),
-    themes,
-    nextTheme: (theme) => (themeStore().theme = setTheme(theme)),
-  }),
-];
+export default class ThemesStore {
+  constructor(root) {
+    makeAutoObservable(this);
+    this.root = root;
+  }
 
-export default themeStore;
+  theme = getTheme();
+  themes = themes;
+  nextTheme = (theme) => (this.theme = setTheme(theme));
+}

@@ -1,29 +1,33 @@
 import { makeAutoObservable, runInAction } from 'mobx';
 import { createContext, useContext } from 'react';
-import auth from './components/auth';
-import themeStore from './components/themes';
-import profileStore from './pages/profile';
-import home from './pages/home';
+import AuthStore from './components/auth';
+import ThemeStore from './components/themes';
+import ProfileStore from './pages/profile';
+import HomeStore from './pages/home';
 
-const store = {
-  time: (() => {
+class Store {
+  constructor() {
+    makeAutoObservable(this);
+
+    this.auth = new AuthStore(this);
+    this.themeStore = new ThemeStore(this);
+    this.profileStore = new ProfileStore(this);
+    this.home = new HomeStore(this);
+
+    this.auth.getUserInfo();
+  }
+
+  isLoading = false;
+  user = null;
+
+  time = (() => {
     const time = new Date().getTime();
-    setInterval(() => runInAction(() => (store.time += 60000)), 60000);
+    setInterval(() => runInAction(() => (this.time += 60000)), 60000);
     return time;
-  })(),
+  })();
+}
 
-  isLoading: false,
-  user: null,
-};
-
-// Extendings
-[auth, themeStore, profileStore, home].forEach(([name = '', init = () => {}]) =>
-  Object.assign((store[name] = {}), init({ root: () => store, [name]: () => store[name] }))
-);
-
-makeAutoObservable(store);
-
-store.auth.getUserInfo();
+const store = new Store();
 
 const StoreContext = createContext(store);
 const useStore = () => useContext(StoreContext);
