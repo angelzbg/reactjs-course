@@ -1,9 +1,9 @@
 import React from 'react';
 import { observer } from 'mobx-react';
 import { withRouter } from 'react-router';
-import ProfileCard from './card/index';
-import Comments from './comments/index';
-import Ratings from './ratings/index';
+import ProfileCard from './card';
+import Comments from './comments';
+import Ratings from './ratings';
 
 export default observer(
   withRouter(({ match }) => {

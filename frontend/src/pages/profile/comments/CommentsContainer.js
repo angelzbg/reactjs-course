@@ -4,7 +4,7 @@ import { useStore } from '../../../store/store';
 import { observer, useLocalObservable } from 'mobx-react';
 import { commentsFilter } from '../constants';
 import CommentDeleteModal from './modals/CommentDeleteModal';
-import Comment from './comment/index';
+import Comment from './comment';
 
 export default observer(({ id, filter, syncing, setSync, sync, commentRef }) => {
   const history = useHistory();

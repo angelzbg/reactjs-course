@@ -4,12 +4,13 @@ import { HashRouter, Route, Switch } from 'react-router-dom';
 import { observer } from 'mobx-react';
 import { useStore } from './store/store';
 import AppLoader from './components/loaders/AppLoader';
-import Notifications from './components/notifications/index';
-import Header from './components/header/index';
-import Login from './pages/authorization/login/index';
-import Register from './pages/authorization/register/index';
-import Profile from './pages/profile/index';
+import Notifications from './components/notifications';
+import Header from './components/header';
+import Login from './pages/authorization/login';
+import Register from './pages/authorization/register';
+import Profile from './pages/profile';
 import Home from './pages/home/index';
+import Developers from './pages/developers';
 
 export default observer(() => {
   const store = useStore();
@@ -23,6 +24,7 @@ export default observer(() => {
             <Route exact path="/login" component={Login} />
             <Route exact path="/register" component={Register} />
             <Route exact path="/profile/:id" component={Profile} />
+            <Route path="/developers/:section?" component={Developers} />
           </Switch>
         </div>
         <Notifications />
