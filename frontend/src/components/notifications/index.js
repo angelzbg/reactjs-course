@@ -1,34 +1,12 @@
 import './styles/notifications.css';
 import React, { useEffect } from 'react';
-import { observer, useLocalObservable } from 'mobx-react';
+import { observer } from 'mobx-react';
 import events from '../../utils/events';
-import { networkCodes } from '../../utils/constants';
 import { SyncIcon } from '@primer/octicons-react';
-import { getId, icons } from './constants';
+import { useNotificationsManager } from './constants';
 
 export default observer(() => {
-  const manager = useLocalObservable(() => ({
-    notifications: [],
-    add: (entry) => {
-      const readable = Object.entries(entry).shift();
-      const notification = {
-        id: getId(),
-        type: readable[0],
-        msg: networkCodes[readable[1]],
-      };
-      manager.notifications.unshift(notification);
-      setTimeout(() => {
-        manager.remove(notification.id);
-      }, 5000);
-      console.log(`%c${notification.msg}`, `color: ${notification.type === 'error' ? '#e60000' : '#005ce6'}`);
-    },
-    remove: (removeId) => {
-      const foundIndex = manager.notifications.findIndex(({ id }) => id === removeId);
-      if (foundIndex !== -1) {
-        manager.notifications.splice(foundIndex, 1);
-      }
-    },
-  }));
+  const manager = useNotificationsManager();
 
   useEffect(() => {
     events.listen('notify', 'notifications', manager.add);
@@ -39,11 +17,11 @@ export default observer(() => {
 
   return (
     <div className="notifications-container">
-      {manager.notifications.map(({ id, type, msg }) => (
+      {manager.notifications.map(({ id, type, msg, icon }) => (
         <div key={id} className={`notification-wrapper ${type}`}>
           <div className="notification-icon-wrap">
             <SyncIcon size="medium" className="notification-icon-sync" />
-            {icons[type]({ size: 'medium', className: 'notifications-icon' })}
+            {icon({ size: 'medium', className: 'notifications-icon' })}
           </div>
           <div className="notification-message">{msg}</div>
           <div className="notification-dismiss" onClick={() => manager.remove(id)}>
