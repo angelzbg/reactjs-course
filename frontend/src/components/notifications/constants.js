@@ -17,7 +17,7 @@ const useNotificationsManager = () => {
       const notification = {
         id: getId(),
         type: readable[0],
-        msg: networkCodes[readable[1]],
+        msg: networkCodes[readable[1]] ?? readable[1],
         icon: icons[readable[0]],
       };
       manager.notifications.unshift(notification);
