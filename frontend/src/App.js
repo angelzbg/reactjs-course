@@ -1,4 +1,4 @@
-import './app.css';
+import './styles/app.css';
 import React from 'react';
 import { HashRouter, Route, Switch } from 'react-router-dom';
 import { observer } from 'mobx-react';
