@@ -5,8 +5,8 @@ import ProfileCard from './card';
 import Comments from './comments';
 import Ratings from './ratings';
 
-export default observer(
-  withRouter(({ match }) => {
+export default withRouter(
+  observer(({ match }) => {
     const id = match.params.id;
     return (
       <>

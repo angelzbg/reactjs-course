@@ -5,8 +5,8 @@ import { observer } from 'mobx-react';
 import { useStore } from '../../../store/store';
 import { links } from '../constants';
 
-export default observer(
-  withRouter(({ location: { pathname } }) => {
+export default withRouter(
+  observer(({ location: { pathname } }) => {
     const { user } = useStore();
 
     return (
