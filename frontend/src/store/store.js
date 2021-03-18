@@ -4,6 +4,8 @@ import AuthStore from './components/auth';
 import ThemeStore from './components/themes';
 import ProfileStore from './pages/profile';
 import HomeStore from './pages/home';
+import DevelopersStore from './pages/developers';
+import OrganizationsStore from './pages/organizations';
 
 class Store {
   constructor() {
@@ -13,6 +15,8 @@ class Store {
     this.themeStore = new ThemeStore(this);
     this.profileStore = new ProfileStore(this);
     this.home = new HomeStore(this);
+    this.developers = new DevelopersStore(this);
+    this.organizations = new OrganizationsStore(this);
 
     this.auth.getUserInfo();
   }

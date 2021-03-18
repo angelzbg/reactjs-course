@@ -157,4 +157,19 @@ const getHashFromEv = (e) => {
   }
 };
 
-export { FieldsObservable, networkCall, notify, resizeBase64Img, getTimeDifference, screwEvent, getHashFromEv };
+const onAppScroll = (e) => {
+  if (e.target.scrollHeight - e.target.scrollTop === e.target.clientHeight) {
+    events.trigger('scroll-bottom', e.target);
+  }
+};
+
+export {
+  FieldsObservable,
+  networkCall,
+  notify,
+  resizeBase64Img,
+  getTimeDifference,
+  screwEvent,
+  getHashFromEv,
+  onAppScroll,
+};

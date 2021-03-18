@@ -43,6 +43,46 @@
           animation: rotation 2.3s infinite linear;
 }
 
+.developers-loader {
+  width: 656px;
+  height: calc(100vh - 100px);
+  -webkit-backdrop-filter: blur(2px);
+          backdrop-filter: blur(2px);
+  -webkit-animation: opacity-keyframe 0.4s ease-out;
+          animation: opacity-keyframe 0.4s ease-out;
+  position: relative;
+}
+
+.developers-loader svg {
+  color: var(--link2);
+  width: 20vmin;
+  height: 20vmin;
+  margin-top: calc((100vh - 100px - 20vmin) / 2);
+  margin-left: calc((656px - 20vmin) / 2);
+  -webkit-animation: rotation 2.3s infinite linear;
+          animation: rotation 2.3s infinite linear;
+}
+
+.organizations-loader {
+  width: 656px;
+  height: calc(100vh - 100px);
+  -webkit-backdrop-filter: blur(2px);
+          backdrop-filter: blur(2px);
+  -webkit-animation: opacity-keyframe 0.4s ease-out;
+          animation: opacity-keyframe 0.4s ease-out;
+  position: relative;
+}
+
+.organizations-loader svg {
+  color: var(--link2);
+  width: 20vmin;
+  height: 20vmin;
+  margin-top: calc((100vh - 100px - 20vmin) / 2);
+  margin-left: calc((656px - 20vmin) / 2);
+  -webkit-animation: rotation 2.3s infinite linear;
+          animation: rotation 2.3s infinite linear;
+}
+
 .profile-loader {
   width: 100%;
   height: 100%;

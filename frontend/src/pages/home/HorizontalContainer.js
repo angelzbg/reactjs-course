@@ -29,7 +29,7 @@ export default observer(({ title, data, yearAgo, time, link }) => {
             {data.map((item) => (
               <UserCard key={`${title}-${item._id}`} {...{ title, yearAgo, time, item }} />
             ))}
-            {data.length && <ViewMoreCard {...{ type: data[0].type, link }} />}
+            {data.length === 10 && <ViewMoreCard {...{ type: data[0].type, link }} />}
           </div>
         </div>
       </div>

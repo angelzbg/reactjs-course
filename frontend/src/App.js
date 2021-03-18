@@ -11,6 +11,8 @@ import Register from './pages/authorization/register';
 import Profile from './pages/profile';
 import Home from './pages/home/index';
 import Developers from './pages/developers';
+import Organizations from './pages/organizations';
+import { onAppScroll } from './utils/utils';
 
 export default observer(() => {
   const store = useStore();
@@ -18,13 +20,14 @@ export default observer(() => {
     <HashRouter>
       <div className="app-wrapper">
         <Header />
-        <div className="content-wrapper scroll-h">
+        <div className="content-wrapper scroll-h" onScroll={onAppScroll}>
           <Switch>
             <Route exact path="/" component={Home} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/register" component={Register} />
             <Route exact path="/profile/:id" component={Profile} />
-            <Route path="/developers/:section?" component={Developers} />
+            <Route exact path="/developers/:section?" component={Developers} />
+            <Route exact path="/organizations/:section?" component={Organizations} />
           </Switch>
         </div>
         <Notifications />

@@ -43,7 +43,95 @@ app.use((req, res, next) => {
   });
 });
 
-app.get('/home', async (req, res, next) => {
+app.post('/api/organizations', async (req, res, next) => {
+  const skip = req.body.skip ?? 0;
+  const limit = req.body.limit ?? 10;
+  const filter = req.body.filter ?? '';
+  const authFilters = ['new-local', 'top-local'];
+  const city = req?.user?.city ?? '';
+  if (!city && authFilters.includes(filter)) {
+    res.status(200).json({ error: 'TOKEN_NOT_FOUND' });
+    return;
+  }
+
+  if (!['new', 'top', 'new-local', 'top-local'].includes(filter)) {
+    res.status(200).json({ error: 'INVALID_FILTER' });
+    return;
+  }
+
+  const sorts = {
+    new: { created: -1 },
+    top: { rating: -1 },
+    'new-local': { created: -1 },
+    'top-local': { rating: -1 },
+  };
+
+  const selected = ['avatar', 'city', 'name', 'created', 'rating', 'ratingRound', 'stars', 'type', 'votes'];
+
+  const result = await User.find(
+    {
+      type: 'Organization',
+      ...(city && authFilters.includes(filter) ? { city } : {}),
+      ...(['new', 'new-local'].includes(filter)
+        ? { created: { $lt: parseInt(req.body.created ?? Number.MAX_SAFE_INTEGER) } }
+        : {}),
+    },
+    selected,
+    {
+      ...(['top', 'top-local'].includes(filter) ? { skip } : {}),
+      limit,
+      sort: sorts[filter],
+    }
+  );
+
+  res.status(200).json({ okay: result ?? [] });
+});
+
+app.post('/api/developers', async (req, res, next) => {
+  const skip = req.body.skip ?? 0;
+  const limit = req.body.limit ?? 10;
+  const filter = req.body.filter ?? '';
+  const authFilters = ['new-local', 'top-local'];
+  const city = req?.user?.city ?? '';
+  if (!city && authFilters.includes(filter)) {
+    res.status(200).json({ error: 'TOKEN_NOT_FOUND' });
+    return;
+  }
+
+  if (!['new', 'top', 'new-local', 'top-local'].includes(filter)) {
+    res.status(200).json({ error: 'INVALID_FILTER' });
+    return;
+  }
+
+  const sorts = {
+    new: { created: -1 },
+    top: { rating: -1 },
+    'new-local': { created: -1 },
+    'top-local': { rating: -1 },
+  };
+
+  const selected = ['avatar', 'city', 'name', 'created', 'rating', 'ratingRound', 'stars', 'type', 'votes'];
+
+  const result = await User.find(
+    {
+      type: 'Developer',
+      ...(city && authFilters.includes(filter) ? { city } : {}),
+      ...(['new', 'new-local'].includes(filter)
+        ? { created: { $lt: parseInt(req.body.created ?? Number.MAX_SAFE_INTEGER) } }
+        : {}),
+    },
+    selected,
+    {
+      ...(['top', 'top-local'].includes(filter) ? { skip } : {}),
+      limit,
+      sort: sorts[filter],
+    }
+  );
+
+  res.status(200).json({ okay: result ?? [] });
+});
+
+app.get('/api/home', async (req, res, next) => {
   let city;
   if (!!req.user) {
     city = req.user.city;
@@ -240,7 +328,13 @@ app.post('/api/rateUser/:id', async (req, res, next) => {
     return;
   }
 
-  const stars = parseInt(req.body.stars);
+  let stars = parseInt(req.body.stars ?? 5);
+  if (stars < 1) {
+    stars = 1;
+  } else if (stars > 5) {
+    stars = 5;
+  }
+
   const ratingUserId = req.user._id.toString();
   const ratedUserId = req.params.id;
   const ratedUser = await User.findById(ratedUserId);
