@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { StarFillIcon, StarIcon, LocationIcon } from '@primer/octicons-react';
 import { getTimeDifference } from '../../utils/utils';
 
-export default observer(({ title, date, item }) => {
+export default observer(({ title, yearAgo, time, item }) => {
   const { _id, name, avatar, rating, votes, ratingRound, created, city } = item;
   return (
     <Link to={`/profile/${_id}`} className="user-card">
@@ -26,8 +26,8 @@ export default observer(({ title, date, item }) => {
       </div>
       <div className="date">
         joined{' '}
-        {date - 34712647200 < created
-          ? getTimeDifference(created)
+        {yearAgo < created
+          ? getTimeDifference(created, time)
           : new Date(created).toLocaleString('en-GB', { timeZone: 'UTC' }).substring(0, 10)}
       </div>
     </Link>

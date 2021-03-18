@@ -9,7 +9,7 @@ import { SyncIcon } from '@primer/octicons-react';
 
 export default observer(() => {
   const store = useStore();
-  const { user, home } = store;
+  const { user, home, time } = store;
   const { loading, data, getData, filters, filtersActive, setFilter } = home;
   const { syncing, sync } = useHomeObservable(getData);
 
@@ -18,6 +18,8 @@ export default observer(() => {
   if (loading) {
     return <PageLoader />;
   }
+
+  const yearAgo = new Date().getTime() - 34712647200;
 
   return (
     <>
@@ -36,7 +38,7 @@ export default observer(() => {
         </div>
       </div>
       {getContainers(data, filters, !!user, filtersActive).map(({ title, data, link }) => (
-        <HorizontalContainer key={`container-h-${title}`} {...{ title, data, link }} />
+        <HorizontalContainer key={`container-h-${title}`} {...{ title, data, yearAgo, time, link }} />
       ))}
     </>
   );
