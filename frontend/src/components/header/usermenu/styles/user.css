@@ -6,8 +6,12 @@
   z-index: 3;
 }
 
-.user-menu-wrapper.inactive:hover {
-  opacity: 0.9;
+.user-menu-wrapper.auth {
+  right: 64px;
+}
+
+.user-menu-wrapper.auth .user-menu-pop {
+  right: -48px;
 }
 
 .user-menu-wrapper.active .profile-icon {
@@ -18,7 +22,11 @@
 }
 
 .user-menu-wrapper.active .profile-icon .user-menu-name {
-  color: var(--lightest);
+  color: var(--active);
+}
+
+.user-menu-wrapper.active .profile-icon:hover {
+  background-color: var(--active-bgr);
 }
 
 .user-menu-wrapper .profile-icon {
@@ -26,6 +34,8 @@
   width: 40px;
   height: 40px;
   border-radius: 20px;
+  display: inline-block;
+  vertical-align: top;
   color: var(--light);
 }
 
@@ -33,6 +43,10 @@
   width: -webkit-max-content;
   width: -moz-max-content;
   width: max-content;
+}
+
+.user-menu-wrapper .profile-icon:hover {
+  background-color: var(--medium2);
 }
 
 .user-menu-wrapper .profile-icon .user-menu-avatar {
@@ -76,7 +90,7 @@
   position: absolute;
   right: 0;
   top: 46px;
-  border-radius: 10px;
+  border-radius: 6px;
   -webkit-box-shadow: 15px 15px 50px rgba(0, 0, 0, 0.2);
   box-shadow: 15px 15px 50px rgba(0, 0, 0, 0.2);
 }

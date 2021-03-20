@@ -9,9 +9,9 @@ import { screwEvent } from '../../../utils/utils';
 export default observer(({ id, setFilter, syncing, setSync, sync, content, setContent, commentRef }) => {
   const history = useHistory();
   const { user, profileStore } = useStore();
-  const comment = async () => {
+  const comment = async (id) => {
     setSync(true);
-    const result = await profileStore.commentUser(content);
+    const result = await profileStore.commentUser(content, id);
     if (result.okay) {
       setContent();
       commentRef.current.textContent = '';
@@ -57,7 +57,7 @@ export default observer(({ id, setFilter, syncing, setSync, sync, content, setCo
             (() => (e.key !== 'Backspace' && e.key !== 'Control' && content.length === 255 ? screwEvent(e) : null))();
             if (e.key === 'Enter') {
               screwEvent(e);
-              (() => (content.length >= 10 ? comment() : null))();
+              (() => (content.length >= 10 ? comment(id) : null))();
             }
           }}
           onPasteCapture={(e) => {

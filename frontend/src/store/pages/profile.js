@@ -88,8 +88,7 @@ export default class ProfileStore {
     return response;
   };
 
-  commentUser = async (content = '') => {
-    const id = this?.profile?._id ?? this.root.user._id;
+  commentUser = async (content = '', id = '') => {
     const response = await networkCall({
       path: `/api/comments/${id}`,
       method: 'POST',

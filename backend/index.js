@@ -2,28 +2,36 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const jwt = require('jsonwebtoken');
+const cors = require('cors');
+const Events = require('./utils/events');
 const { getId } = require('./utils/utils');
+const uniqid = require('uniqid');
 
 const User = require('./models/User.js');
 const AccountRating = require('./models/Rating');
 const ProfileComment = require('./models/ProfileComment');
+const Friend = require('./models/Friend');
+const FriendRequest = require('./models/FriendRequest');
 
 const PORT = 3000;
 const connectionStr = 'mongodb://localhost:27017/webby';
 const secret = 'testappwhocares';
 
 const app = express();
+const http = require('http').createServer(app);
+const io = require('socket.io')(http);
 
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
+app.use(cors());
 
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-  next();
-});
+const signToken = (login) => {
+  const payload = { login };
+  const token = jwt.sign(payload, secret /*, { expiresIn: '1h' }*/);
+  return token;
+};
 
 app.use((req, res, next) => {
   const token = req.cookies.token || req.headers.token; /*[authHeaderName]*/
@@ -39,6 +47,7 @@ app.use((req, res, next) => {
     }
 
     req.user = await User.findOne({ login: decoded.login });
+    req.token = token;
     next();
   });
 });
@@ -200,12 +209,237 @@ app.get('/api/home', async (req, res, next) => {
   });
 });
 
+app.get('/api/send-friend-request/:id', async (req, res, next) => {
+  if (!req.user) {
+    res.status(200).json({ error: 'TOKEN_NOT_FOUND' });
+    return;
+  }
+
+  const id = req.params.id;
+  const foundUser = await User.findById(id);
+  if (!foundUser) {
+    res.status(200).json({ error: 'USER_PROFILE_NOT_FOUND' });
+    return;
+  }
+
+  const foundFriendship = await Friend.findOne({ users: { $all: [req.user._id, foundUser._id] } });
+  if (foundFriendship) {
+    res.status(200).json({ error: 'USER_ALREADY_FRIENDED' });
+    return;
+  }
+
+  const foundRequest = await FriendRequest.findOne({ sender: req.user._id, receiver: id });
+  if (foundRequest) {
+    res.status(200).json({ error: 'REQUEST_ALREADY_SENT_TO_USER' });
+    return;
+  } else {
+    const friendRequest = new FriendRequest({
+      sender: req.user._id,
+      receiver: foundUser._id,
+      created: new Date().getTime(),
+    });
+    friendRequest.save(async (err, doc) => {
+      if (err) {
+        res.status(200).json({ error: 'UNEXPECTED_ERROR' });
+      } else {
+        const data = {
+          ...(() => {
+            const { _id, created } = doc;
+            return { _id, created };
+          })(),
+          sender: (() => {
+            const { _id, city, created, type, name, avatar, rating, ratingRound, votes, stars } = req.user;
+            return { _id, city, created, type, name, avatar, rating, ratingRound, votes, stars };
+          })(),
+          receiver: (() => {
+            const { _id, city, created, type, name, avatar, rating, ratingRound, votes, stars } = foundUser;
+            return { _id, city, created, type, name, avatar, rating, ratingRound, votes, stars };
+          })(),
+        };
+        res.status(200).json({ okay: data });
+        Events.trigger('emit', {
+          id: foundUser.socketId,
+          channel: 'friend-request-received',
+          data,
+        });
+      }
+    });
+  }
+});
+
+app.get('/api/accept-friend-request/:id', async (req, res, next) => {
+  if (!req.user) {
+    res.status(200).json({ error: 'TOKEN_NOT_FOUND' });
+    return;
+  }
+
+  const requestId = req.params.id;
+  const foundRequest = await FriendRequest.findById(requestId);
+  if (!foundRequest) {
+    res.status(200).json({ error: 'FRIEND_REQUEST_NOT_FOUND' });
+    return;
+  }
+
+  if (foundRequest.receiver.toString() !== req.user._id.toString()) {
+    res.status(200).json({ error: 'UNAUTHORIZED_ACCESS' });
+    return;
+  }
+
+  const users = [req.user._id, foundRequest.sender];
+  const friendship = new Friend({ users, created: new Date().getTime() });
+  friendship.save(async (err, doc) => {
+    if (err) {
+      res.status(200).json({ error: 'UNEXPECTED_ERROR' });
+    } else {
+      const senderId = foundRequest.sender;
+      await FriendRequest.findByIdAndDelete(requestId);
+      const sender = await User.findById(senderId)
+        .populate('sender', '_id city created type name avatar rating ratingRound votes stars socketId')
+        .lean();
+
+      const data = {
+        ...(() => {
+          const { _id, created } = doc;
+          return { _id, created };
+        })(),
+        users: [
+          (() => {
+            const { _id, city, created, type, name, avatar, rating, ratingRound, votes, stars } = req.user;
+            return { _id, city, created, type, name, avatar, rating, ratingRound, votes, stars };
+          })(),
+          (() => {
+            const { _id, city, created, type, name, avatar, rating, ratingRound, votes, stars } = sender;
+            return { _id, city, created, type, name, avatar, rating, ratingRound, votes, stars };
+          })(),
+        ],
+      };
+
+      res.status(200).json({ okay: data });
+      Events.trigger('emit', {
+        id: sender.socketId,
+        channel: 'friend-request-accepted',
+        data: { friend: data, removed: requestId },
+      });
+    }
+  });
+});
+
+app.get('/api/remove-friend-request/:id', async (req, res, next) => {
+  if (!req.user) {
+    res.status(200).json({ error: 'TOKEN_NOT_FOUND' });
+    return;
+  }
+
+  const requestId = req.params.id;
+  const foundRequest = await FriendRequest.findById(requestId)
+    .populate('sender', '_id socketId')
+    .populate('receiver', '_id socketId')
+    .lean();
+
+  if (!foundRequest) {
+    res.status(200).json({ error: 'REQUEST_NOT_FOUND' });
+    return;
+  } else {
+    let sender = req.user._id.toString() === foundRequest.sender._id.toString();
+    let receiver = req.user._id.toString() === foundRequest.receiver._id.toString();
+    if (sender || receiver) {
+      const id = foundRequest._id.toString();
+      await FriendRequest.findByIdAndDelete(id);
+      res.status(200).json({ okay: 'REQUEST_REMOVED' });
+      Events.trigger('emit', {
+        id: sender ? foundRequest.receiver.socketId : foundRequest.sender.socketId,
+        channel: 'friend-request-removed',
+        data: id,
+      });
+    } else {
+      res.status(200).json({ error: 'UNAUTHORIZED_ACCESS' });
+    }
+  }
+});
+
+app.get('/api/friends/remove/:id', async (req, res, next) => {
+  if (!req.user) {
+    res.status(200).json({ error: 'TOKEN_NOT_FOUND' });
+    return;
+  }
+
+  const friendId = req.params.id;
+  const foundFriend = await Friend.findById(friendId).populate('users', '_id socketId').lean();
+  if (!foundFriend) {
+    res.status(200).json({ error: 'FRIENDSHIP_NOT_FOUND' });
+    return;
+  }
+
+  const isValid = foundFriend.users.find(({ _id }) => _id.toString() === req.user._id.toString());
+  if (!isValid) {
+    res.status(200).json({ error: 'UNAUTHORIZED_ACCESS' });
+    return;
+  }
+
+  await Friend.findByIdAndDelete(friendId);
+  res.status(200).json({ okay: 'FRIENDSHIP_REMOVED' });
+  Events.trigger('emit', {
+    id: foundFriend.users.find(({ _id }) => _id.toString() !== req.user._id.toString()).socketId,
+    channel: 'friend-removed',
+    data: friendId,
+  });
+});
+
+app.get('/api/friends', async (req, res, next) => {
+  if (!req.user) {
+    res.status(200).json({ error: 'TOKEN_NOT_FOUND' });
+    return;
+  }
+
+  const friends = await Friend.find({ users: req.user._id })
+    .populate('users', '_id city created type name avatar rating ratingRound votes stars')
+    .sort({ created: -1 })
+    .lean();
+
+  res.status(200).json({ okay: friends || [] });
+});
+
+app.get('/api/friend-requests', async (req, res, next) => {
+  if (!req.user) {
+    res.status(200).json({ error: 'TOKEN_NOT_FOUND' });
+    return;
+  }
+
+  const friendRequests = await FriendRequest.find({
+    $or: [{ sender: req.user._id }, { receiver: req.user._id }],
+  })
+    .populate('sender', '_id city created type name avatar rating ratingRound votes stars')
+    .populate('receiver', '_id city created type name avatar rating ratingRound votes stars')
+    .sort({ created: -1 })
+    .lean();
+
+  res.status(200).json({ okay: friendRequests || [] });
+});
+
 app.get('/api/profile/:id', async (req, res) => {
   const id = req.params.id;
   const profile = await User.findById(id).populate('ratings').lean();
   if (profile) {
     const { _id, city, created, type, name, avatar, rating, ratingRound, votes, stars } = profile;
-    res.status(200).json({ okay: { _id, city, created, type, name, avatar, rating, ratingRound, votes, stars } });
+    const okay = { _id, city, created, type, name, avatar, rating, ratingRound, votes, stars };
+
+    /*if (req.user) {
+      const friendRequest = await FriendRequest.findOne({
+        $or: [
+          { sender: req.user._id, receiver: id },
+          { sender: id, receiver: req.user._id },
+        ],
+      });
+
+      if (friendRequest) {
+        okay.friendRequest = {
+          type: friendRequest.sender.toString() === req.user._id.toString() ? 'sender' : 'receiver',
+          id: friendRequest._id,
+        };
+      }
+    }*/
+
+    res.status(200).json({ okay });
     return;
   }
 
@@ -215,7 +449,10 @@ app.get('/api/profile/:id', async (req, res) => {
 app.get('/api/userInfo', (req, res) => {
   if (req.user) {
     const { _id, city, created, type, name, avatar, rating, ratingRound, votes, stars } = req.user;
-    res.status(200).json({ okay: { _id, city, created, type, name, avatar, rating, ratingRound, votes, stars } });
+    const { lastNotifCheck, socketId } = req.user;
+    res.status(200).json({
+      okay: { _id, city, created, type, name, avatar, rating, ratingRound, votes, stars, lastNotifCheck, socketId },
+    });
   } else {
     res.status(200).json({ error: 'TOKEN_NOT_FOUND' });
   }
@@ -386,13 +623,7 @@ app.post('/api/userInfo/:id', async (req, res) => {
     return;
   }
 
-  const found = await User.findById(id).lean();
-  if (!found) {
-    res.status(200).json({ error: 'USER_PROFILE_NOT_FOUND' });
-    return;
-  }
-
-  let { name, city, avatar } = req.body;
+  let { name, city, avatar, lastNotifCheck } = req.body;
 
   if (name) {
     await User.findByIdAndUpdate(id, { name });
@@ -412,8 +643,8 @@ app.post('/api/userInfo/:id', async (req, res) => {
       );
       avatar = `${imgId}.jpg`;
 
-      if (found.avatar) {
-        require('fs').unlinkSync(`public/avatars/${found.avatar}`);
+      if (req.user.avatar) {
+        require('fs').unlinkSync(`public/avatars/${req.user.avatar}`);
       }
     } catch (ex) {
       avatar = '';
@@ -421,6 +652,11 @@ app.post('/api/userInfo/:id', async (req, res) => {
 
     await User.findByIdAndUpdate(id, { avatar });
     res.status(200).json({ okay: avatar });
+    return;
+  } else if (lastNotifCheck) {
+    const date = new Date().getTime();
+    await User.findByIdAndUpdate(id, { lastNotifCheck: date });
+    res.status(200).json({ okay: date });
     return;
   }
 
@@ -456,6 +692,7 @@ app.post('/api/register', async (req, res) => {
     name,
     city,
     created: new Date().getTime(),
+    socketId: uniqid() + uniqid(),
     ...(avatar ? { avatar } : {}),
   });
 
@@ -463,8 +700,7 @@ app.post('/api/register', async (req, res) => {
     if (err) {
       res.status(200).json({ error: 'UNEXPECTED_ERROR' });
     } else {
-      const payload = { login };
-      const token = jwt.sign(payload, secret /*, { expiresIn: '1h' }*/);
+      const token = signToken(login);
       res.cookie('token', token, { httpOnly: true });
       res.status(200).json({ okay: 'REGISTER_SUCCESSFUL' });
     }
@@ -486,8 +722,7 @@ app.post('/api/login', (req, res) => {
         } else if (!same) {
           res.status(200).json({ error: 'WRONG_CREDENTIALS' });
         } else {
-          const payload = { login };
-          const token = jwt.sign(payload, secret /*, { expiresIn: '1h' }*/);
+          const token = signToken(login);
           res.cookie('token', token, { httpOnly: true });
           res.status(200).json({ okay: 'LOGIN_SUCCESSFUL' });
         }
@@ -508,6 +743,36 @@ app.use((err, _, res, _1) => {
   }
 });
 
+const sockets = {};
+
+io.on('connection', (socket) => {
+  let socketId;
+  socket.on('subscribeSocket', (id) => {
+    socketId = id;
+    sockets[socketId] = (sockets[socketId] || []).concat(socket);
+  });
+  socket.on('disconnect', () => {
+    if (sockets[socketId]) {
+      sockets[socketId] = sockets[socketId].filter((s) => s.id !== socket.id);
+      if (!sockets[socketId].length) {
+        delete sockets[socketId];
+      }
+    }
+  });
+  socket.on('unsubscribeSocket', () => {
+    if (sockets[socketId]) {
+      sockets[socketId] = sockets[socketId].filter((s) => s.id !== socket.id);
+      if (!sockets[socketId].length) {
+        delete sockets[socketId];
+      }
+    }
+  });
+});
+
+Events.listen('emit', 'sockets', ({ id, channel, data }) =>
+  sockets[id]?.forEach((s) => s.emit(channel, JSON.stringify(data)))
+);
+
 mongoose
   .connect(connectionStr, {
     useNewUrlParser: true,
@@ -517,5 +782,5 @@ mongoose
   })
   .then(() => {
     console.log('Connected to database successfully!');
-    app.listen(PORT, console.log(`Listening on port ${PORT} -> http://localhost:${PORT}`));
+    http.listen(PORT, console.log(`Listening on port ${PORT} -> http://localhost:${PORT}`));
   });

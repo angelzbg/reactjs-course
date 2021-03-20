@@ -4,9 +4,10 @@ import { observer } from 'mobx-react';
 import { PersonIcon, NorthStarIcon, SignInIcon, GlobeIcon } from '@primer/octicons-react';
 import Themes from './Themes';
 import { toggles } from '../constants';
+import { wrappersIds } from '../constants';
 
 export default observer(({ wrapperRef, toggle, setToggle }) => (
-  <div id="user-menu" ref={wrapperRef} className={`user-menu-wrapper ${toggle ? 'active' : 'inactive'}`}>
+  <div id={wrappersIds.userMenu} ref={wrapperRef} className={`user-menu-wrapper ${toggle ? 'active' : 'inactive'}`}>
     <div className="profile-icon" onClick={() => setToggle(!toggle ? toggles.main : toggles.closed)}>
       <PersonIcon />
     </div>

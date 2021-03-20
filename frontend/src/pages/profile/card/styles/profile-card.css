@@ -60,6 +60,124 @@
   padding-top: 2px;
 }
 
+.profile-card .profile-card-info .profile-card-link-wrap {
+  position: absolute;
+  right: -60px;
+  bottom: 0;
+}
+
+.profile-card .profile-card-info .profile-card-link-wrap.disabled div {
+  opacity: 0.8;
+}
+
+.profile-card .profile-card-info .profile-card-link-wrap.disabled div:hover {
+  background-color: var(--medium);
+  border: 1px solid transparent;
+}
+
+.profile-card .profile-card-info .profile-card-link-wrap .p-link-remove-button {
+  cursor: pointer;
+  color: var(--lightest);
+  background-color: var(--medium);
+  padding: 6px 12px 7px 8px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+}
+
+.profile-card .profile-card-info .profile-card-link-wrap .p-link-remove-button svg {
+  width: 20px;
+  height: 20px;
+  color: var(--error);
+}
+
+.profile-card .profile-card-info .profile-card-link-wrap .p-link-remove-button:hover {
+  background-color: var(--medium2);
+  border: 1px solid var(--error2);
+}
+
+.profile-card .profile-card-info .profile-card-link-wrap .p-link-remove-button:hover svg {
+  color: var(--error2);
+}
+
+.profile-card .profile-card-info .profile-card-link-wrap .p-link-add-button {
+  cursor: pointer;
+  color: var(--lightest);
+  background-color: var(--medium);
+  padding: 6px 8px 7px 12px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+}
+
+.profile-card .profile-card-info .profile-card-link-wrap .p-link-add-button svg {
+  width: 20px;
+  height: 20px;
+  color: var(--link1);
+}
+
+.profile-card .profile-card-info .profile-card-link-wrap .p-link-add-button:hover {
+  background-color: var(--medium2);
+  border: 1px solid var(--link1);
+}
+
+.profile-card .profile-card-info .profile-card-link-wrap .p-link-add-button:hover svg {
+  color: var(--link2);
+}
+
+.profile-card .profile-card-info .profile-card-link-wrap .p-link-accept-button {
+  margin-right: 4px;
+  cursor: pointer;
+  display: inline-block;
+  color: var(--lightest);
+  background-color: var(--medium);
+  padding: 6px 12px 7px 8px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+}
+
+.profile-card .profile-card-info .profile-card-link-wrap .p-link-accept-button svg {
+  width: 20px;
+  height: 20px;
+  color: var(--link1);
+}
+
+.profile-card .profile-card-info .profile-card-link-wrap .p-link-accept-button:hover {
+  background-color: var(--medium2);
+  border: 1px solid var(--link1);
+}
+
+.profile-card .profile-card-info .profile-card-link-wrap .p-link-accept-button:hover svg {
+  color: var(--link2);
+}
+
+.profile-card .profile-card-info .profile-card-link-wrap .p-link-decline-button {
+  cursor: pointer;
+  display: inline-block;
+  color: var(--lightest);
+  background-color: var(--medium);
+  padding: 6px 12px 7px 8px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+}
+
+.profile-card .profile-card-info .profile-card-link-wrap .p-link-decline-button svg {
+  width: 20px;
+  height: 20px;
+  color: var(--error);
+}
+
+.profile-card .profile-card-info .profile-card-link-wrap .p-link-decline-button:hover {
+  background-color: var(--medium2);
+  border: 1px solid var(--error2);
+}
+
+.profile-card .profile-card-info .profile-card-link-wrap .p-link-decline-button:hover svg {
+  color: var(--error2);
+}
+
 .profile-card .profile-card-name-text {
   font-size: 18px;
   font-weight: bold;

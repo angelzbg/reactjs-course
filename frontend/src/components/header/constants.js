@@ -1,8 +1,14 @@
 import { FlameIcon, OctofaceIcon, OrganizationIcon, SearchIcon, HistoryIcon } from '@primer/octicons-react';
 
+export const wrappersIds = {
+  userMenu: 'user-menu',
+  notifMenu: 'notif-menu',
+};
+
 export const toggles = {
   main: 'main',
   themes: 'themes',
+  notifications: 'notifications',
   closed: '',
 };
 

@@ -55,6 +55,108 @@
       padding-left: 6px;
       padding-top: 2px;
     }
+
+    .profile-card-link-wrap {
+      position: absolute;
+      right: -60px;
+      bottom: 0;
+      &.disabled {
+        div {
+          opacity: 0.8;
+          &:hover {
+            background-color: var(--medium);
+            border: 1px solid transparent;
+          }
+        }
+      }
+      .p-link-remove-button {
+        cursor: pointer;
+        color: var(--lightest);
+        background-color: var(--medium);
+        padding: 6px 12px 7px 8px;
+        font-size: 16px;
+        border-radius: 8px;
+        border: 1px solid transparent;
+        svg {
+          width: 20px;
+          height: 20px;
+          color: var(--error);
+        }
+        &:hover {
+          background-color: var(--medium2);
+          border: 1px solid var(--error2);
+          svg {
+            color: var(--error2);
+          }
+        }
+      }
+      .p-link-add-button {
+        cursor: pointer;
+        color: var(--lightest);
+        background-color: var(--medium);
+        padding: 6px 8px 7px 12px;
+        font-size: 16px;
+        border-radius: 8px;
+        border: 1px solid transparent;
+        svg {
+          width: 20px;
+          height: 20px;
+          color: var(--link1);
+        }
+        &:hover {
+          background-color: var(--medium2);
+          border: 1px solid var(--link1);
+          svg {
+            color: var(--link2);
+          }
+        }
+      }
+      .p-link-accept-button {
+        margin-right: 4px;
+        cursor: pointer;
+        display: inline-block;
+        color: var(--lightest);
+        background-color: var(--medium);
+        padding: 6px 12px 7px 8px;
+        font-size: 16px;
+        border-radius: 8px;
+        border: 1px solid transparent;
+        svg {
+          width: 20px;
+          height: 20px;
+          color: var(--link1);
+        }
+        &:hover {
+          background-color: var(--medium2);
+          border: 1px solid var(--link1);
+          svg {
+            color: var(--link2);
+          }
+        }
+      }
+      .p-link-decline-button {
+        cursor: pointer;
+        display: inline-block;
+        color: var(--lightest);
+        background-color: var(--medium);
+        padding: 6px 12px 7px 8px;
+        font-size: 16px;
+        border-radius: 8px;
+        border: 1px solid transparent;
+        svg {
+          width: 20px;
+          height: 20px;
+          color: var(--error);
+        }
+        &:hover {
+          background-color: var(--medium2);
+          border: 1px solid var(--error2);
+          svg {
+            color: var(--error2);
+          }
+        }
+      }
+    }
   }
 
   .profile-card-name-text {

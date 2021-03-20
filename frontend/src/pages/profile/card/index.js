@@ -9,6 +9,7 @@ import ProfileAvatar from './ProfileAvatar';
 import ProfileName from './ProfileName';
 import ProfileLocation from './ProfileLocation';
 import ProfileRating from './ProfileRating';
+import ProfileLink from './ProfileLink';
 
 export default observer(({ id }) => {
   const store = useStore();
@@ -62,6 +63,7 @@ export default observer(({ id }) => {
             <div className="profile-card-account-type">{profile.type}</div>
             <ProfileLocation {...{ profile, isSelf, setSync, setEditField, editField, syncing }} />
             <ProfileRating {...{ id, profile, isSelf, sync, setSync, syncing }} />
+            {!!store.user && store.user._id !== id && <ProfileLink {...{ id, syncing, setSync, sync }} />}
           </div>
         </>
       )}

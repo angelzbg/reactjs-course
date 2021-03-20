@@ -14,6 +14,8 @@ const UserSchema = new mongoose.Schema({
   votes: { type: Number, default: 0 },
   rating: { type: Number, default: 0 },
   ratingRound: { type: Number, default: 0 },
+  lastNotifCheck: { type: Number, default: 0 },
+  socketId: { type: String, required: true },
 });
 
 UserSchema.pre('save', function (next) {

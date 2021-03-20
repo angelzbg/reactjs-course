@@ -100,7 +100,8 @@ const getTimeDifference = (date, now = new Date().getTime()) => {
       }
     } else if (days >= 7) {
       const weeks = Math.floor(days / 7);
-      return `${weeks > 1 ? `${weeks} weeks` : 'a week'} ago`;
+      const ramainingDays = days - weeks * 7;
+      return `${weeks > 1 ? `${weeks} weeks` : 'a week'}${ramainingDays > 0 ? ` and ${ramainingDays} day(s)` : ''} ago`;
     } else {
       return `${days > 1 ? `${days} days` : 'a day'} ago`;
     }

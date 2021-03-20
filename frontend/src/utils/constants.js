@@ -23,6 +23,7 @@ export const profileTypes = {
 export const toggles = {
   main: 'main',
   themes: 'themes',
+  notifications: 'notifications',
   closed: '',
 };
 
