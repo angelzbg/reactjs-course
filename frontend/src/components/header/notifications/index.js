@@ -39,7 +39,11 @@ export default observer(({ toggle, setToggle, notifWrapRef }) => {
         <div className="notif-container-wrap">
           <div className="notif-container">
             <Header {...{ syncing, sync }} />
-            {list.map((item, i) => typeComponent[item.type]({ item, i, setToggle, profileStore, time }))}
+            {!!list.length ? (
+              list.map((item, i) => typeComponent[item.type]({ item, i, setToggle, profileStore, time }))
+            ) : (
+              <div className="notif-empty">Nothing new to display</div>
+            )}
           </div>
         </div>
       )}

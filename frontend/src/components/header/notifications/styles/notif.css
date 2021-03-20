@@ -80,6 +80,13 @@
   background-color: var(--scroll1);
 }
 
+.notif-wrapper .notif-container-wrap .notif-container .notif-empty {
+  text-align: center;
+  font-size: 15px;
+  color: var(--light);
+  padding: 8px 0;
+}
+
 .notif-wrapper .notif-container-wrap .notif-container .notif-header {
   position: relative;
   font-size: 18px;
