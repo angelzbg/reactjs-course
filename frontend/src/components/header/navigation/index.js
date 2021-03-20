@@ -14,7 +14,11 @@ export default withRouter(
           <Link
             key={`nav-link-${i}`}
             to={auth && !user ? auth : path}
-            className={`nav-icon-link ${pathname === path ? 'active' : 'inactive'}`}
+            className={`nav-icon-link ${
+              (pathname === '/' && pathname === path) || (path !== '/' && pathname.startsWith(path))
+                ? 'active'
+                : 'inactive'
+            }`}
           >
             {icon({ size: 'medium' })}
             <div className="tip-navigation">{name}</div>
