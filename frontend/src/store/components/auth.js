@@ -72,23 +72,28 @@ export default class AuthStore {
           await Promise.all([this.root.loadFriends(), this.root.loadRequests()]);
           runInAction(() => (this.root.user = user));
           listen(user.socketId);
+          if (!isSilent) {
+            runInAction(() => (this.root.isLoading = false));
+          }
         })();
       } else {
-        runInAction(() =>
+        runInAction(() => {
           Object.assign(this.root.user, {
             ...response.okay,
             lastNotifCheck: response.okay.lastNotifCheck ?? 0,
-          })
-        );
+          });
+          if (!isSilent) {
+            this.root.isLoading = false;
+          }
+        });
       }
-    }
-
-    if (!isSilent) {
-      runInAction(() => (this.root.isLoading = false));
-    }
-
-    if (response.error) {
-      runInAction(() => (this.root.user = this.root.user === undefined ? null : undefined));
+    } else {
+      runInAction(() => {
+        this.root.user = this.root.user === undefined ? null : undefined;
+        if (!isSilent) {
+          this.root.isLoading = false;
+        }
+      });
     }
 
     return response;
