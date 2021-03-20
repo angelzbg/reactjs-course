@@ -2,15 +2,10 @@ import './styles/notif.css';
 import { observer, useLocalObservable } from 'mobx-react';
 import { useStore } from '../../../store/store';
 import { toggles } from '../constants';
-import { notificationTypes } from './constants';
+import { notificationsComponents } from './constants';
 import { wrappersIds } from '../constants';
 import Bell from './Bell';
 import Header from './Header';
-import FriendRequest from './FriendRequest';
-
-const typeComponent = {
-  [notificationTypes.friendRequest]: (props) => <FriendRequest key={`notif-acc-${props.item._id}`} {...props} />,
-};
 
 export default observer(({ toggle, setToggle, notifWrapRef }) => {
   const { time, profileStore, loadRequests, notifications } = useStore();
@@ -40,7 +35,7 @@ export default observer(({ toggle, setToggle, notifWrapRef }) => {
           <div className="notif-container">
             <Header {...{ syncing, sync }} />
             {!!list.length ? (
-              list.map((item, i) => typeComponent[item.type]({ item, i, setToggle, profileStore, time }))
+              list.map((item, i) => notificationsComponents[item.type]({ item, i, setToggle, profileStore, time }))
             ) : (
               <div className="notif-empty">Nothing new to display</div>
             )}
