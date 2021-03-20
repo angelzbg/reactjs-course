@@ -5,9 +5,8 @@ import { Link } from 'react-router-dom';
 import no_profile from '../../../images/no_profile.png';
 import { getTimeDifference } from '../../../utils/utils';
 
-export default observer(({ item, i, setToggle, profileStore, time }) => (
+export default observer(({ item, setToggle, profileStore, time }) => (
   <Link
-    key={`notif-acc-${item._id}`}
     to={`/profile/${item.sender._id}`}
     className="friend-request-wrap"
     onClick={() => {
