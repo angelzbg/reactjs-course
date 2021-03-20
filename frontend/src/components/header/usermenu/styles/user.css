@@ -4,6 +4,11 @@
   position: absolute;
   cursor: pointer;
   z-index: 3;
+  /*&.inactive {
+    &:hover {
+      //opacity: 0.9;
+    }
+  }*/
 }
 
 .user-menu-wrapper.auth {

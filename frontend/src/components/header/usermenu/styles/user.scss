@@ -10,11 +10,11 @@
       right: -48px;
     }
   }
-  &.inactive {
+  /*&.inactive {
     &:hover {
       //opacity: 0.9;
     }
-  }
+  }*/
   &.active {
     .profile-icon {
       -webkit-box-shadow: 0 0px 2px var(--shadow1), 0 0 10px var(--shadow2);
