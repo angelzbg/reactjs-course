@@ -10,6 +10,8 @@ export default observer(({ section }) => {
   const { filters, isValidFilter } = organizations;
   const [filterPop, setFilterPop] = useState(false);
 
+  document.title = `${filters[section] || 'Organizations'} - Webby`;
+
   return (
     <div className="organizations-filter-wrapper">
       <div className="filter" onMouseEnter={() => setFilterPop(true)} onMouseLeave={() => setFilterPop(false)}>

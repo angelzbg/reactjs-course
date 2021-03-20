@@ -15,6 +15,8 @@ export default observer(() => {
 
   useEffect(() => (!store.isLoading ? getData() : null), [store, user, getData]);
 
+  document.title = 'Home - Webby';
+
   if (loading) {
     return <PageLoader />;
   }

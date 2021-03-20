@@ -25,6 +25,8 @@ export default observer(() => {
     }
   };
 
+  document.title = 'Sign Up - Webby';
+
   if (user) {
     return <Redirect to="/" />;
   }

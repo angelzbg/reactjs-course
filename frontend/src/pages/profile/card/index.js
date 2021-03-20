@@ -46,6 +46,9 @@ export default observer(({ id }) => {
   const isLoading = (!store.profileStore.profile && !isSelf) || store.isLoading;
   const profile = isSelf ? store.user : store.profileStore.profile;
 
+  const name = (isSelf ? store.user.name : store.profileStore?.profile?.name) || 'User';
+  document.title = `${name}'s profile - Webby`;
+
   return (
     <div className="profile-card">
       {isLoading ? (
