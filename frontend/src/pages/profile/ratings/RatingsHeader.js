@@ -1,4 +1,3 @@
-import React from 'react';
 import { observer, useLocalObservable } from 'mobx-react';
 import { SyncIcon } from '@primer/octicons-react';
 import { ratingFilters, ratingIcons } from '../constants';

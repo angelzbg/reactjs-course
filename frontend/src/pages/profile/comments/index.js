@@ -1,5 +1,5 @@
 import './styles/comments.css';
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useStore } from '../../../store/store';
 import { observer, useLocalObservable } from 'mobx-react';
 import { commentsFilters } from '../constants';

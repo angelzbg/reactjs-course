@@ -1,5 +1,5 @@
 import './styles/ratings.css';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useStore } from '../../../store/store';
 import { observer, useLocalObservable } from 'mobx-react';
 import { ratingFilters } from '../constants';

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { observer } from 'mobx-react';
 import events from '../../utils/events';
 import DeveloperCard from './DeveloperCard';

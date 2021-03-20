@@ -1,5 +1,5 @@
 import './styles/profile-card.css';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useStore } from '../../../store/store';
 import { observer, useLocalObservable } from 'mobx-react';
 import { runInAction } from 'mobx';
@@ -35,12 +35,8 @@ export default observer(({ id }) => {
   }, [store, id]);
 
   useEffect(() => {
-    if (
-      !store.user &&
-      (!store.profileStore.profile || store.profileStore.profile._id !== id) &&
-      !store.isLoading &&
-      !store.profileStore.loadingProfile
-    ) {
+    const notLoading = !store.isLoading && !store.profileStore.loadingProfile;
+    if (!store.user && (!store.profileStore.profile || store.profileStore.profile._id !== id) && notLoading) {
       store.profileStore.getUserProfile(id);
     }
   }, [store, store.isLoading, id]);

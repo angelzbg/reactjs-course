@@ -1,4 +1,3 @@
-import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { observer } from 'mobx-react';
 import WarningModal from '../../../../components/modals/WarningModal';

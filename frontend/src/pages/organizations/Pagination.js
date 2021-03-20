@@ -1,7 +1,6 @@
-import React from 'react';
 import { observer } from 'mobx-react';
-import { SyncIcon } from '@primer/octicons-react';
 import { useStore } from '../../store/store';
+import { SyncIcon } from '@primer/octicons-react';
 
 export default observer(() => {
   const { canPaginate, paginating, getData, data } = useStore().organizations;

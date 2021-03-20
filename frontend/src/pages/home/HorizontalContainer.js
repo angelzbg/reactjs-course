@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { observer } from 'mobx-react';
 import { screwEvent } from '../../utils/utils';
 import UserCard from './UserCard';

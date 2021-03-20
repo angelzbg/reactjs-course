@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { observer } from 'mobx-react';
 import { useStore } from '../../store/store';
 import { ChevronRightIcon, ShieldXIcon } from '@primer/octicons-react';

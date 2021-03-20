@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { observer } from 'mobx-react';
+import { useStore } from '../../store/store';
 import events from '../../utils/events';
 import OrganizationCard from './OrganizationCard';
 import Pagination from './Pagination';
-import { useStore } from '../../store/store';
 
 export default observer(({ section }) => {
   const { organizations, time } = useStore();

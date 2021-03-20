@@ -1,6 +1,6 @@
-import { ArrowLeftIcon, ArrowRightIcon, XIcon } from '@primer/octicons-react';
 import { observer } from 'mobx-react';
 import { useStore } from '../../../store/store';
+import { ArrowLeftIcon, ArrowRightIcon, XIcon } from '@primer/octicons-react';
 
 export default observer(({ id, syncing, setSync, sync }) => {
   const { user, friends, requests, sendRequest, acceptRequest, removeRequest, removeFriend } = useStore();

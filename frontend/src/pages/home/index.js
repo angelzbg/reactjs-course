@@ -1,6 +1,6 @@
 import './styles/home.css';
 import { observer } from 'mobx-react';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useStore } from '../../store/store';
 import PageLoader from '../../components/loaders/PageLoader';
 import HorizontalContainer from './HorizontalContainer';

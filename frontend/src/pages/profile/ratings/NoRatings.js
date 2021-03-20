@@ -1,4 +1,3 @@
-import React from 'react';
 import { HubotIcon } from '@primer/octicons-react';
 
 const NoRatings = () => (

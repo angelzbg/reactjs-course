@@ -1,4 +1,3 @@
-import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { useStore } from '../../../store/store';
 import { observer } from 'mobx-react';

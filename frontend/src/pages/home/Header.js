@@ -1,6 +1,4 @@
-import './styles/home.css';
 import { observer } from 'mobx-react';
-import React from 'react';
 import { SyncIcon } from '@primer/octicons-react';
 
 export default observer(({ filters, filtersActive, setFilter, syncing, sync }) => (

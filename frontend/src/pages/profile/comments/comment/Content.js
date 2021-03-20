@@ -1,4 +1,3 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import { observer } from 'mobx-react';
 import { iconsByType } from '../../../../utils/constants';

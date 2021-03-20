@@ -1,4 +1,3 @@
-import React from 'react';
 import { Portal } from 'react-portal';
 import { observer } from 'mobx-react';
 import { AlertIcon } from '@primer/octicons-react';

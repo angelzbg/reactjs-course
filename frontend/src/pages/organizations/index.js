@@ -1,5 +1,5 @@
 import './styles/organizations.css';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { observer } from 'mobx-react';
 import { useHistory, withRouter } from 'react-router';
 import { useStore } from '../../store/store';

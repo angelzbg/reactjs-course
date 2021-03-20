@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import { Fragment } from 'react';
 import { useStore } from '../../../store/store';
 import { observer, useLocalObservable } from 'mobx-react';
 import { StarFillIcon, StarIcon } from '@primer/octicons-react';

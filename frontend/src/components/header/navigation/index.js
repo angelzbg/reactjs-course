@@ -1,5 +1,4 @@
 import './styles/navigation.css';
-import React from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { observer } from 'mobx-react';
 import { useStore } from '../../../store/store';

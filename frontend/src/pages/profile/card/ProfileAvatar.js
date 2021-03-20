@@ -1,7 +1,7 @@
-import React, { useRef } from 'react';
+import { useRef } from 'react';
 import { observer } from 'mobx-react';
-import no_profile from '../../../images/no_profile.png';
 import { useStore } from '../../../store/store';
+import no_profile from '../../../images/no_profile.png';
 import { resizeBase64Img } from '../../../utils/utils';
 
 export default observer(({ setSync, isSelf, avatar }) => {

@@ -1,4 +1,3 @@
-import React from 'react';
 import { observer } from 'mobx-react';
 import { StarFillIcon, StarIcon, LocationIcon } from '@primer/octicons-react';
 import { iconsByType } from '../../../utils/constants';

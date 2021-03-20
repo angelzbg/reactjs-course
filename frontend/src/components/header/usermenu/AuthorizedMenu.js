@@ -1,4 +1,3 @@
-import React from 'react';
 import { observer } from 'mobx-react';
 import { useStore } from '../../../store/store';
 import { PersonIcon, NorthStarIcon, SignOutIcon } from '@primer/octicons-react';

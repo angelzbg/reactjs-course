@@ -1,8 +1,7 @@
-import React from 'react';
 import { observer } from 'mobx-react';
-import { ArrowUpIcon, ArrowDownIcon } from '@primer/octicons-react';
 import { useStore } from '../../../../store/store';
 import { getTimeDifference } from '../../../../utils/utils';
+import { ArrowUpIcon, ArrowDownIcon } from '@primer/octicons-react';
 
 export default observer(({ user, profileId, commentId, likes, dislikes, syncing, action, created }) => {
   const { time } = useStore();

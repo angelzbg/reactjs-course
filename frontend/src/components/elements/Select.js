@@ -1,5 +1,3 @@
-import React from 'react';
-
 const Select = ({ className, value, values, name, placeholder, setInput }) => (
   <select className={className} value={value} onChange={(e) => setInput(name, e.target.value)}>
     <option value="" disabled>

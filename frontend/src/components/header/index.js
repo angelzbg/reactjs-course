@@ -1,6 +1,5 @@
 import './styles/header.css';
 import logo from '../../images/logo.png';
-import React from 'react';
 import { Link } from 'react-router-dom';
 import UserMenu from './usermenu/index';
 import Navigation from './navigation/index';

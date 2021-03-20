@@ -1,5 +1,5 @@
 import './styles/notifications.css';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { observer } from 'mobx-react';
 import events from '../../utils/events';
 import { SyncIcon } from '@primer/octicons-react';

@@ -1,5 +1,5 @@
 import './styles/user.css';
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { observer, useLocalObservable } from 'mobx-react';
 import { useStore } from '../../../store/store';
 import AuthorizedMenu from './AuthorizedMenu';

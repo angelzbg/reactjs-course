@@ -1,4 +1,3 @@
-import React from 'react';
 import { observer } from 'mobx-react';
 import { useStore } from '../../store/store';
 import { SyncIcon } from '@primer/octicons-react';

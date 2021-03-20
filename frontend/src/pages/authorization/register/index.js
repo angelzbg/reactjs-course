@@ -1,5 +1,5 @@
 import '../styles/auth.css';
-import React, { useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { useStore } from '../../../store/store';
 import { observer } from 'mobx-react';

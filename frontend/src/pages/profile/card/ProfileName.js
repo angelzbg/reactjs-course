@@ -1,4 +1,3 @@
-import React from 'react';
 import { observer, useLocalObservable } from 'mobx-react';
 import { useStore } from '../../../store/store';
 import { CheckCircleIcon, XCircleIcon, PencilIcon } from '@primer/octicons-react';
