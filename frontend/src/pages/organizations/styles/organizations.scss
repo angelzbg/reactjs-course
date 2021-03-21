@@ -152,6 +152,63 @@
       border-radius: 50%; //15%;
       margin-top: 10px;
     }
+    .card-request-from {
+      position: absolute;
+      top: 65px;
+      right: 39px;
+      width: 28px;
+      height: 28px;
+      background: rgb(30, 88, 210);
+      background: linear-gradient(360deg, rgba(30, 88, 210, 1) 0%, rgba(144, 208, 252, 1) 100%);
+      border-radius: 50%;
+      svg {
+        width: 19px;
+        height: 19px;
+        color: var(--lightest);
+        margin-top: 5px;
+      }
+    }
+    .card-friends-linked {
+      position: absolute;
+      top: 65px;
+      right: 39px;
+      width: 28px;
+      height: 28px;
+      background: rgb(30, 88, 210);
+      background: linear-gradient(360deg, rgba(30, 88, 210, 1) 0%, rgba(144, 208, 252, 1) 100%);
+      border-radius: 50%;
+      svg {
+        width: 19px;
+        height: 19px;
+        color: var(--lightest);
+        margin-top: 5px;
+      }
+    }
+    .card-request-to {
+      position: absolute;
+      top: 65px;
+      right: 39px;
+      width: 28px;
+      height: 28px;
+      background: rgb(30, 88, 210);
+      background: linear-gradient(360deg, rgba(30, 88, 210, 1) 0%, rgba(144, 208, 252, 1) 100%);
+      border-radius: 50%;
+      svg {
+        width: 19px;
+        height: 19px;
+        color: var(--lightest);
+        margin-top: 5px;
+      }
+    }
+    .card-notification {
+      width: 6px;
+      height: 6px;
+      background-color: var(--link1);
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      border-radius: 50%;
+    }
     .rating-wrap {
       position: absolute;
       left: 50%;

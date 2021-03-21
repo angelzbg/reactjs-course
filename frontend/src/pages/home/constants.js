@@ -9,7 +9,6 @@ export const useHomeObservable = (getData) => {
       await getData();
       runInAction(() => (observable.syncing = false));
     },
-    yearAgo: new Date().getTime() - 34712647200,
   }));
 
   return observable;

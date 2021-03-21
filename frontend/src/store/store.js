@@ -158,6 +158,32 @@ class Store {
     return { list, newCount: list.length - seen };
   }
 
+  get requestsTo() {
+    return !!this.user
+      ? this.requests
+          .filter(({ sender }) => sender._id === this.user._id)
+          .reduce((map, { receiver, created }) => Object.assign(map, { [receiver._id]: { created } }), {})
+      : {};
+  }
+
+  get requestsFrom() {
+    return !!this.user
+      ? this.requests
+          .filter(({ receiver }) => receiver._id === this.user._id)
+          .reduce(
+            (map, { sender, created }) =>
+              Object.assign(map, { [sender._id]: { created, new: this.user.lastNotifCheck < created } }),
+            {}
+          )
+      : {};
+  }
+
+  get friendsIds() {
+    return !!this.user
+      ? this.friends.map(({ users }) => (users[0]._id === this.user._id ? users[1]._id : users[0]._id))
+      : [];
+  }
+
   loadingFriends = false;
   loadFriends = async () => {
     runInAction(() => (this.loadingFriends = true));

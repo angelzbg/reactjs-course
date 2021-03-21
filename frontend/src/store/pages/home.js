@@ -1,5 +1,5 @@
 import { makeAutoObservable, runInAction } from 'mobx';
-import { networkCall, notify } from '../../utils/utils';
+import { getTimeDifference, networkCall, notify } from '../../utils/utils';
 import { homeFilters, homeFiltersActive } from '../../utils/constants';
 
 export default class HomeStore {
@@ -21,6 +21,33 @@ export default class HomeStore {
       this.filtersActive.push(filter);
     }
   };
+
+  get items() {
+    const yearAgo = new Date().getTime() - 34712647200;
+    return Object.fromEntries(
+      Object.entries(this.data).map(([key, items]) => [
+        key,
+        items.map((item) => {
+          const [requestFrom, requestTo, isFriend] = [
+            this.root.requestsFrom[item._id],
+            this.root.requestsTo[item._id],
+            this.root.friendsIds.includes(item._id),
+          ];
+          return {
+            ...item,
+            time: `joined ${
+              yearAgo < item.created
+                ? getTimeDifference(item.created, this.root.time)
+                : new Date(item.created).toLocaleString('en-GB', { timeZone: 'UTC' }).substring(0, 10)
+            }`,
+            requestFrom,
+            requestTo,
+            isFriend,
+          };
+        }),
+      ])
+    );
+  }
 
   data = {};
   getData = async () => {

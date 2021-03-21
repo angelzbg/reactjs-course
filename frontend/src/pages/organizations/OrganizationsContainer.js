@@ -6,7 +6,7 @@ import OrganizationCard from './OrganizationCard';
 import Pagination from './Pagination';
 
 export default observer(({ section }) => {
-  const { organizations, time } = useStore();
+  const { organizations } = useStore();
 
   useEffect(() => {
     events.listen('scroll-bottom', 'organizations-page', async (target) => {
@@ -22,13 +22,11 @@ export default observer(({ section }) => {
     };
   }, [organizations]);
 
-  const yearAgo = new Date().getTime() - 34712647200;
-
   return (
     <>
       <div className="organizations-wrap">
-        {organizations.data.map((item, i) => (
-          <OrganizationCard key={`org-${i}`} {...{ item, i, section, yearAgo, time }} />
+        {organizations.items.map((item, i) => (
+          <OrganizationCard key={`org-${i}`} {...{ item, i, section }} />
         ))}
       </div>
       <Pagination />

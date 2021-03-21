@@ -4,7 +4,7 @@ import { screwEvent } from '../../utils/utils';
 import UserCard from './UserCard';
 import ViewMoreCard from './ViewMoreCard';
 
-export default observer(({ title, data, yearAgo, time, link }) => {
+export default observer(({ title, data, link }) => {
   useEffect(() => {
     const container = document.getElementById(`container-${title}`);
     const onwheel = (event) => {
@@ -27,7 +27,7 @@ export default observer(({ title, data, yearAgo, time, link }) => {
         <div className="horizontal-container" id={`container-${title}`}>
           <div className="card-wrap">
             {data.map((item) => (
-              <UserCard key={`${title}-${item._id}`} {...{ title, yearAgo, time, item }} />
+              <UserCard key={`${title}-${item._id}`} {...{ title, item }} />
             ))}
             {data.length === 10 && <ViewMoreCard {...{ type: data[0].type, link }} />}
           </div>

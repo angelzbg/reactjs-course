@@ -6,7 +6,7 @@ import Pagination from './Pagination';
 import { useStore } from '../../store/store';
 
 export default observer(({ section }) => {
-  const { developers, time } = useStore();
+  const { developers } = useStore();
 
   useEffect(() => {
     events.listen('scroll-bottom', 'developers-page', async (target) => {
@@ -19,13 +19,11 @@ export default observer(({ section }) => {
     };
   }, [developers]);
 
-  const yearAgo = new Date().getTime() - 34712647200;
-
   return (
     <>
       <div className="developers-wrap">
-        {developers.data.map((item, i) => (
-          <DeveloperCard key={`dev-${i}`} {...{ item, i, section, yearAgo, time }} />
+        {developers.items.map((item, i) => (
+          <DeveloperCard key={`dev-${i}`} {...{ item, i, section }} />
         ))}
       </div>
       <Pagination />
