@@ -101,16 +101,16 @@ class Store {
   get notifications() {
     let seen = 0;
     let weekAgo = new Date().getTime() - 604800000;
-    const lastNotifCheck = this.user.lastNotifCheck;
-    const request = this.requests
-      .filter(({ receiver }) => receiver._id === this.user._id)
+    const { lastNotifCheck, _id: currentUserId } = this.user;
+    const requests = this.requests
+      .filter(({ receiver }) => receiver._id === currentUserId)
       .map((r) => ({ ...r, type: notificationTypes.friendRequest }));
 
     const accepted = this.friends
-      .filter(({ users: [_, sender], created }) => sender._id === this.user._id && created > weekAgo)
+      .filter(({ users: [_, sender], created }) => sender._id === currentUserId && created > weekAgo)
       .map((f) => ({ ...f, type: notificationTypes.friendAccepted }));
 
-    const list = request
+    const list = requests
       .concat(accepted)
       .map((n) => ({ ...n, new: n.created > lastNotifCheck || !++seen }))
       .sort((a, b) => b.created - a.created);
