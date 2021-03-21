@@ -23,7 +23,7 @@ export default observer(({ item, setToggle, profileStore, time }) => {
         </div>
       </div>
       <div className="friend-request-text">
-        <b>You</b> and <b>{user.name}</b> are now connected.
+        <b>You</b> and <b>{user.name}</b> are connected.
         <div className={`friend-request-date ${item.new ? 'new' : ''}`}>{getTimeDifference(item.created, time)}</div>
       </div>
     </Link>
