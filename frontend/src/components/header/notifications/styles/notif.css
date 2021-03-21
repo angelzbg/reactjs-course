@@ -61,7 +61,7 @@
   right: 0;
   top: 46px;
   z-index: 2;
-  width: 292px;
+  width: 360px;
   background-color: var(--dark);
   border-radius: 6px;
 }
@@ -172,8 +172,8 @@
 }
 
 .notif-wrapper .notif-container-wrap .notif-container .friend-request-wrap .friend-request-avatar img {
-  width: 50px;
-  height: 50px;
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
 }
 
