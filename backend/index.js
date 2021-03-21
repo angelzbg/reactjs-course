@@ -745,7 +745,6 @@ io.on('connection', (socket) => {
       if (!sockets[socketId].length) {
         delete sockets[socketId];
       }
-      console.log(sockets)
     }
   });
 });
