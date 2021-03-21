@@ -24,9 +24,7 @@ export default observer(({ item, setToggle, profileStore, time }) => {
       </div>
       <div className="friend-request-text">
         <b>{user.name}</b> has accepted your friend request.
-        <div className="friend-request-date">
-          {item.new && <div className="friend-request-pointer" />} {getTimeDifference(item.created, time)}
-        </div>
+        <div className={`friend-request-date ${item.new ? 'new' : ''}`}>{getTimeDifference(item.created, time)}</div>
       </div>
     </Link>
   );

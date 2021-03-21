@@ -54,7 +54,7 @@
     right: 0;
     top: 46px;
     z-index: 2;
-    width: 360px;
+    width: 292px;
     background-color: var(--dark);
     border-radius: 6px;
     .notif-container {
@@ -131,13 +131,9 @@
           .friend-request-date {
             font-size: 13px;
             font-weight: bold;
-            color: var(--link1);
-            .friend-request-pointer {
-              display: inline-block;
-              width: 8px;
-              height: 8px;
-              border-radius: 50%;
-              background-color: var(--link2);
+            color: var(--light);
+            &.new {
+              color: var(--link1);
             }
           }
         }
@@ -149,8 +145,8 @@
           vertical-align: top;
           position: relative;
           img {
-            width: 60px;
-            height: 60px;
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
           }
           .friend-request-icon {
