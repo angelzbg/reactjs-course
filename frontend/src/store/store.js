@@ -25,6 +25,7 @@ class Store {
   }
 
   socket = null;
+  disconnected = false;
   listen = () => {
     if (!this.socket) {
       this.socket = io('/');
@@ -54,15 +55,36 @@ class Store {
 
       this.socket.on('connect', () => {
         this.socket.emit('subscribeSocket', this.user.socketId);
+
+        if (this.disconnected) {
+          runInAction(() => (this.disconnected = false));
+
+          if (!this.loadingFriends) {
+            this.loadFriends();
+          }
+
+          if (!this.loadingRequests) {
+            this.loadRequests();
+          }
+        }
+      });
+
+      this.socket.on('disconnect', (reason) => {
+        runInAction(() => (this.disconnected = true));
+        if (reason === 'io server disconnect') {
+          this.socket.connect();
+        }
       });
     } else {
       this.socket.emit('subscribeSocket', this.user.socketId);
     }
   };
   close = () => {
-    if (this.socket) {
-      this.socket.emit('unsubscribeSocket', this.user.socketId);
+    if (this.socket && this.user) {
+      this.socket.disconnect();
+      this.socket = null;
     }
+    runInAction(() => (this.disconnected = false));
   };
 
   isLoading = false;

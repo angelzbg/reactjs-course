@@ -422,23 +422,6 @@ app.get('/api/profile/:id', async (req, res) => {
   if (profile) {
     const { _id, city, created, type, name, avatar, rating, ratingRound, votes, stars } = profile;
     const okay = { _id, city, created, type, name, avatar, rating, ratingRound, votes, stars };
-
-    /*if (req.user) {
-      const friendRequest = await FriendRequest.findOne({
-        $or: [
-          { sender: req.user._id, receiver: id },
-          { sender: id, receiver: req.user._id },
-        ],
-      });
-
-      if (friendRequest) {
-        okay.friendRequest = {
-          type: friendRequest.sender.toString() === req.user._id.toString() ? 'sender' : 'receiver',
-          id: friendRequest._id,
-        };
-      }
-    }*/
-
     res.status(200).json({ okay });
     return;
   }
@@ -747,7 +730,12 @@ const sockets = {};
 
 io.on('connection', (socket) => {
   let socketId;
-  socket.on('subscribeSocket', (id) => {
+  socket.on('subscribeSocket', async (id) => {
+    const foundUser = await User.findOne({ socketId: id });
+    if (!foundUser) {
+      return;
+    }
+
     socketId = id;
     sockets[socketId] = (sockets[socketId] || []).concat(socket);
   });
@@ -757,14 +745,7 @@ io.on('connection', (socket) => {
       if (!sockets[socketId].length) {
         delete sockets[socketId];
       }
-    }
-  });
-  socket.on('unsubscribeSocket', () => {
-    if (sockets[socketId]) {
-      sockets[socketId] = sockets[socketId].filter((s) => s.id !== socket.id);
-      if (!sockets[socketId].length) {
-        delete sockets[socketId];
-      }
+      console.log(sockets)
     }
   });
 });
