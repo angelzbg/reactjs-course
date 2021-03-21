@@ -692,7 +692,7 @@ app.post('/api/register', async (req, res) => {
     name,
     city,
     created: new Date().getTime(),
-    socketId: uniqid() + uniqid(),
+    socketId: uniqid() + getId() + uniqid(),
     ...(avatar ? { avatar } : {}),
   });
 
