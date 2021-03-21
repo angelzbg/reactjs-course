@@ -1,6 +1,5 @@
 import { makeAutoObservable, runInAction } from 'mobx';
 import { networkCall, notify } from '../../utils/utils';
-import { listen, close } from '../sockets/notifications';
 
 export default class AuthStore {
   constructor(root) {
@@ -41,7 +40,7 @@ export default class AuthStore {
   signOut = async () => {
     runInAction(() => (this.root.isLoading = true));
 
-    close();
+    this.root.close();
     const response = await networkCall({ path: '/api/logout', method: 'GET' });
 
     if (response.okay) {
@@ -71,7 +70,7 @@ export default class AuthStore {
           const user = { ...response.okay, lastNotifCheck: response.okay.lastNotifCheck ?? 0 };
           await Promise.all([this.root.loadFriends(), this.root.loadRequests()]);
           runInAction(() => (this.root.user = user));
-          listen(user.socketId);
+          this.root.listen();
           if (!isSilent) {
             runInAction(() => (this.root.isLoading = false));
           }

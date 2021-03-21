@@ -7,8 +7,8 @@ import HomeStore from './pages/home';
 import DevelopersStore from './pages/developers';
 import OrganizationsStore from './pages/organizations';
 import { networkCall, notify } from '../utils/utils';
-import Events from '../utils/events';
 import { notificationTypes } from '../components/header/notifications/constants';
+import { io } from 'socket.io-client';
 
 class Store {
   constructor() {
@@ -22,29 +22,48 @@ class Store {
     this.organizations = new OrganizationsStore(this);
 
     this.auth.getUserInfo();
-
-    Events.listen('friend-request-received', 'store', (request) =>
-      runInAction(() => {
-        this.requests.unshift(request);
-      })
-    );
-    Events.listen('friend-request-accepted', 'store', ({ friend, removed }) =>
-      runInAction(() => {
-        this.requests = this.requests.filter(({ _id }) => _id !== removed);
-        this.friends.unshift(friend);
-      })
-    );
-    Events.listen('friend-request-removed', 'store', (id) =>
-      runInAction(() => {
-        this.requests = this.requests.filter(({ _id }) => _id !== id);
-      })
-    );
-    Events.listen('friend-removed', 'store', (id) =>
-      runInAction(() => {
-        this.friends = this.friends.filter(({ _id }) => _id !== id);
-      })
-    );
   }
+
+  socket = null;
+  listen = () => {
+    if (!this.socket) {
+      this.socket = io('/');
+
+      this.socket.on('friend-request-received', (data) => {
+        const request = JSON.parse(data);
+        runInAction(() => this.requests.unshift(request));
+      });
+
+      this.socket.on('friend-request-accepted', (data) => {
+        const { friend, removed } = JSON.parse(data);
+        runInAction(() => {
+          this.requests = this.requests.filter(({ _id }) => _id !== removed);
+          this.friends.unshift(friend);
+        });
+      });
+
+      this.socket.on('friend-request-removed', (data) => {
+        const id = JSON.parse(data);
+        runInAction(() => (this.requests = this.requests.filter(({ _id }) => _id !== id)));
+      });
+
+      this.socket.on('friend-removed', (data) => {
+        const id = JSON.parse(data);
+        runInAction(() => (this.friends = this.friends.filter(({ _id }) => _id !== id)));
+      });
+
+      this.socket.on('connect', () => {
+        this.socket.emit('subscribeSocket', this.user.socketId);
+      });
+    } else {
+      this.socket.emit('subscribeSocket', this.user.socketId);
+    }
+  };
+  close = () => {
+    if (this.socket) {
+      this.socket.emit('unsubscribeSocket', this.user.socketId);
+    }
+  };
 
   isLoading = false;
   user = null;
