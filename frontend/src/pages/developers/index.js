@@ -1,16 +1,16 @@
 import './styles/developers.css';
 import { useEffect } from 'react';
 import { observer } from 'mobx-react';
-import { useHistory, withRouter } from 'react-router';
+import { useHistory, useParams } from 'react-router';
 import { useStore } from '../../store/store';
 import Sync from './Sync';
 import Filter from './Filter';
 import DevelopersLoader from '../../components/loaders/DevelopersLoader';
 import DevelopersContainer from './DevelopersContainer';
 
-const Developers = ({ match }) => {
+export default observer(() => {
   const history = useHistory();
-  const section = match.params.section;
+  const { section } = useParams();
   const store = useStore();
   const { user, developers } = store;
 
@@ -33,6 +33,4 @@ const Developers = ({ match }) => {
       {developers.loading ? <DevelopersLoader /> : <DevelopersContainer {...{ section }} />}
     </>
   );
-};
-
-export default withRouter(observer(Developers));
+});

@@ -1,10 +1,10 @@
-import { withRouter } from 'react-router';
+import { useParams } from 'react-router';
 import ProfileCard from './card';
 import Comments from './comments';
 import Ratings from './ratings';
 
-export default withRouter(({ match }) => {
-  const id = match.params.id;
+const Profile = () => {
+  const { id } = useParams();
   return (
     <>
       <ProfileCard {...{ id }} />
@@ -12,4 +12,5 @@ export default withRouter(({ match }) => {
       <Ratings {...{ id }} />
     </>
   );
-});
+};
+export default Profile;
