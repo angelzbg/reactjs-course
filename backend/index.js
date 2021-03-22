@@ -891,32 +891,6 @@ mongoose
           }
         }
       });
-
-      socket.on('getMissedNotifications', async (data) => {
-        try {
-          const { lastFriend, lastRequest } = JSON.parse(data);
-          if (!loadingMissed && foundUser) {
-            loadingMissed = true;
-
-            const [friends, requests] = await Promise.all([
-              Friend.find({ 'users.1': foundUser._id, created: { $gt: lastFriend } })
-                .populate('users', '_id city created type name avatar rating ratingRound votes stars')
-                .sort({ created: -1 })
-                .lean(),
-              FriendRequest.find({ receiver: foundUser._id, created: { $gt: lastRequest } })
-                .populate('sender', '_id city created type name avatar rating ratingRound votes stars')
-                .populate('receiver', '_id city created type name avatar rating ratingRound votes stars')
-                .sort({ created: -1 })
-                .lean(),
-            ]);
-
-            loadingMissed = false;
-            socket.emit('missedNotifications', JSON.stringify({ friends: friends || [], requests: requests || [] }));
-          }
-        } catch (ex) {
-          console.log(ex);
-        }
-      });
     });
 
     Events.listen('emit', 'sockets', ({ id, channel, data }) =>

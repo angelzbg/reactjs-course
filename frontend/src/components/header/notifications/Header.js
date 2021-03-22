@@ -1,10 +1,10 @@
 import { observer } from 'mobx-react';
 import { SyncIcon } from '@primer/octicons-react';
 
-export default observer(({ syncing, sync }) => (
+export default observer(({ loadingRequests, loadRequests }) => (
   <div className="notif-header">
     Notifications{' '}
-    <div className={`notif-sync ${syncing ? 'notif-syncing' : ''}`} onClick={sync}>
+    <div className={`notif-sync ${loadingRequests ? 'notif-syncing' : ''}`} onClick={loadRequests}>
       <SyncIcon />
     </div>
   </div>
