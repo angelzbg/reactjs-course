@@ -23,6 +23,10 @@ export default class HomeStore {
   };
 
   get items() {
+    if (!Object.keys(this.data).length) {
+      return null;
+    }
+
     const yearAgo = new Date().getTime() - 34712647200;
     return Object.fromEntries(
       Object.entries(this.data).map(([key, items]) => [

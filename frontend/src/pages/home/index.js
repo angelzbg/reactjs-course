@@ -13,7 +13,7 @@ export default observer(() => {
   const { loading, items, getData, filters, filtersActive, setFilter } = home;
   const { syncing, sync } = useHomeObservable(getData);
 
-  useEffect(() => (!store.isLoading ? getData() : null), [store, user, getData]);
+  useEffect(() => (!store.isLoading && !store.userInfoFail ? getData() : null), [store, user, getData]);
 
   document.title = 'Home - Webby';
 
@@ -24,9 +24,10 @@ export default observer(() => {
   return (
     <>
       <Header {...{ filters, filtersActive, setFilter, syncing, sync }} />
-      {getContainers(items, filters, !!user, filtersActive).map((container) => (
-        <HorizontalContainer key={`container-h-${container.title}`} {...container} />
-      ))}
+      {items &&
+        getContainers(items, filters, !!user, filtersActive).map((container) => (
+          <HorizontalContainer key={`container-h-${container.title}`} {...container} />
+        ))}
     </>
   );
 });

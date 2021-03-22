@@ -6,6 +6,7 @@ import ProfileStore from './pages/profile';
 import HomeStore from './pages/home';
 import DevelopersStore from './pages/developers';
 import OrganizationsStore from './pages/organizations';
+import SearchStore from './pages/search';
 import { networkCall, notify } from '../utils/utils';
 import { notificationTypes } from '../components/header/notifications/constants';
 import { io } from 'socket.io-client';
@@ -20,6 +21,7 @@ class Store {
     this.home = new HomeStore(this);
     this.developers = new DevelopersStore(this);
     this.organizations = new OrganizationsStore(this);
+    this.searchStore = new SearchStore(this);
 
     this.auth.getUserInfo();
   }
@@ -87,6 +89,7 @@ class Store {
     runInAction(() => (this.disconnected = false));
   };
 
+  userInfoFail = false;
   isLoading = false;
   user = null;
   friends = [];
@@ -193,6 +196,11 @@ class Store {
       runInAction(() => (this.friends = response.okay));
     } else {
       notify(response);
+      setTimeout(() => {
+        if (!this.loadingFriends) {
+          this.loadFriends();
+        }
+      }, 5000);
     }
 
     runInAction(() => (this.loadingFriends = false));
@@ -208,6 +216,11 @@ class Store {
       runInAction(() => (this.requests = response.okay));
     } else {
       notify(response);
+      setTimeout(() => {
+        if (!this.loadingRequests) {
+          this.loadRequests();
+        }
+      }, 5000);
     }
 
     runInAction(() => (this.loadingRequests = false));

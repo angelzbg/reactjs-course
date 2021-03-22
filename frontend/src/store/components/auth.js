@@ -65,6 +65,7 @@ export default class AuthStore {
     const response = await networkCall({ path: '/api/userInfo', method: 'GET' });
 
     if (response.okay) {
+      runInAction(() => (this.root.userInfoFail = false));
       if (!this.root.user) {
         (async () => {
           const user = { ...response.okay, lastNotifCheck: response.okay.lastNotifCheck ?? 0 };
@@ -91,6 +92,12 @@ export default class AuthStore {
         this.root.user = this.root.user === undefined ? null : undefined;
         if (!isSilent) {
           this.root.isLoading = false;
+          this.root.userInfoFail = true;
+          setTimeout(() => {
+            if (!this.root.isLoading) {
+              this.getUserInfo();
+            }
+          }, 5000);
         }
       });
     }

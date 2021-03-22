@@ -33,13 +33,31 @@ const FieldsObservable = (fields = []) => {
 };
 
 const networkCall = async ({ path = '', method = '', body = {} }) => {
-  const req = { method, headers: { 'Content-Type': 'application/json' } };
+  const controller = new AbortController();
+  const { signal } = controller;
+  const req = { method, headers: { 'Content-Type': 'application/json' }, signal };
 
   if (method !== 'GET') {
     req.body = JSON.stringify(body);
   }
 
-  return await (await fetch(path, req)).json();
+  const responseInfo = { done: false };
+  const response = await Promise.race([
+    fetch(path, req).then((res) => {
+      responseInfo.done = true;
+      return res.json();
+    }),
+    new Promise((resolve) => {
+      setTimeout(() => {
+        resolve({ error: `Bad connection ('${path}')` });
+        if (!responseInfo.done) {
+          controller.abort();
+        }
+      }, 15000);
+    }),
+  ]);
+
+  return response;
 };
 
 const notify = (response) => events.trigger('notify', response);
