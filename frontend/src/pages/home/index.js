@@ -13,7 +13,7 @@ export default observer(() => {
   const { loading, items, getData, filters, filtersActive, setFilter } = home;
   const { syncing, sync } = useHomeObservable(getData);
 
-  useEffect(() => (!store.isLoading && !store.userInfoFail ? getData() : null), [store, user, getData]);
+  useEffect(() => (!store.isLoading ? getData() : null), [store, user, getData]);
 
   document.title = 'Home - Webby';
 

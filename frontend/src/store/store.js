@@ -61,14 +61,40 @@ class Store {
         if (this.disconnected) {
           runInAction(() => (this.disconnected = false));
 
+          let lastFriend, lastRequest;
           if (!this.loadingFriends) {
-            this.loadFriends();
+            lastFriend =
+              this.friends
+                .filter(({ users }) => users[0]._id !== this.user._id)
+                .sort((a, b) => b.created - a.created)[0]?.created || 0;
           }
 
           if (!this.loadingRequests) {
-            this.loadRequests();
+            lastRequest = this.requests.filter(({ receiver }) => receiver._id !== this.user._id)[0]?.created || 0;
           }
+
+          this.socket.emit('getMissedNotifications', JSON.stringify({ lastFriend, lastRequest }));
+
+          /*if (!this.loadingFriends) {
+            this.loadFriends();
+          }
+          if (!this.loadingRequests) {
+            this.loadRequests();
+          }*/
         }
+      });
+
+      this.socket.on('missedNotifications', (data) => {
+        const { friends, requests } = JSON.parse(data);
+        if (friends.length) {
+          this.friends = friends.concat(this.friends);
+        }
+
+        if (requests.length) {
+          this.requests = requests.concat(this.requests);
+        }
+
+        console.log({ friends, requests });
       });
 
       this.socket.on('disconnect', (reason) => {
@@ -89,7 +115,6 @@ class Store {
     runInAction(() => (this.disconnected = false));
   };
 
-  userInfoFail = false;
   isLoading = false;
   user = null;
   friends = [];

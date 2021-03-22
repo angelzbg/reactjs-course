@@ -52,10 +52,64 @@ app.use((req, res, next) => {
   });
 });
 
+app.post('/api/search', async (req, res, next) => {
+  const { type, name, city } = req.body;
+  if (
+    (!name && !city) ||
+    !['Organization', 'Developer'].includes(type) ||
+    typeof type !== 'string' ||
+    (name && typeof name !== 'string') ||
+    (city && typeof city !== 'string')
+  ) {
+    res.status(200).json({ error: 'SEARCH_CANNOT_BE_PERFORMED' });
+    return;
+  }
+
+  const result = await User.find(
+    {
+      type,
+      ...(name ? { name: { $regex: name, $options: 'i' } } : {}),
+      ...(city ? { city: { $regex: city, $options: 'i' } } : {}),
+    },
+    ['avatar', 'city', 'name', 'created', 'rating', 'ratingRound', 'stars', 'type', 'votes']
+  );
+
+  res.status(200).json({ okay: result || [] });
+});
+
 app.post('/api/organizations', async (req, res, next) => {
-  const skip = req.body.skip ?? 0;
-  const limit = req.body.limit ?? 10;
+  let skip = req.body.skip ?? 0;
+  let limit = req.body.limit ?? 10;
+  if (req.body.skip !== undefined) {
+    const check = parseInt(req.body.skip);
+    if (isNaN(check)) {
+      res.status(200).json({ error: 'UNEXPECTED_ERROR' });
+      return;
+    }
+  }
+
+  if (req.body.limit !== undefined) {
+    const check = parseInt(req.body.limit);
+    if (isNaN(check)) {
+      res.status(200).json({ error: 'UNEXPECTED_ERROR' });
+      return;
+    }
+  }
+
+  let created;
+  if (req.body.created !== undefined) {
+    created = parseInt(created);
+    if (isNaN(created)) {
+      created = undefined;
+    }
+  }
+
   const filter = req.body.filter ?? '';
+  if (typeof filter !== 'string') {
+    res.status(200).json({ error: 'UNEXPECTED_ERROR' });
+    return;
+  }
+
   const authFilters = ['new-local', 'top-local'];
   const city = req?.user?.city ?? '';
   if (!city && authFilters.includes(filter)) {
@@ -82,13 +136,17 @@ app.post('/api/organizations', async (req, res, next) => {
       type: 'Organization',
       ...(city && authFilters.includes(filter) ? { city } : {}),
       ...(['new', 'new-local'].includes(filter)
-        ? { created: { $lt: parseInt(req.body.created ?? Number.MAX_SAFE_INTEGER) } }
+        ? {
+            created: {
+              [req.body.isSync ? '$gt' : '$lt']: created ?? req.body.isSync ? 0 : Number.MAX_SAFE_INTEGER,
+            },
+          }
         : {}),
     },
     selected,
     {
       ...(['top', 'top-local'].includes(filter) ? { skip } : {}),
-      limit,
+      ...(req.body.isSync && ['new', 'new-local'].includes(filter) ? {} : { limit }),
       sort: sorts[filter],
     }
   );
@@ -99,7 +157,36 @@ app.post('/api/organizations', async (req, res, next) => {
 app.post('/api/developers', async (req, res, next) => {
   const skip = req.body.skip ?? 0;
   const limit = req.body.limit ?? 10;
+  if (req.body.skip !== undefined) {
+    const check = parseInt(req.body.skip);
+    if (isNaN(check)) {
+      res.status(200).json({ error: 'UNEXPECTED_ERROR' });
+      return;
+    }
+  }
+
+  if (req.body.limit !== undefined) {
+    const check = parseInt(req.body.limit);
+    if (isNaN(check)) {
+      res.status(200).json({ error: 'UNEXPECTED_ERROR' });
+      return;
+    }
+  }
+
+  let created;
+  if (req.body.created !== undefined) {
+    created = parseInt(created);
+    if (isNaN(created)) {
+      created = undefined;
+    }
+  }
+
   const filter = req.body.filter ?? '';
+  if (typeof filter !== 'string') {
+    res.status(200).json({ error: 'UNEXPECTED_ERROR' });
+    return;
+  }
+
   const authFilters = ['new-local', 'top-local'];
   const city = req?.user?.city ?? '';
   if (!city && authFilters.includes(filter)) {
@@ -126,13 +213,17 @@ app.post('/api/developers', async (req, res, next) => {
       type: 'Developer',
       ...(city && authFilters.includes(filter) ? { city } : {}),
       ...(['new', 'new-local'].includes(filter)
-        ? { created: { $lt: parseInt(req.body.created ?? Number.MAX_SAFE_INTEGER) } }
+        ? {
+            created: {
+              [req.body.isSync ? '$gt' : '$lt']: created ?? req.body.isSync ? 0 : Number.MAX_SAFE_INTEGER,
+            },
+          }
         : {}),
     },
     selected,
     {
       ...(['top', 'top-local'].includes(filter) ? { skip } : {}),
-      limit,
+      ...(req.body.isSync && ['new', 'new-local'].includes(filter) ? {} : { limit }),
       sort: sorts[filter],
     }
   );
@@ -509,7 +600,7 @@ app.post('/api/comments/:id', async (req, res, next) => {
   }
 
   const { content } = req.body;
-  if (!content || content.length < 10 || content.length > 255) {
+  if (typeof content !== 'string' || !content || content.length < 10 || content.length > 255) {
     res.status(200).json({ error: 'COMMENT_CONTENT_ERROR' });
     return;
   }
@@ -549,6 +640,12 @@ app.post('/api/rateUser/:id', async (req, res, next) => {
   }
 
   let stars = parseInt(req.body.stars ?? 5);
+
+  if (isNaN(stars)) {
+    res.status(200).json({ error: 'UNEXPECTED_ERROR' });
+    return;
+  }
+
   if (stars < 1) {
     stars = 1;
   } else if (stars > 5) {
@@ -609,14 +706,29 @@ app.post('/api/userInfo/:id', async (req, res) => {
   let { name, city, avatar, lastNotifCheck } = req.body;
 
   if (name) {
+    if (typeof name !== 'string') {
+      res.status(200).json({ error: 'UNEXPECTED_ERROR' });
+      return;
+    }
+
     await User.findByIdAndUpdate(id, { name });
     res.status(200).json({ okay: name });
     return;
   } else if (city) {
+    if (typeof city !== 'string') {
+      res.status(200).json({ error: 'UNEXPECTED_ERROR' });
+      return;
+    }
+
     await User.findByIdAndUpdate(id, { city });
     res.status(200).json({ okay: city });
     return;
   } else if (avatar) {
+    if (typeof avatar !== 'string') {
+      res.status(200).json({ error: 'UNEXPECTED_ERROR' });
+      return;
+    }
+
     const imgId = getId();
     try {
       require('fs').writeFileSync(
@@ -648,6 +760,20 @@ app.post('/api/userInfo/:id', async (req, res) => {
 
 app.post('/api/register', async (req, res) => {
   let { login, password, type, name, avatar, city } = req.body;
+
+  if (
+    typeof login !== 'string' ||
+    login.length < 3 ||
+    login.length > 14 ||
+    typeof password !== 'string' ||
+    !['Developer', 'Organization'].includes(type) ||
+    (avatar && typeof avatar !== 'string') ||
+    typeof city !== 'string'
+  ) {
+    res.status(200).json({ error: 'UNEXPECTED_ERROR' });
+    return;
+  }
+
   const found = await User.findOne({ login });
   if (found) {
     res.status(200).json({ error: 'LOGON_TAKEN' });
@@ -692,6 +818,12 @@ app.post('/api/register', async (req, res) => {
 
 app.post('/api/login', (req, res) => {
   const { login, password } = req.body;
+
+  if (typeof login !== 'string' || typeof password !== 'string') {
+    res.status(200).json({ error: 'UNEXPECTED_ERROR' });
+    return;
+  }
+
   User.findOne({ login }, (err, user) => {
     if (err) {
       console.error(err);
@@ -726,33 +858,6 @@ app.use((err, _, res, _1) => {
   }
 });
 
-const sockets = {};
-
-io.on('connection', (socket) => {
-  let socketId;
-  socket.on('subscribeSocket', async (id) => {
-    const foundUser = await User.findOne({ socketId: id });
-    if (!foundUser) {
-      return;
-    }
-
-    socketId = id;
-    sockets[socketId] = (sockets[socketId] || []).concat(socket);
-  });
-  socket.on('disconnect', () => {
-    if (sockets[socketId]) {
-      sockets[socketId] = sockets[socketId].filter((s) => s.id !== socket.id);
-      if (!sockets[socketId].length) {
-        delete sockets[socketId];
-      }
-    }
-  });
-});
-
-Events.listen('emit', 'sockets', ({ id, channel, data }) =>
-  sockets[id]?.forEach((s) => s.emit(channel, JSON.stringify(data)))
-);
-
 mongoose
   .connect(connectionStr, {
     useNewUrlParser: true,
@@ -761,6 +866,62 @@ mongoose
     useFindAndModify: false,
   })
   .then(() => {
-    console.log('Connected to database successfully!');
+    const sockets = {};
+
+    io.on('connection', (socket) => {
+      let socketId;
+      let foundUser;
+      let loadingMissed = false;
+
+      socket.on('subscribeSocket', async (id) => {
+        foundUser = foundUser || (await User.findOne({ socketId: id }));
+        if (!foundUser) {
+          return;
+        }
+
+        socketId = id;
+        sockets[socketId] = (sockets[socketId] || []).concat(socket);
+      });
+
+      socket.on('disconnect', () => {
+        if (sockets[socketId]) {
+          sockets[socketId] = sockets[socketId].filter((s) => s.id !== socket.id);
+          if (!sockets[socketId].length) {
+            delete sockets[socketId];
+          }
+        }
+      });
+
+      socket.on('getMissedNotifications', async (data) => {
+        try {
+          const { lastFriend, lastRequest } = JSON.parse(data);
+          if (!loadingMissed && foundUser) {
+            loadingMissed = true;
+
+            const [friends, requests] = await Promise.all([
+              Friend.find({ 'users.1': foundUser._id, created: { $gt: lastFriend } })
+                .populate('users', '_id city created type name avatar rating ratingRound votes stars')
+                .sort({ created: -1 })
+                .lean(),
+              FriendRequest.find({ receiver: foundUser._id, created: { $gt: lastRequest } })
+                .populate('sender', '_id city created type name avatar rating ratingRound votes stars')
+                .populate('receiver', '_id city created type name avatar rating ratingRound votes stars')
+                .sort({ created: -1 })
+                .lean(),
+            ]);
+
+            loadingMissed = false;
+            socket.emit('missedNotifications', JSON.stringify({ friends: friends || [], requests: requests || [] }));
+          }
+        } catch (ex) {
+          console.log(ex);
+        }
+      });
+    });
+
+    Events.listen('emit', 'sockets', ({ id, channel, data }) =>
+      sockets[id]?.forEach((s) => s.emit(channel, JSON.stringify(data)))
+    );
+
     http.listen(PORT, console.log(`Listening on port ${PORT} -> http://localhost:${PORT}`));
   });

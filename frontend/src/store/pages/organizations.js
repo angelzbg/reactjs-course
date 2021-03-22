@@ -23,10 +23,12 @@ export default class OrganizationsStore {
     return false;
   };
 
-  filter = '';
+  filter = 'new';
   setFilter = (filter = '') => {
     if (this.filter !== filter) {
       this.filter = filter;
+      this.getData();
+    } else if (!this.data.length) {
       this.getData();
     }
   };
@@ -82,14 +84,20 @@ export default class OrganizationsStore {
     const response = await networkCall({
       path: '/api/organizations',
       method: 'POST',
-      body: { skip, limit, filter: this.filter, ...(isLoad || isSync ? {} : this.getfilterBody()) },
+      body: {
+        skip,
+        limit,
+        filter: this.filter,
+        ...(isLoad ? {} : isSync ? { created: this.data[0]?.created } : this.getfilterBody()),
+        isSync,
+      },
     });
 
     if (response.error) {
       notify(response);
     } else {
       runInAction(() => {
-        this.data = isSync || isLoad ? response.okay : this.data.concat(response.okay);
+        this.data = isLoad ? response.okay : isSync ? response.okay.concat(this.data) : this.data.concat(response.okay);
         this.allowPaginate = response.okay.length === limit;
       });
     }

@@ -23,6 +23,16 @@ export default class ProfileStore {
     runInAction(() => {
       this.profile = response.okay ?? null;
       this.loadingProfile = false;
+      const isFriend = !!this.root.user && this.root.friendsIds.includes(this.profile._id);
+      if (isFriend) {
+        let index;
+        const found = this.root.friends.find(
+          ({ users }) => (index = users.findIndex(({ _id }) => _id === this.profile._id)) !== -1
+        );
+        if (found) {
+          Object.assign(found.users[index], this.profile);
+        }
+      }
     });
 
     if (response.error) {

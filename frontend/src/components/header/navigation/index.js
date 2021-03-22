@@ -2,28 +2,30 @@ import './styles/navigation.css';
 import { Link, withRouter } from 'react-router-dom';
 import { observer } from 'mobx-react';
 import { useStore } from '../../../store/store';
-import { links } from '../constants';
+import { getLinks } from '../constants';
 
 export default withRouter(
   observer(({ location: { pathname } }) => {
-    const { user } = useStore();
+    const { user, developers, organizations } = useStore();
 
     return (
       <div className="navigation-wrapper">
-        {links.map(({ path, name, icon, auth }, i) => (
-          <Link
-            key={`nav-link-${i}`}
-            to={auth && !user ? auth : path}
-            className={`nav-icon-link ${
-              (pathname === '/' && pathname === path) || (path !== '/' && pathname.startsWith(path))
-                ? 'active'
-                : 'inactive'
-            }`}
-          >
-            {icon({ size: 'medium' })}
-            <div className="tip-navigation">{name}</div>
-          </Link>
-        ))}
+        {getLinks({ devSection: developers.filter, orgSection: organizations.filter }).map(
+          ({ path, name, icon, auth }, i) => (
+            <Link
+              key={`nav-link-${i}`}
+              to={auth && !user ? auth : path}
+              className={`nav-icon-link ${
+                (pathname === '/' && pathname === path) || (path !== '/' && pathname.startsWith(path))
+                  ? 'active'
+                  : 'inactive'
+              }`}
+            >
+              {icon({ size: 'medium' })}
+              <div className="tip-navigation">{name}</div>
+            </Link>
+          )
+        )}
       </div>
     );
   })

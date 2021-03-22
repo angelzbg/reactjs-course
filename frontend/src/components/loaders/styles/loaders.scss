@@ -54,6 +54,23 @@
   }
 }
 
+.search-loader {
+  width: 656px;
+  height: calc(100vh - 220px);
+  backdrop-filter: blur(2px);
+  animation: opacity-keyframe 0.4s ease-out;
+  position: relative;
+
+  svg {
+    color: var(--link2);
+    width: 20vmin;
+    height: 20vmin;
+    margin-top: calc((100vh - 220px - 20vmin) / 2);
+    margin-left: calc((656px - 20vmin) / 2);
+    animation: rotation 2.3s infinite linear;
+  }
+}
+
 .organizations-loader {
   width: 656px;
   height: calc(100vh - 100px);

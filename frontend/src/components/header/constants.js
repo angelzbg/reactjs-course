@@ -12,10 +12,12 @@ export const toggles = {
   closed: '',
 };
 
-export const links = [
-  { path: '/', name: 'Home', icon: FlameIcon },
-  { path: '/developers', name: 'Developers', icon: OctofaceIcon },
-  { path: '/organizations', name: 'Organizations', icon: OrganizationIcon },
-  { path: '/search', name: 'Search', icon: SearchIcon },
-  { path: '/activity', name: 'Activity', icon: HistoryIcon, auth: '/login' },
-];
+export const getLinks = ({ devSection, orgSection }) => {
+  return [
+    { path: '/', name: 'Home', icon: FlameIcon },
+    { path: `/developers/${devSection}`, name: 'Developers', icon: OctofaceIcon },
+    { path: `/organizations/${orgSection}`, name: 'Organizations', icon: OrganizationIcon },
+    { path: '/search', name: 'Search', icon: SearchIcon },
+    { path: '/activity', name: 'Activity', icon: HistoryIcon, auth: '/login' },
+  ];
+};

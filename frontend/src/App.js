@@ -11,6 +11,7 @@ import Profile from './pages/profile';
 import Home from './pages/home/index';
 import Developers from './pages/developers';
 import Organizations from './pages/organizations';
+import Search from './pages/search';
 import { onAppScroll } from './utils/utils';
 
 export default observer(() => {
@@ -27,6 +28,7 @@ export default observer(() => {
             <Route exact path="/profile/:id" component={Profile} />
             <Route exact path="/developers/:section?" component={Developers} />
             <Route exact path="/organizations/:section?" component={Organizations} />
+            <Route exact path="/search" component={Search} />
           </Switch>
         </div>
         <Notifications />
