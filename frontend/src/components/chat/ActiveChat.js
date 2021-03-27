@@ -11,7 +11,7 @@ import { ArrowSwitchIcon } from '@primer/octicons-react';
 
 export default observer(({ activeChat, idx }) => {
   const store = useStore();
-  const { loadingChats, closeActiveChat, chats, switchChats } = store;
+  const { loadingChats, closeActiveChat, chats, switchChats, chatHighlights, removeChatHighlight } = store;
   const { inputHeight, ref: inputWrapRef } = useResizeDetector();
   const messageRef = useRef(null);
   const messageRefB = useRef(null);
@@ -33,7 +33,10 @@ export default observer(({ activeChat, idx }) => {
   }, [store, activeChat, chatId, loadingChats]);
 
   return (
-    <div className="active-chat-wrapper">
+    <div
+      className={`active-chat-wrapper ${chatHighlights[chatId] ? 'new' : ''}`}
+      onMouseEnter={() => removeChatHighlight(chatId)}
+    >
       <Header {...{ chatUser, closeActiveChat, _id }} />
       <MessageBox {...{ chatId, content, setContent, isSending, sendMessage, inputWrapRef, messageRef, messageRefB }} />
       <MessagesContainer {...{ chatId, chatUser, messages, inputHeight }} />

@@ -40,12 +40,18 @@
       width: 280px;
       background-color: var(--dark);
       border-radius: 6px;
-      //animation: popup 0.2s;
       height: 331px;
       margin-right: 10px;
       -webkit-box-shadow: 0 1px 4px var(--shadow1), 0 0 40px var(--shadow2);
       -moz-box-shadow: 0 1px 4px var(--shadow1), 0 0 40px var(--shadow2);
       box-shadow: 0 1px 4px var(--shadow1), 0 0 40px var(--shadow2);
+      border: 1px solid var(--medium2);
+      //animation: popup 0.2s;
+
+      &.new {
+        border: 1px solid var(--link1);
+        animation: new-message 0.9s linear infinite;
+      }
 
       &:last-child {
         margin-right: 5px;
@@ -390,6 +396,15 @@
         }
       }
     }
+  }
+}
+
+@keyframes new-message {
+  0% {
+    border-color: var(--link1);
+  }
+  100% {
+    border-color: var(--link2);
   }
 }
 

@@ -36,6 +36,7 @@ class Store {
   requests = [];
   chats = {};
   activeChatIds = [];
+  chatHighlights = {};
   openActiveChat = (friendId) => {
     if (this.activeChatIds.includes(friendId)) {
       return;
@@ -55,6 +56,10 @@ class Store {
     runInAction(() => {
       [this.activeChatIds[idx], this.activeChatIds[idx + 1]] = [this.activeChatIds[idx + 1], this.activeChatIds[idx]];
     });
+  };
+
+  removeChatHighlight = (chatId) => {
+    runInAction(() => (this.chatHighlights[chatId] = false));
   };
 
   get activeChats() {
@@ -173,6 +178,10 @@ class Store {
           } else {
             this.chats[message.chatId] = [message];
           }
+
+          if (message.sender !== this.user._id) {
+            this.chatHighlights[message.chatId] = true;
+          }
         });
         setTimeout(() => Events.trigger('scroll-to-bottom-chat', message.chatId), 20);
       });
@@ -185,7 +194,7 @@ class Store {
           let messages = Object.values(this.chats)
             .map((msgs) => msgs?.[msgs.length - 1]?.created)
             .filter((c) => !!c);
-          const lastMessage = messages.length ? Math.max(...messages) : 0;
+          const lastMessage = messages.length ? Math.max(...messages) : undefined;
           this.loadChats(lastMessage);
           this.loadFriends();
           this.loadRequests();
@@ -368,6 +377,7 @@ class Store {
     const response = await networkCall({ path: '/api/chats', method: 'POST', body: { created } });
     if (response.okay) {
       runInAction(() => {
+        const highlights = {};
         if (created !== undefined) {
           response.okay.forEach((msg) => {
             if (this.chats[msg.chatId]) {
@@ -375,7 +385,9 @@ class Store {
             } else {
               this.chats[msg.chatId] = [msg];
             }
+            highlights[msg.chatId] = true;
           });
+          Object.assign(this.chatHighlights, highlights);
         } else {
           response.okay.forEach((msg) => {
             this.chats[msg.chatId] = [msg];
@@ -384,6 +396,7 @@ class Store {
       });
     } else {
       notify(response);
+      setTimeout(() => this.loadChats(created), 5000);
     }
 
     if (created === undefined) {
