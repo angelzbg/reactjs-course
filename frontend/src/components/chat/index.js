@@ -7,7 +7,7 @@ import ActiveChat from './ActiveChat';
 
 export default observer(() => {
   const store = useStore();
-  const { activeChat } = store;
+  const { activeChats } = store;
 
   useEffect(() => {
     Events.listen('scroll-to-bottom-chat', 'chat-listener', (chatId) => {
@@ -38,9 +38,13 @@ export default observer(() => {
     };
   }, [store]);
 
-  if (!activeChat) {
-    return null;
-  }
-
-  return <ActiveChat chatId={activeChat.chatId} />;
+  return (
+    <div className="active-chats">
+      <div className="active-chats-main">
+        {activeChats.map((activeChat, idx) => (
+          <ActiveChat key={`a-c-${activeChat.chatId}`} {...{ activeChat, idx }} />
+        ))}
+      </div>
+    </div>
+  );
 });

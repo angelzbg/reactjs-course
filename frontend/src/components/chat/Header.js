@@ -3,7 +3,7 @@ import no_profile from '../../images/no_profile.png';
 import { Link } from 'react-router-dom';
 import { XIcon } from '@primer/octicons-react';
 
-export default observer(({ /*chatId,*/ chatUser, setActiveChat }) => {
+export default observer(({ chatUser, closeActiveChat, _id }) => {
   return (
     <div className="chat-header">
       <Link className="chat-header-user" to={`/profile/${chatUser._id}`} title={`To ${chatUser.name}'s profile`}>
@@ -12,7 +12,7 @@ export default observer(({ /*chatId,*/ chatUser, setActiveChat }) => {
         </div>
         <div className="chat-header-name">{chatUser.name}</div>
       </Link>
-      <div className="chat-header-close" title="Close" onClick={() => setActiveChat(null)}>
+      <div className="chat-header-close" title="Close" onClick={() => closeActiveChat(_id)}>
         <XIcon size="small" />
       </div>
     </div>

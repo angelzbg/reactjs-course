@@ -7,41 +7,40 @@ import { useChatObservable } from './constants';
 import Header from './Header';
 import MessageBox from './MessageBox';
 import MessagesContainer from './MessagesContainer';
+import { ArrowSwitchIcon } from '@primer/octicons-react';
 
-export default observer(({ chatId }) => {
+export default observer(({ activeChat, idx }) => {
   const store = useStore();
-  const { activeChat, loadingChats, setActiveChat, chats } = store;
+  const { loadingChats, closeActiveChat, chats, switchChats } = store;
   const { inputHeight, ref: inputWrapRef } = useResizeDetector();
   const messageRef = useRef(null);
   const messageRefB = useRef(null);
   const observable = useChatObservable(store, messageRef);
   const { content, setContent, sendMessage, isSending } = observable;
   const chatUser = activeChat.chatUser;
+  const { _id, chatId } = activeChat;
   const messages = chats[chatId] || [];
 
   useEffect(() => {
-    const canLoad = !loadingChats && store.activeChat && !store.loadingChatsIds[chatId];
+    const canLoad = !loadingChats && activeChat && !store.loadingChatsIds[chatId];
     if (canLoad && store.chats[chatId]?.length === 1) {
       store.loadChatMessages(chatId, store.chats[chatId][0].created, true);
     }
 
     if (!loadingChats) {
       setTimeout(() => Events.trigger('scroll-to-bottom-chat', chatId), 20);
+      console.log(activeChat);
     }
-  }, [store, chatId, loadingChats]);
-
-  useEffect(() => {
-    if (activeChat && messageRef?.current) {
-      observable.setContent();
-      messageRef.current.textContent = '';
-    }
-  }, [observable, activeChat, messageRef]);
+  }, [store, activeChat, chatId, loadingChats]);
 
   return (
     <div className="active-chat-wrapper">
-      <Header {...{ chatUser, setActiveChat }} />
+      <Header {...{ chatUser, closeActiveChat, _id }} />
       <MessageBox {...{ chatId, content, setContent, isSending, sendMessage, inputWrapRef, messageRef, messageRefB }} />
       <MessagesContainer {...{ chatId, chatUser, messages, inputHeight }} />
+      <div className="active-chat-switcher" onClick={() => switchChats(idx)}>
+        <ArrowSwitchIcon />
+      </div>
     </div>
   );
 });

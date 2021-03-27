@@ -7,7 +7,7 @@ import Moment from 'react-moment';
 import { CommentDiscussionIcon } from '@primer/octicons-react';
 
 export default observer(() => {
-  const { connections, activeChat, setActiveChat } = useStore();
+  const { connections, activeChatIds, openActiveChat } = useStore();
   return (
     <div className="friends-wrapper">
       {!!connections.length && <div className="con-title">Connections</div>}
@@ -23,20 +23,23 @@ export default observer(() => {
               </div>
               {lastMessage ? (
                 <>
-                  <div className="con-msg" onClick={() => setActiveChat(_id)}>
+                  <div className="con-msg" onClick={() => openActiveChat(_id)}>
                     {user._id === lastMessage.sender ? '↩' : '↪'} {lastMessage.content}
                   </div>
-                  <div className="con-msg-date" onClick={() => setActiveChat(_id)}>
+                  <div className="con-msg-date" onClick={() => openActiveChat(_id)}>
                     <Moment date={lastMessage.created} interval={60000} fromNow />
                   </div>
                 </>
               ) : (
-                <div className="con-msg" onClick={() => setActiveChat(_id)}>
+                <div className="con-msg" onClick={() => openActiveChat(_id)}>
                   Last message...
                 </div>
               )}
             </div>
-            <div className={`con-chat ${activeChat?._id === _id ? 'active' : ''}`} onClick={() => setActiveChat(_id)}>
+            <div
+              className={`con-chat ${activeChatIds.includes(_id) ? 'active' : ''}`}
+              onClick={() => openActiveChat(_id)}
+            >
               <CommentDiscussionIcon size="medium" />
             </div>
           </div>

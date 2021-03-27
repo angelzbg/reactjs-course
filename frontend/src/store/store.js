@@ -35,25 +35,33 @@ class Store {
   friends = [];
   requests = [];
   chats = {};
-  activeChatId = null;
-  setActiveChat = (friendId) => {
-    if (friendId && this.activeChat?._id === friendId) {
+  activeChatIds = [];
+  openActiveChat = (friendId) => {
+    if (this.activeChatIds.includes(friendId)) {
       return;
     }
 
-    this.activeChatId = friendId;
+    this.activeChatIds.unshift(friendId);
   };
 
-  get activeChat() {
-    const found = this.friends.find(({ _id }) => _id === this.activeChatId);
-    return found ? { ...found, chatUser: found.users.filter(({ _id }) => _id !== this.user._id)[0] } : null;
+  closeActiveChat = (friendId) => {
+    const foundIndex = this.activeChatIds.indexOf(friendId);
+    if (foundIndex !== -1) {
+      this.activeChatIds.splice(foundIndex, 1);
+    }
+  };
+
+  switchChats = (idx) => {
+    [this.activeChatIds[idx], this.activeChatIds[idx + 1]] = [this.activeChatIds[idx + 1], this.activeChatIds[idx]];
+  };
+
+  get activeChats() {
+    return this.activeChatIds
+      .map((id) => this.friends.find(({ _id }) => _id === id))
+      .map((friend) => ({ ...friend, chatUser: friend.users.find(({ _id }) => _id !== this.user._id) }));
   }
 
   sendMessage = async (chatId = '', content = '') => {
-    if (!this.activeChat) {
-      return;
-    }
-
     const response = await networkCall({ path: '/api/message', method: 'POST', body: { chatId, content } });
 
     if (response.okay) {
@@ -119,22 +127,29 @@ class Store {
       this.socket.on('friend-request-accepted', (data) => {
         const { friend, removed } = JSON.parse(data);
         runInAction(() => {
-          this.requests = this.requests.filter(({ _id }) => _id !== removed);
           this.friends.unshift(friend);
+          const foundIndex = this.requests.findIndex(({ _id }) => _id === removed);
+          if (foundIndex !== -1) {
+            this.requests.splice(foundIndex, 1);
+          }
         });
       });
 
       this.socket.on('friend-request-removed', (data) => {
         const id = JSON.parse(data);
-        runInAction(() => (this.requests = this.requests.filter(({ _id }) => _id !== id)));
+        const foundIndex = this.requests.findIndex(({ _id }) => _id === id);
+        if (foundIndex !== -1) {
+          runInAction(() => this.requests.splice(foundIndex, 1));
+        }
       });
 
       this.socket.on('friend-removed', (data) => {
         const id = JSON.parse(data);
         const friendsId = this.friends.findIndex(({ _id }) => _id === id);
+        const foundActiveChatIndex = this.activeChatIds.indexOf(id);
         runInAction(() => {
-          if (this.activeChatId === id) {
-            this.activeChatId = null;
+          if (foundActiveChatIndex !== -1) {
+            this.activeChatIds.splice(foundActiveChatIndex, 1);
           }
 
           if (friendsId !== -1) {
@@ -211,9 +226,12 @@ class Store {
   acceptRequest = async (id = '') => {
     const response = await networkCall({ path: `/api/accept-friend-request/${id}`, method: 'GET' });
     if (response.okay) {
+      const foundIndex = this.requests.findIndex(({ _id }) => _id === id);
       runInAction(() => {
-        this.requests = this.requests.filter(({ _id }) => _id !== id);
         this.friends.unshift(response.okay);
+        if (foundIndex !== -1) {
+          this.requests.splice(foundIndex, 1);
+        }
       });
       this.multiUser('friend-request-accepted', { removed: id, friend: response.okay });
     } else {
@@ -226,7 +244,11 @@ class Store {
   removeRequest = async (id = '') => {
     const response = await networkCall({ path: `/api/remove-friend-request/${id}`, method: 'GET' });
     if (response.okay) {
-      runInAction(() => (this.requests = this.requests.filter(({ _id }) => _id !== id)));
+      const foundIndex = this.requests.findIndex(({ _id }) => _id === id);
+      if (foundIndex !== -1) {
+        runInAction(() => this.requests.splice(foundIndex, 1));
+      }
+
       this.multiUser('friend-request-removed', id);
     } else {
       notify(response);
@@ -239,9 +261,10 @@ class Store {
     const response = await networkCall({ path: `/api/friends/remove/${id}`, method: 'GET' });
     if (response.okay) {
       const friendsId = this.friends.findIndex(({ _id }) => _id === id);
+      const foundActiveChatIdIndex = this.activeChatIds.indexOf(id);
       runInAction(() => {
-        if (this.activeChatId === id) {
-          this.activeChatId = null;
+        if (foundActiveChatIdIndex !== -1) {
+          this.activeChatIds.splice(foundActiveChatIdIndex);
         }
 
         if (friendsId !== -1) {
@@ -379,10 +402,11 @@ class Store {
       runInAction(() => {
         // if connection was lost and the other user has removed the friendship
         if (this.friends.length && response.okay.length !== this.friends.length) {
-          this.friends.forEach(({ chatId }) => {
+          this.friends.forEach(({ _id, chatId }) => {
             if (response.okay.findIndex((f) => f.chatId === chatId) === -1) {
-              if (this.activeChat && this.activeChat.chatId === chatId) {
-                this.activeChatId = null;
+              const foundActiveChatIdIndex = this.activeChatIds.indexOf(_id);
+              if (foundActiveChatIdIndex !== -1) {
+                this.activeChatIds.splice(foundActiveChatIdIndex, 1);
               }
 
               if (this.chats[chatId]) {
