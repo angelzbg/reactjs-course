@@ -59,6 +59,11 @@
           animation: new-message 0.9s linear infinite;
 }
 
+.active-chats .active-chats-main .active-chat-wrapper.new .chat-header {
+  -webkit-animation: new-message-header 1.9s linear infinite;
+          animation: new-message-header 1.9s linear infinite;
+}
+
 .active-chats .active-chats-main .active-chat-wrapper:last-child {
   margin-right: 5px;
 }
@@ -99,8 +104,8 @@
   top: 0;
   left: 0;
   width: 280px;
-  border-top-left-radius: 6px;
-  border-top-right-radius: 6px;
+  border-top-left-radius: 9px;
+  border-top-right-radius: 9px;
   -webkit-box-shadow: 0 1px 4px var(--shadow1), 0 0 40px var(--shadow2);
   box-shadow: 0 1px 4px var(--shadow1), 0 0 40px var(--shadow2);
 }
@@ -422,6 +427,30 @@
   margin-left: 7px;
   -webkit-animation: rotation-message-sending 0.5s infinite linear;
           animation: rotation-message-sending 0.5s infinite linear;
+}
+
+@-webkit-keyframes new-message-header {
+  0% {
+    background-color: var(--link1);
+  }
+  80% {
+    background-color: var(--medium);
+  }
+  100% {
+    background-color: var(--link2);
+  }
+}
+
+@keyframes new-message-header {
+  0% {
+    background-color: var(--link1);
+  }
+  80% {
+    background-color: var(--medium);
+  }
+  100% {
+    background-color: var(--link2);
+  }
 }
 
 @-webkit-keyframes new-message {

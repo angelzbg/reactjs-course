@@ -51,6 +51,9 @@
       &.new {
         border: 1px solid var(--link1);
         animation: new-message 0.9s linear infinite;
+        .chat-header {
+          animation: new-message-header 1.9s linear infinite;
+        }
       }
 
       &:last-child {
@@ -89,8 +92,8 @@
         top: 0;
         left: 0;
         width: 280px;
-        border-top-left-radius: 6px;
-        border-top-right-radius: 6px;
+        border-top-left-radius: 9px;
+        border-top-right-radius: 9px;
         -webkit-box-shadow: 0 1px 4px var(--shadow1), 0 0 40px var(--shadow2);
         -moz-box-shadow: 0 1px 4px var(--shadow1), 0 0 40px var(--shadow2);
         box-shadow: 0 1px 4px var(--shadow1), 0 0 40px var(--shadow2);
@@ -396,6 +399,18 @@
         }
       }
     }
+  }
+}
+
+@keyframes new-message-header {
+  0% {
+    background-color: var(--link1);
+  }
+  80% {
+    background-color: var(--medium);
+  }
+  100% {
+    background-color: var(--link2);
   }
 }
 
