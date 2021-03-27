@@ -12,7 +12,7 @@ import { ArrowSwitchIcon } from '@primer/octicons-react';
 export default observer(({ activeChat, idx }) => {
   const store = useStore();
   const { loadingChats, closeActiveChat, chats, switchChats, chatHighlights, removeChatHighlight } = store;
-  const { inputHeight, ref: inputWrapRef } = useResizeDetector();
+  const { height: inputHeight, ref: inputWrapRef } = useResizeDetector();
   const messageRef = useRef(null);
   const messageRefB = useRef(null);
   const observable = useChatObservable(store, messageRef);

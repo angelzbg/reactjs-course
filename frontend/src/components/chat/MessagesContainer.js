@@ -14,7 +14,7 @@ export default observer(({ chatId, chatUser, messages, inputHeight }) => {
     <div
       id={chatId}
       className="messages-container"
-      style={{ height: 331 - (inputHeight || 46) - 48 }}
+      style={{ height: 331 - (inputHeight || 46) - 48 - 12 }}
       onScroll={({ target: { scrollTop } }) => {
         if (scrollTop === 0 && messages[0]) {
           loadChatMessages(chatId, messages[0].created);
