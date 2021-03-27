@@ -35,7 +35,7 @@ export default observer(({ activeChat, idx }) => {
   return (
     <div
       className={`active-chat-wrapper ${chatHighlights[chatId] ? 'new' : ''}`}
-      onMouseEnter={() => removeChatHighlight(chatId)}
+      onClick={() => removeChatHighlight(chatId)}
     >
       <Header {...{ chatUser, closeActiveChat, _id }} />
       <MessageBox {...{ chatId, content, setContent, isSending, sendMessage, inputWrapRef, messageRef, messageRefB }} />
