@@ -44,6 +44,9 @@
     border-radius: 8px;
     padding-bottom: 4px;
     transition: background-color 0.3s ease;
+    &.new {
+      animation: new-message-connections 1.9s linear infinite;
+    }
     &:last-child {
       margin-bottom: 8px;
     }
@@ -133,5 +136,17 @@
         margin-left: 6px;
       }
     }
+  }
+}
+
+@keyframes new-message-connections {
+  0% {
+    background-color: var(--active-bgr);
+  }
+  80% {
+    background-color: var(--medium);
+  }
+  100% {
+    background-color: var(--active-bgr);
   }
 }

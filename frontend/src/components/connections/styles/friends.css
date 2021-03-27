@@ -50,6 +50,11 @@
   transition: background-color 0.3s ease;
 }
 
+.friends-wrapper .friends-connection.new {
+  -webkit-animation: new-message-connections 1.9s linear infinite;
+          animation: new-message-connections 1.9s linear infinite;
+}
+
 .friends-wrapper .friends-connection:last-child {
   margin-bottom: 8px;
 }
@@ -148,5 +153,29 @@
   height: 18px;
   margin-top: 6px;
   margin-left: 6px;
+}
+
+@-webkit-keyframes new-message-connections {
+  0% {
+    background-color: var(--active-bgr);
+  }
+  80% {
+    background-color: var(--medium);
+  }
+  100% {
+    background-color: var(--active-bgr);
+  }
+}
+
+@keyframes new-message-connections {
+  0% {
+    background-color: var(--active-bgr);
+  }
+  80% {
+    background-color: var(--medium);
+  }
+  100% {
+    background-color: var(--active-bgr);
+  }
 }
 /*# sourceMappingURL=friends.css.map */

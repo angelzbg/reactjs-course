@@ -7,13 +7,16 @@ import Moment from 'react-moment';
 import { CommentDiscussionIcon } from '@primer/octicons-react';
 
 export default observer(() => {
-  const { connections, activeChatIds, openActiveChat } = useStore();
+  const { connections, activeChatIds, openActiveChat, chatHighlights } = useStore();
   return (
     <div className="friends-wrapper">
       {!!connections.length && <div className="con-title">Connections</div>}
       {connections.map(({ _id, user, lastMessage }) => {
         return (
-          <div key={`con-${_id}`} className="friends-connection">
+          <div
+            key={`con-${_id}`}
+            className={`friends-connection ${lastMessage && chatHighlights[lastMessage.chatId] ? 'new' : ''}`}
+          >
             <Link className="con-avatar" to={`/profile/${user._id}`}>
               <img src={user.avatar ? `/avatars/${user.avatar}` : no_profile} alt="avatar" />
             </Link>
