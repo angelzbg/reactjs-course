@@ -45,7 +45,7 @@
       -webkit-box-shadow: 0 1px 4px var(--shadow1), 0 0 40px var(--shadow2);
       -moz-box-shadow: 0 1px 4px var(--shadow1), 0 0 40px var(--shadow2);
       box-shadow: 0 1px 4px var(--shadow1), 0 0 40px var(--shadow2);
-      border: 1px solid var(--medium2);
+      border: 1px solid transparent;
       //animation: popup 0.2s;
 
       &.new {
@@ -53,6 +53,14 @@
         animation: new-message 0.9s linear infinite;
         .chat-header {
           animation: new-message-header 1.9s linear infinite;
+        }
+        .messages-container {
+          &::-webkit-scrollbar-thumb {
+            background-color: var(--link1) !important;
+            &:hover {
+              background-color: var(--link2) !important;
+            }
+          }
         }
       }
 
