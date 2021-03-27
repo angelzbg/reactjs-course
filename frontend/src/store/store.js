@@ -41,18 +41,20 @@ class Store {
       return;
     }
 
-    this.activeChatIds.unshift(friendId);
+    runInAction(() => this.activeChatIds.unshift(friendId));
   };
 
   closeActiveChat = (friendId) => {
     const foundIndex = this.activeChatIds.indexOf(friendId);
     if (foundIndex !== -1) {
-      this.activeChatIds.splice(foundIndex, 1);
+      runInAction(() => this.activeChatIds.splice(foundIndex, 1));
     }
   };
 
   switchChats = (idx) => {
-    [this.activeChatIds[idx], this.activeChatIds[idx + 1]] = [this.activeChatIds[idx + 1], this.activeChatIds[idx]];
+    runInAction(() => {
+      [this.activeChatIds[idx], this.activeChatIds[idx + 1]] = [this.activeChatIds[idx + 1], this.activeChatIds[idx]];
+    });
   };
 
   get activeChats() {

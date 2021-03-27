@@ -28,8 +28,7 @@ export default observer(({ activeChat, idx }) => {
     }
 
     if (!loadingChats) {
-      setTimeout(() => Events.trigger('scroll-to-bottom-chat', chatId), 20);
-      console.log(activeChat);
+      Events.trigger('scroll-to-bottom-chat', chatId);
     }
   }, [store, activeChat, chatId, loadingChats]);
 
