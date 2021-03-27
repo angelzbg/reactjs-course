@@ -1,10 +1,18 @@
 import './styles/loaders.css';
 import { SyncIcon } from '@primer/octicons-react';
+import { observer } from 'mobx-react';
+import { useStore } from '../../store/store';
 
-const AppLoader = () => (
-  <div className="app-loader">
-    <SyncIcon size="medium" />
-  </div>
-);
+export default observer(() => {
+  const { isLoading } = useStore();
 
-export default AppLoader;
+  if (isLoading) {
+    return (
+      <div className="app-loader">
+        <SyncIcon size="medium" />
+      </div>
+    );
+  }
+
+  return null;
+});

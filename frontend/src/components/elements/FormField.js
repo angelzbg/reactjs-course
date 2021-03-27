@@ -3,7 +3,6 @@ import { observer } from 'mobx-react';
 export default observer(({ field, fieldsObs }) => {
   const { el, error, errorMsg, highlight, icon, component } = field;
   const [errorClass, setInput] = [error || highlight?.includes(fieldsObs.error) ? 'error' : '', fieldsObs.setInput];
-
   return (
     <div>
       {icon({ size: 'medium', className: `auth-input-icon ${errorClass}` })}

@@ -1,6 +1,13 @@
 import { makeAutoObservable, runInAction } from 'mobx';
-import { getTimeDifference, networkCall, notify } from '../../utils/utils';
-import { homeFilters, homeFiltersActive } from '../../utils/constants';
+import { networkCall, notify } from '../../utils/utils';
+import { homeFilters, homeFiltersActive } from '../../pages/home/constants';
+
+const getSection = (rf, rt, fIds, data) => {
+  return data.map((item) => {
+    const [requestFrom, requestTo, isFriend] = [rf?.[item._id], rt?.[item._id], fIds.includes(item._id)];
+    return { ...item, requestFrom, requestTo, isFriend };
+  });
+};
 
 export default class HomeStore {
   constructor(root) {
@@ -22,35 +29,40 @@ export default class HomeStore {
     }
   };
 
-  get items() {
-    if (!Object.keys(this.data).length) {
-      return null;
-    }
+  get userInfo() {
+    return [this.root.requestsFrom, this.root.requestsTo, this.root.friendsIds];
+  }
 
-    const yearAgo = new Date().getTime() - 34712647200;
-    return Object.fromEntries(
-      Object.entries(this.data).map(([key, items]) => [
-        key,
-        items.map((item) => {
-          const [requestFrom, requestTo, isFriend] = [
-            this.root.requestsFrom[item._id],
-            this.root.requestsTo[item._id],
-            this.root.friendsIds.includes(item._id),
-          ];
-          return {
-            ...item,
-            time: `joined ${
-              yearAgo < item.created
-                ? getTimeDifference(item.created, this.root.time)
-                : new Date(item.created).toLocaleString('en-GB', { timeZone: 'UTC' }).substring(0, 10)
-            }`,
-            requestFrom,
-            requestTo,
-            isFriend,
-          };
-        }),
-      ])
-    );
+  get topDevs() {
+    return getSection(...this.userInfo, this.data.topDevs || []);
+  }
+
+  get topOrgs() {
+    return getSection(...this.userInfo, this.data.topOrgs || []);
+  }
+
+  get newDevs() {
+    return getSection(...this.userInfo, this.data.newDevs || []);
+  }
+
+  get newOrgs() {
+    return getSection(...this.userInfo, this.data.newOrgs || []);
+  }
+
+  get topDevsNear() {
+    return getSection(...this.userInfo, this.data.topDevsNear || []);
+  }
+
+  get topOrgsNear() {
+    return getSection(...this.userInfo, this.data.topOrgsNear || []);
+  }
+
+  get newDevsNear() {
+    return getSection(...this.userInfo, this.data.newDevsNear || []);
+  }
+
+  get newOrgsNear() {
+    return getSection(...this.userInfo, this.data.newOrgsNear || []);
   }
 
   data = {};

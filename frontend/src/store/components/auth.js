@@ -45,10 +45,13 @@ export default class AuthStore {
     if (response.okay) {
       this.root.close();
       runInAction(() => {
-        this.root.isLoading = false;
         this.root.user = null;
         this.root.friends = [];
         this.root.requests = [];
+        this.root.activityStore.comments = [];
+        this.root.chats = {};
+        this.root.activeChatId = null;
+        this.root.isLoading = false;
       });
     }
 
@@ -69,6 +72,7 @@ export default class AuthStore {
         (async () => {
           const user = { ...response.okay, lastNotifCheck: response.okay.lastNotifCheck ?? 0 };
           await Promise.all([this.root.loadFriends(), this.root.loadRequests()]);
+          this.root.loadChats();
           runInAction(() => (this.root.user = user));
           this.root.listen();
           if (!isSilent) {

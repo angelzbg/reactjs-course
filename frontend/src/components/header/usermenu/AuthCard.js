@@ -8,7 +8,6 @@ import no_profile from '../../../images/no_profile.png';
 export default observer(({ setToggle }) => {
   const { user } = useStore();
   const { votes, rating, ratingRound } = user;
-
   return (
     <Link className="user-menu-item-me" to={`/profile/${user._id}`} onClick={() => setToggle(toggles.closed)}>
       <img
@@ -19,7 +18,7 @@ export default observer(({ setToggle }) => {
       <div className="user-menu-item-me-info-wrapper">
         <span className="me-name">{user.name}</span>
         <span className="me-type">{user.type}</span>
-        {new Array(5).fill(0).map((_, i) => {
+        {[0, 0, 0, 0, 0].map((_, i) => {
           const isVoted = votes !== 0;
           const isFilled = isVoted && i < ratingRound;
           return (

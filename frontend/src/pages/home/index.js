@@ -5,17 +5,15 @@ import { useStore } from '../../store/store';
 import PageLoader from '../../components/loaders/PageLoader';
 import HorizontalContainer from './HorizontalContainer';
 import Header from './Header';
-import { useHomeObservable, getContainers } from './constants';
+import { getContainers } from './constants';
 
 export default observer(() => {
   const store = useStore();
   const { user, home } = store;
-  const { loading, items, getData, filters, filtersActive, setFilter } = home;
-  const { syncing, sync } = useHomeObservable(getData);
+  const { loading, getData, filters, filtersActive, setFilter } = home;
 
   useEffect(() => (!store.isLoading ? getData() : null), [store, user, getData]);
-
-  document.title = 'Home - Webby';
+  useEffect(() => (document.title = 'Home - Webby'), []);
 
   if (loading) {
     return <PageLoader />;
@@ -23,9 +21,10 @@ export default observer(() => {
 
   return (
     <>
-      <Header {...{ filters, filtersActive, setFilter, syncing, sync }} />
-      {items &&
-        getContainers(items, filters, !!user, filtersActive).map((container) => (
+      <Header {...{ filters, filtersActive, setFilter }} />
+      {getContainers()
+        .filter(({ filter, auth }) => filtersActive.includes(filter) && (!user ? !auth : true))
+        .map((container) => (
           <HorizontalContainer key={`container-h-${container.title}`} {...container} />
         ))}
     </>

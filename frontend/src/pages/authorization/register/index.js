@@ -1,5 +1,5 @@
 import '../styles/auth.css';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { useStore } from '../../../store/store';
 import { observer } from 'mobx-react';
@@ -14,6 +14,7 @@ export default observer(() => {
   const fieldsObs = FieldsObservable(registerFields);
   const [avatar, setAvatar] = useState('');
   const avatarRef = useRef(null);
+  useEffect(() => (document.title = 'Sign Up - Webby'), []);
 
   const onSubmit = async (event) => {
     event.preventDefault();
@@ -24,8 +25,6 @@ export default observer(() => {
       }
     }
   };
-
-  document.title = 'Sign Up - Webby';
 
   if (user) {
     return <Redirect to="/" />;

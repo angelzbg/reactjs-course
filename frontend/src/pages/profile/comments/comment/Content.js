@@ -19,7 +19,7 @@ export default observer(({ user, author, content, syncing, setDeleteId, commentI
       {iconsByType[author.type]({ size: 'small', className: 'author-type' })}
       <span style={{ color: 'var(--medium2)' }}> | </span>
       <div className={`author-rating ${author.votes > 0 ? 'voted' : ''}`}>
-        {new Array(5).fill(0).map((_, i) => (
+        {[0, 0, 0, 0, 0].map((_, i) => (
           <span key={`star-${commentId}-${author._id}-${i}`}>
             {(i < author.ratingRound ? StarFillIcon : StarIcon)({ size: 'small' })}
           </span>

@@ -33,11 +33,16 @@ const FieldsObservable = (fields = []) => {
 };
 
 const networkCall = async ({ path = '', method = '', body = {} }) => {
+  if (
+    !['GET', 'HEAD', 'POST', 'PUT', 'DELETE', 'CONNECT', 'OPTIONS', 'TRACE', 'PATCH'].includes(method.toUpperCase())
+  ) {
+    throw new Error(`${method} is invalid CRUD method!`);
+  }
+
   const controller = new AbortController();
   const { signal } = controller;
-  const req = { method, headers: { 'Content-Type': 'application/json' }, signal };
-
-  if (method !== 'GET') {
+  const req = { method: method.toUpperCase(), headers: { 'Content-Type': 'application/json' }, signal };
+  if (['POST', 'PUT', 'PATCH' /*, 'DELETE'*/].includes(method.toUpperCase())) {
     req.body = JSON.stringify(body);
   }
 
@@ -100,50 +105,6 @@ const resizeBase64Img = (srcData, width, height) => {
   });
 };
 
-const getTimeDifference = (date, now = new Date().getTime()) => {
-  // get total seconds between the times
-  let delta = Math.abs(date - now) / 1000;
-
-  // calculate (and subtract) whole days
-  const days = Math.floor(delta / 86400);
-  delta -= days * 86400;
-  if (days > 0) {
-    if (days > 30) {
-      const months = Math.floor(days / 30);
-      if (months < 12) {
-        return `${months > 1 ? 'a month' : `${months} months`} ago`;
-      } else {
-        const years = Math.floor(months / 12);
-        return `${years > 1 ? `${years} years` : 'a year'} ago`;
-      }
-    } else if (days >= 7) {
-      const weeks = Math.floor(days / 7);
-      const ramainingDays = days - weeks * 7;
-      return `${weeks > 1 ? `${weeks} weeks` : 'a week'}${ramainingDays > 0 ? ` and ${ramainingDays} day(s)` : ''} ago`;
-    } else {
-      return `${days > 1 ? `${days} days` : 'a day'} ago`;
-    }
-  }
-
-  // calculate (and subtract) whole hours
-  const hours = Math.floor(delta / 3600) % 24;
-  delta -= hours * 3600;
-  if (hours > 0) {
-    return `${hours > 1 ? `${hours} hours` : 'an hour'} ago`;
-  }
-
-  // calculate (and subtract) whole minutes
-  const minutes = Math.floor(delta / 60) % 60;
-  delta -= minutes * 60;
-  if (minutes > 0) {
-    return `${minutes > 1 ? `${minutes} minutes` : 'a minute'} ago`;
-  }
-
-  // what's left is seconds
-  //const seconds = delta % 60; // in theory the modulus is not required
-  return `just now`;
-};
-
 const screwEvent = (e) => {
   e.preventDefault();
   e.stopPropagation();
@@ -182,13 +143,4 @@ const onAppScroll = (e) => {
   }
 };
 
-export {
-  FieldsObservable,
-  networkCall,
-  notify,
-  resizeBase64Img,
-  getTimeDifference,
-  screwEvent,
-  getHashFromEv,
-  onAppScroll,
-};
+export { FieldsObservable, networkCall, notify, resizeBase64Img, screwEvent, getHashFromEv, onAppScroll };

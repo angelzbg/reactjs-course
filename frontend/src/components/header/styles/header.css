@@ -9,7 +9,7 @@
 .header-logo {
   width: 41px;
   height: 44px;
-  position: absolute;
+  position: fixed;
   top: 6px;
   left: 16px;
 }

@@ -1,5 +1,5 @@
 import { makeAutoObservable, runInAction } from 'mobx';
-import { getTimeDifference, networkCall, notify } from '../../utils/utils';
+import { networkCall, notify } from '../../utils/utils';
 
 export default class SearchStore {
   constructor(root) {
@@ -11,27 +11,50 @@ export default class SearchStore {
   loading = false;
   noresults = false;
   saved = false;
-  getResults = async (type, name, city) => {
-    runInAction(() => (this.loading = true));
+  allowPaginate = false;
+  paginating = false;
+  lastSearch = null;
 
-    const response = await networkCall({ path: `/api/search`, method: 'POST', body: { type, name, city } });
+  get canPaginate() {
+    return !this.loading && !this.paginating && this.allowPaginate;
+  }
+
+  getResults = async (isPagination, type, name, city) => {
+    if (isPagination && !this.canPaginate) {
+      return;
+    }
+
+    runInAction(() => (!isPagination ? (this.loading = true) : (this.paginating = true)));
+
+    const response = await networkCall({
+      path: `/api/search`,
+      method: 'POST',
+      body: isPagination ? { skip: this.results.length, ...this.lastSearch } : { type, name, city },
+    });
     if (response.okay) {
       runInAction(() => {
-        this.results = response.okay;
-        this.saved = !!response.okay.length;
-        this.noresults = !response.okay.length;
+        this.results = isPagination ? this.results.concat(response.okay) : response.okay;
+        this.saved = !!response.okay.length || !!this.results.length;
+        this.noresults = !this.results.length;
+        this.allowPaginate = response.okay.length === 12;
+        if (!isPagination) {
+          this.lastSearch = { type, name, city };
+        }
       });
     } else {
       notify(response);
     }
 
-    runInAction(() => (this.loading = false));
+    runInAction(() => (!isPagination ? (this.loading = false) : (this.paginating = false)));
 
     return response;
   };
 
+  setNoResults = () => {
+    this.noresults = false;
+  };
+
   get items() {
-    const yearAgo = new Date().getTime() - 34712647200;
     return this.results.map((item) => {
       const [requestFrom, requestTo, isFriend] = [
         this.root.requestsFrom[item._id],
@@ -40,11 +63,6 @@ export default class SearchStore {
       ];
       return {
         ...item,
-        time: `joined ${
-          yearAgo < item.created
-            ? getTimeDifference(item.created, this.root.time)
-            : new Date(item.created).toLocaleString('en-GB', { timeZone: 'UTC' }).substring(0, 10)
-        }`,
         requestFrom,
         requestTo,
         isFriend,

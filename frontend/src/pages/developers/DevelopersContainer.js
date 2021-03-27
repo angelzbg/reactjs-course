@@ -5,7 +5,7 @@ import DeveloperCard from './DeveloperCard';
 import Pagination from './Pagination';
 import { useStore } from '../../store/store';
 
-export default observer(({ section }) => {
+export default observer(() => {
   const { developers } = useStore();
 
   useEffect(() => {
@@ -23,7 +23,7 @@ export default observer(({ section }) => {
     <>
       <div className="developers-wrap">
         {developers.items.map((item, i) => (
-          <DeveloperCard key={`dev-${i}`} {...{ item, i, section }} />
+          <DeveloperCard key={`dev-${item._id}`} {...{ item, i }} />
         ))}
       </div>
       <Pagination />

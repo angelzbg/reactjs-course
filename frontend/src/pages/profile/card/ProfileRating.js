@@ -20,7 +20,7 @@ export default observer(({ id, profile, isSelf, syncing, sync, setSync }) => {
 
   return (
     <div className="profile-card-stars">
-      {new Array(5).fill(0).map((_, i) => {
+      {[0, 0, 0, 0, 0].map((_, i) => {
         const isFilled =
           (isVoted && i < /*=*/ ratingRound && observable.hoveredStar === -1) ||
           (canVote && i <= observable.hoveredStar);

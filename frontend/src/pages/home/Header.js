@@ -1,7 +1,6 @@
 import { observer } from 'mobx-react';
-import { SyncIcon } from '@primer/octicons-react';
 
-export default observer(({ filters, filtersActive, setFilter, syncing, sync }) => (
+export default observer(({ filters, filtersActive, setFilter }) => (
   <div className="home-filters-wrap">
     {Object.values(filters).map((filter) => (
       <div
@@ -12,8 +11,5 @@ export default observer(({ filters, filtersActive, setFilter, syncing, sync }) =
         {filter}
       </div>
     ))}
-    <div className={`home-sync ${syncing ? 'syncing' : ''}`} onClick={sync}>
-      <SyncIcon size="small" />
-    </div>
   </div>
 ));

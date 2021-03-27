@@ -12,6 +12,7 @@ const AccountRating = require('./models/Rating');
 const ProfileComment = require('./models/ProfileComment');
 const Friend = require('./models/Friend');
 const FriendRequest = require('./models/FriendRequest');
+const Message = require('./models/Message');
 
 const PORT = 3000;
 const connectionStr = 'mongodb://localhost:27017/webby';
@@ -26,6 +27,8 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 app.use(cors());
+
+const sockets = {};
 
 const signToken = (login) => {
   const payload = { login };
@@ -52,14 +55,15 @@ app.use((req, res, next) => {
   });
 });
 
-app.post('/api/search', async (req, res, next) => {
-  const { type, name, city } = req.body;
+app.post('/api/search', async (req, res) => {
+  const { type, name, city, skip } = req.body;
   if (
     (!name && !city) ||
     !['Organization', 'Developer'].includes(type) ||
     typeof type !== 'string' ||
     (name && typeof name !== 'string') ||
-    (city && typeof city !== 'string')
+    (city && typeof city !== 'string') ||
+    (skip !== undefined && isNaN(skip))
   ) {
     res.status(200).json({ error: 'SEARCH_CANNOT_BE_PERFORMED' });
     return;
@@ -71,13 +75,17 @@ app.post('/api/search', async (req, res, next) => {
       ...(name ? { name: { $regex: name, $options: 'i' } } : {}),
       ...(city ? { city: { $regex: city, $options: 'i' } } : {}),
     },
-    ['avatar', 'city', 'name', 'created', 'rating', 'ratingRound', 'stars', 'type', 'votes']
+    ['avatar', 'city', 'name', 'created', 'rating', 'ratingRound', 'stars', 'type', 'votes'],
+    {
+      skip: skip || 0,
+      limit: 12,
+    }
   );
 
   res.status(200).json({ okay: result || [] });
 });
 
-app.post('/api/organizations', async (req, res, next) => {
+app.post('/api/organizations', async (req, res) => {
   let skip = req.body.skip ?? 0;
   let limit = req.body.limit ?? 10;
   if (req.body.skip !== undefined) {
@@ -98,7 +106,7 @@ app.post('/api/organizations', async (req, res, next) => {
 
   let created;
   if (req.body.created !== undefined) {
-    created = parseInt(created);
+    created = parseInt(req.body.created);
     if (isNaN(created)) {
       created = undefined;
     }
@@ -138,7 +146,7 @@ app.post('/api/organizations', async (req, res, next) => {
       ...(['new', 'new-local'].includes(filter)
         ? {
             created: {
-              [req.body.isSync ? '$gt' : '$lt']: created ?? req.body.isSync ? 0 : Number.MAX_SAFE_INTEGER,
+              [req.body.isSync ? '$gt' : '$lt']: created ?? (req.body.isSync ? 0 : Number.MAX_SAFE_INTEGER),
             },
           }
         : {}),
@@ -154,7 +162,7 @@ app.post('/api/organizations', async (req, res, next) => {
   res.status(200).json({ okay: result ?? [] });
 });
 
-app.post('/api/developers', async (req, res, next) => {
+app.post('/api/developers', async (req, res) => {
   const skip = req.body.skip ?? 0;
   const limit = req.body.limit ?? 10;
   if (req.body.skip !== undefined) {
@@ -175,7 +183,7 @@ app.post('/api/developers', async (req, res, next) => {
 
   let created;
   if (req.body.created !== undefined) {
-    created = parseInt(created);
+    created = parseInt(req.body.created);
     if (isNaN(created)) {
       created = undefined;
     }
@@ -215,7 +223,7 @@ app.post('/api/developers', async (req, res, next) => {
       ...(['new', 'new-local'].includes(filter)
         ? {
             created: {
-              [req.body.isSync ? '$gt' : '$lt']: created ?? req.body.isSync ? 0 : Number.MAX_SAFE_INTEGER,
+              [req.body.isSync ? '$gt' : '$lt']: created ?? (req.body.isSync ? 0 : Number.MAX_SAFE_INTEGER),
             },
           }
         : {}),
@@ -231,7 +239,7 @@ app.post('/api/developers', async (req, res, next) => {
   res.status(200).json({ okay: result ?? [] });
 });
 
-app.get('/api/home', async (req, res, next) => {
+app.get('/api/home', async (req, res) => {
   let city;
   if (!!req.user) {
     city = req.user.city;
@@ -300,7 +308,7 @@ app.get('/api/home', async (req, res, next) => {
   });
 });
 
-app.get('/api/send-friend-request/:id', async (req, res, next) => {
+app.get('/api/send-friend-request/:id', async (req, res) => {
   if (!req.user) {
     res.status(200).json({ error: 'TOKEN_NOT_FOUND' });
     return;
@@ -319,9 +327,14 @@ app.get('/api/send-friend-request/:id', async (req, res, next) => {
     return;
   }
 
-  const foundRequest = await FriendRequest.findOne({ sender: req.user._id, receiver: id });
+  const foundRequest = await FriendRequest.findOne({
+    $or: [
+      { sender: req.user._id, receiver: id },
+      { sender: id, receiver: req.user._id },
+    ],
+  });
   if (foundRequest) {
-    res.status(200).json({ error: 'REQUEST_ALREADY_SENT_TO_USER' });
+    res.status(200).json({ error: 'REQUEST_ALREADY_EXISTS' });
     return;
   } else {
     const friendRequest = new FriendRequest({
@@ -358,7 +371,7 @@ app.get('/api/send-friend-request/:id', async (req, res, next) => {
   }
 });
 
-app.get('/api/accept-friend-request/:id', async (req, res, next) => {
+app.get('/api/accept-friend-request/:id', async (req, res) => {
   if (!req.user) {
     res.status(200).json({ error: 'TOKEN_NOT_FOUND' });
     return;
@@ -377,7 +390,8 @@ app.get('/api/accept-friend-request/:id', async (req, res, next) => {
   }
 
   const users = [req.user._id, foundRequest.sender];
-  const friendship = new Friend({ users, created: new Date().getTime() });
+  const chatId = uniqid() + uniqid();
+  const friendship = new Friend({ users, created: new Date().getTime(), chatId });
   friendship.save(async (err, doc) => {
     if (err) {
       res.status(200).json({ error: 'UNEXPECTED_ERROR' });
@@ -391,7 +405,7 @@ app.get('/api/accept-friend-request/:id', async (req, res, next) => {
       const data = {
         ...(() => {
           const { _id, created } = doc;
-          return { _id, created };
+          return { _id, created, chatId };
         })(),
         users: [
           (() => {
@@ -415,7 +429,7 @@ app.get('/api/accept-friend-request/:id', async (req, res, next) => {
   });
 });
 
-app.get('/api/remove-friend-request/:id', async (req, res, next) => {
+app.get('/api/remove-friend-request/:id', async (req, res) => {
   if (!req.user) {
     res.status(200).json({ error: 'TOKEN_NOT_FOUND' });
     return;
@@ -448,7 +462,7 @@ app.get('/api/remove-friend-request/:id', async (req, res, next) => {
   }
 });
 
-app.get('/api/friends/remove/:id', async (req, res, next) => {
+app.get('/api/friends/remove/:id', async (req, res) => {
   if (!req.user) {
     res.status(200).json({ error: 'TOKEN_NOT_FOUND' });
     return;
@@ -467,7 +481,8 @@ app.get('/api/friends/remove/:id', async (req, res, next) => {
     return;
   }
 
-  await Friend.findByIdAndDelete(friendId);
+  const chatId = foundFriend.chatId;
+  await Promise.all([Message.deleteMany({ chatId }), Friend.findByIdAndDelete(friendId)]);
   res.status(200).json({ okay: 'FRIENDSHIP_REMOVED' });
   Events.trigger('emit', {
     id: foundFriend.users.find(({ _id }) => _id.toString() !== req.user._id.toString()).socketId,
@@ -476,21 +491,21 @@ app.get('/api/friends/remove/:id', async (req, res, next) => {
   });
 });
 
-app.get('/api/friends', async (req, res, next) => {
+app.get('/api/friends', async (req, res) => {
   if (!req.user) {
     res.status(200).json({ error: 'TOKEN_NOT_FOUND' });
     return;
   }
 
   const friends = await Friend.find({ users: req.user._id })
-    .populate('users', '_id city created type name avatar rating ratingRound votes stars')
+    .populate('users', '_id city created type name avatar rating ratingRound votes stars chatId')
     .sort({ created: -1 })
     .lean();
 
   res.status(200).json({ okay: friends || [] });
 });
 
-app.get('/api/friend-requests', async (req, res, next) => {
+app.get('/api/friend-requests', async (req, res) => {
   if (!req.user) {
     res.status(200).json({ error: 'TOKEN_NOT_FOUND' });
     return;
@@ -505,6 +520,106 @@ app.get('/api/friend-requests', async (req, res, next) => {
     .lean();
 
   res.status(200).json({ okay: friendRequests || [] });
+});
+
+app.post('/api/message', async (req, res) => {
+  if (!req.user) {
+    res.status(200).json({ error: 'TOKEN_NOT_FOUND' });
+    return;
+  }
+
+  const chatId = req.body.chatId;
+  const content = req.body.content;
+  if (typeof content !== 'string' || content.length < 1 || content.length > 1000) {
+    res.status(200).json({ error: 'INVALID_CONTENT_FOR_MESSAGE' });
+    return;
+  }
+
+  const foundFriend = await Friend.findOne({ chatId }).populate('users', '_id socketId');
+  if (!foundFriend) {
+    res.status(200).json({ error: 'FRIENDSHIP_NOT_FOUND' });
+    return;
+  }
+
+  const socketId = foundFriend.users.find(({ _id }) => _id.toString() !== req.user._id.toString()).socketId;
+
+  const created = new Date().getTime();
+  const message = new Message({ chatId, sender: req.user._id, created, content });
+  message.save(async (err, doc) => {
+    if (err) {
+      res.status(200).json({ error: 'UNEXPECTED_ERROR' });
+    } else {
+      const data = {
+        _id: doc._id,
+        chatId,
+        sender: req.user._id.toString(),
+        created,
+        content,
+      };
+      res.status(200).json({ okay: data });
+      Events.trigger('emit', { id: socketId, channel: 'new-message', data });
+    }
+  });
+});
+
+app.post('/api/message/:id', async (req, res) => {
+  if (!req.user) {
+    res.status(200).json({ error: 'TOKEN_NOT_FOUND' });
+    return;
+  }
+
+  const chatId = req.params.id;
+  let created;
+  if (req.body.created) {
+    created = parseInt(req.body.created);
+    if (isNaN(created)) {
+      res.status(200).json({ error: 'INVALID_DATE_FOR_LOAD_MESAGES' });
+      return;
+    }
+  }
+
+  const messages = await Message.find({ chatId, created: { $lt: created } })
+    .sort({ created: -1 })
+    .limit(10);
+
+  res.status(200).json({ okay: (messages || []).sort((a, b) => a.created - b.created) });
+});
+
+app.post('/api/chats', async (req, res) => {
+  if (!req.user) {
+    res.status(200).json({ error: 'TOKEN_NOT_FOUND' });
+    return;
+  }
+
+  let created;
+  if (req.body.created) {
+    created = parseInt(req.body.created);
+    if (isNaN(created)) {
+      res.status(200).json({ error: 'UNEXPECTED_ERROR' });
+      return;
+    }
+  }
+
+  const friends = ((await Friend.find({ users: req.user._id })) || []).map(({ chatId }) => chatId);
+  if (!friends.length) {
+    res.status(200).json({ okay: [] });
+    return;
+  }
+
+  if (created === undefined) {
+    /*const messages = await Message.aggregate([
+      { $match: { chatId: { $in: friends } } },
+      { $sort: { created: -1 } },
+      { $group: { chatId: '$chatId', latest: { $first: '$$ROOT' } } },
+    ]);*/
+    const messages = (
+      await Promise.all(friends.map((chatId) => Message.findOne({ chatId }).sort({ created: -1 }).limit(1)))
+    ).filter((m) => !!m);
+    res.status(200).json({ okay: messages || [] });
+  } else {
+    const messages = await Message.find({ chatId: { $in: friends }, created: { $gt: created } });
+    res.status(200).json({ okay: (messages || []).sort((a, b) => a.created - b.created) });
+  }
 });
 
 app.get('/api/profile/:id', async (req, res) => {
@@ -532,7 +647,7 @@ app.get('/api/userInfo', (req, res) => {
   }
 });
 
-app.post('/api/comments/action/:id', async (req, res, next) => {
+app.post('/api/comments/action/:id', async (req, res) => {
   if (!req.user) {
     res.status(200).json({ error: 'TOKEN_NOT_FOUND' });
     return;
@@ -553,7 +668,7 @@ app.post('/api/comments/action/:id', async (req, res, next) => {
       return;
     }
 
-    ProfileComment.findByIdAndDelete(id, (err, docs) => {
+    ProfileComment.findByIdAndDelete(id, (err) => {
       if (err) {
         res.status(200).json({ error: 'UNEXPECTED_ERROR' });
       } else {
@@ -584,15 +699,43 @@ app.post('/api/comments/action/:id', async (req, res, next) => {
   );
 });
 
-app.get('/api/comments/:id', async (req, res, next) => {
+app.post('/api/activity/comments', async (req, res) => {
+  if (!req.user) {
+    res.status(200).json({ error: 'TOKEN_NOT_FOUND' });
+    return;
+  }
+
+  let createdComment;
+  if (req.body.createdComment) {
+    createdComment = parseInt(req.body.createdComment);
+    if (isNaN(createdComment)) {
+      res.status(200).json({ error: 'INVALID_DATE_PROVIDED_FOR_COMMENTS' });
+      return;
+    }
+  }
+
+  const comments = await ProfileComment.find({
+    $or: [{ userId: req.user._id }, { accountId: req.user._id }],
+    created: { $lt: createdComment || Number.MAX_SAFE_INTEGER },
+  })
+    .sort({ created: -1 })
+    .limit(20)
+    .populate('userId', 'avatar city name created rating ratingRound stars type votes')
+    .populate('accountId', 'avatar city name created rating ratingRound stars type votes')
+    .lean();
+
+  res.status(200).json({ okay: comments || [] });
+});
+
+app.get('/api/comments/:id', async (req, res) => {
   const accountId = req.params.id;
   const comments = await ProfileComment.find({ accountId })
     .populate('userId', 'avatar city name created rating ratingRound stars type votes')
     .lean();
-  res.status(200).json({ okay: comments ?? [] });
+  res.status(200).json({ okay: comments || [] });
 });
 
-app.post('/api/comments/:id', async (req, res, next) => {
+app.post('/api/comments/:id', async (req, res) => {
   const accountId = req.params.id;
   if (!req.user) {
     res.status(200).json({ error: 'TOKEN_NOT_FOUND' });
@@ -624,7 +767,7 @@ app.post('/api/comments/:id', async (req, res, next) => {
   });
 });
 
-app.get('/api/ratings/:id', async (req, res, next) => {
+app.get('/api/ratings/:id', async (req, res) => {
   const accountId = req.params.id;
   const ratings = await AccountRating.find({ accountId })
     .populate('userId', 'avatar city name created rating ratingRound stars type votes')
@@ -675,7 +818,7 @@ app.post('/api/rateUser/:id', async (req, res, next) => {
       .catch(next);
   } else {
     const accountRating = new AccountRating({ userId: ratingUserId, accountId: ratedUserId, stars, created });
-    accountRating.save(async (err, doc) => {
+    accountRating.save(async (err) => {
       if (err) {
         res.status(200).json({ error: 'UNEXPECTED_ERROR' });
       } else {
@@ -846,7 +989,7 @@ app.post('/api/login', (req, res) => {
   });
 });
 
-app.get('/api/logout', (req, res) => {
+app.get('/api/logout', (_, res) => {
   res.clearCookie('token');
   res.status(200).json({ okay: 'LOGOUT_SUCCESSFUL' });
 });
@@ -866,31 +1009,59 @@ mongoose
     useFindAndModify: false,
   })
   .then(() => {
-    const sockets = {};
+    const removeSocket = (socketId, socket) => {
+      if (sockets[socketId]) {
+        sockets[socketId] = sockets[socketId].filter((s) => s.id !== socket.id);
+        if (!sockets[socketId].length) {
+          delete sockets[socketId];
+        }
+      }
+    };
 
     io.on('connection', (socket) => {
       let socketId;
       let foundUser;
-      let loadingMissed = false;
+      let blacklisted = false;
+      let attachedExtras = false;
 
       socket.on('subscribeSocket', async (id) => {
+        if (blacklisted) {
+          return;
+        }
+
         foundUser = foundUser || (await User.findOne({ socketId: id }));
         if (!foundUser) {
+          blacklisted = true;
+          removeSocket(socketId, socket);
           return;
         }
 
         socketId = id;
         sockets[socketId] = (sockets[socketId] || []).concat(socket);
-      });
 
-      socket.on('disconnect', () => {
-        if (sockets[socketId]) {
-          sockets[socketId] = sockets[socketId].filter((s) => s.id !== socket.id);
-          if (!sockets[socketId].length) {
-            delete sockets[socketId];
-          }
+        if (!attachedExtras) {
+          attachedExtras = true;
+          socket.on('multiuser', (extra) => {
+            if (blacklisted) {
+              return;
+            }
+
+            try {
+              if (sockets[socketId] && sockets[socketId].length > 1) {
+                const { channel, data } = JSON.parse(extra);
+                sockets[socketId]
+                  .filter((s) => s.id !== socket.id)
+                  .forEach((s) => s.emit(channel, JSON.stringify(data)));
+              }
+            } catch (ex) {
+              blacklisted = true;
+              removeSocket(socketId, socket);
+            }
+          });
         }
       });
+
+      socket.on('disconnect', () => removeSocket(socketId, socket));
     });
 
     Events.listen('emit', 'sockets', ({ id, channel, data }) =>

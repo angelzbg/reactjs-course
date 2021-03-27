@@ -3,9 +3,10 @@ import { StarFillIcon, StarIcon, LocationIcon } from '@primer/octicons-react';
 import { Link } from 'react-router-dom';
 import no_profile from '../../images/no_profile.png';
 import CardInfo from './CardInfo';
+import Moment from 'react-moment';
 
 export default observer(({ item, i }) => {
-  const { _id, name, avatar, rating, votes, ratingRound, time, city, isFriend, requestFrom, requestTo, type } = item;
+  const { _id, name, avatar, rating, votes, ratingRound, created, city, isFriend, requestFrom, requestTo, type } = item;
   return (
     <Link to={`/profile/${_id}`} className="search-user-card" style={{ marginLeft: i % 4 !== 0 ? 8 : 0 }}>
       <img className="avatar" src={avatar ? `/avatars/${avatar}` : no_profile} alt={`${name}'s avatar`} />
@@ -24,7 +25,9 @@ export default observer(({ item, i }) => {
       <div className="location">
         <LocationIcon size="small" /> {city}
       </div>
-      <div className="date">{time}</div>
+      <div className="date">
+        joined <Moment date={created} interval={60000} fromNow />
+      </div>
     </Link>
   );
 });

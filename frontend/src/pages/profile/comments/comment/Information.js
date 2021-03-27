@@ -1,10 +1,8 @@
 import { observer } from 'mobx-react';
-import { useStore } from '../../../../store/store';
-import { getTimeDifference } from '../../../../utils/utils';
 import { ArrowUpIcon, ArrowDownIcon } from '@primer/octicons-react';
+import Moment from 'react-moment';
 
 export default observer(({ user, profileId, commentId, likes, dislikes, syncing, action, created }) => {
-  const { time } = useStore();
   const liked = !!user && likes.indexOf(user._id) !== -1;
   const disliked = !!user && dislikes.indexOf(user._id) !== -1;
   return (
@@ -23,7 +21,7 @@ export default observer(({ user, profileId, commentId, likes, dislikes, syncing,
           <ArrowDownIcon size="small" /> {dislikes.length}
         </div>
       </div>{' '}
-      ‧ {getTimeDifference(created, time)}
+      ‧ <Moment date={created} interval={60000} fromNow />
     </div>
   );
 });

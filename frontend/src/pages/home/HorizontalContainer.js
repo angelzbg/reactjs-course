@@ -3,8 +3,12 @@ import { observer } from 'mobx-react';
 import { screwEvent } from '../../utils/utils';
 import UserCard from './UserCard';
 import ViewMoreCard from './ViewMoreCard';
+import { useStore } from '../../store/store';
 
-export default observer(({ title, data, link }) => {
+export default observer(({ title, prop, link }) => {
+  const { home } = useStore();
+  const data = home[prop];
+
   useEffect(() => {
     const container = document.getElementById(`container-${title}`);
     const onwheel = (event) => {
@@ -27,7 +31,7 @@ export default observer(({ title, data, link }) => {
         <div className="horizontal-container" id={`container-${title}`}>
           <div className="card-wrap">
             {data.map((item) => (
-              <UserCard key={`${title}-${item._id}`} {...{ title, item }} />
+              <UserCard key={item._id} {...{ item }} />
             ))}
             {data.length === 10 && <ViewMoreCard {...{ type: data[0].type, link }} />}
           </div>

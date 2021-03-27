@@ -14,6 +14,7 @@ export const loginFields = [
     errorMsg: 'Field is required',
     highlight: ['WRONG_CREDENTIALS'],
     icon: PersonIcon,
+    autoFocus: true,
   },
   {
     component: Input,
@@ -41,6 +42,7 @@ export const registerFields = [
     errorMsg: '3 to 14 alphanumeric characters',
     highlight: ['LOGON_TAKEN'],
     icon: PersonIcon,
+    autoFocus: true,
   },
   {
     component: Input,

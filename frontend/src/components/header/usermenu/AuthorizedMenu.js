@@ -10,7 +10,6 @@ import Notifications from '../notifications';
 
 export default observer(({ wrapperRef, toggle, setToggle, notifWrapRef }) => {
   const { user, auth } = useStore();
-
   return (
     <>
       <Notifications {...{ toggle, setToggle, notifWrapRef }} />

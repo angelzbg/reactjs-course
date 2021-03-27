@@ -118,6 +118,8 @@
   text-decoration: none;
   position: relative;
   margin-top: 9px;
+  -webkit-transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease;
 }
 
 .organizations-wrap .user-card:hover {

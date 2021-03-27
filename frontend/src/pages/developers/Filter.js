@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { observer } from 'mobx-react';
 import { useStore } from '../../store/store';
 import { ChevronRightIcon, ShieldXIcon } from '@primer/octicons-react';
@@ -9,9 +9,7 @@ export default observer(({ section }) => {
   const { user, developers } = store;
   const { filters, isValidFilter } = developers;
   const [filterPop, setFilterPop] = useState(false);
-
-  document.title = `${filters[section] || 'Developers'} - Webby`;
-
+  useEffect(() => (document.title = `${filters[section] || 'Organizations'} - Webby`), [filters, section]);
   return (
     <div className="developers-filter-wrapper">
       <div className="filter" onMouseEnter={() => setFilterPop(true)} onMouseLeave={() => setFilterPop(false)}>
@@ -20,12 +18,12 @@ export default observer(({ section }) => {
           <div className="filters-wrap">
             {Object.entries(filters)
               .filter(([f]) => f !== section)
-              .map(([f, n], i) => {
+              .map(([f, n]) => {
                 const isValid = isValidFilter(f, !!user);
                 return (
                   <Link
                     to={isValid ? `/developers/${f}` : '/login'}
-                    key={`f-o-${i}`}
+                    key={`f-o-${f}`}
                     className={`filter-option ${!isValid ? 'invalid' : ''}`}
                     onClick={() => setFilterPop(false)}
                   >

@@ -2,11 +2,11 @@ import { observer } from 'mobx-react';
 import { runInAction } from 'mobx';
 import { SearchIcon } from '@primer/octicons-react';
 
-export default observer(({ searchStore, nameVal, typeVal, cityVal, isValid, valueChange, history }) => (
+export default observer(({ searchStore, nameVal, typeVal, cityVal, isValid, valueChange: change, history }) => (
   <div className="search-box-wrapper">
-    <input className="search-input" value={nameVal} onChange={valueChange} placeholder="Name..." name="nameVal" />
-    <input className="search-input" value={cityVal} onChange={valueChange} placeholder="Location..." name="cityVal" />
-    <select value={typeVal} className="search-type" name="typeVal" onChange={valueChange}>
+    <input autoFocus className="search-input" value={nameVal} onChange={change} placeholder="Name..." name="nameVal" />
+    <input className="search-input" value={cityVal} onChange={change} placeholder="Location..." name="cityVal" />
+    <select value={typeVal} className="search-type" name="typeVal" onChange={change}>
       <option value="" disabled hidden>
         Search for...
       </option>

@@ -15,6 +15,7 @@
     height: 40px;
     border-radius: 50%;
     color: var(--lightest);
+    transition: background-color 0.3s ease;
     &:hover {
       background-color: var(--medium2);
     }
@@ -106,7 +107,7 @@
         color: var(--lightest);
         text-decoration: none;
         display: block;
-        //background-color: var(--medium);
+        transition: background-color 0.3s ease;
         &:hover {
           background-color: var(--medium);
         }
@@ -121,7 +122,7 @@
           display: inline-block;
           vertical-align: top;
           margin-bottom: 12px;
-          margin-top: 8px;
+          margin-top: 10px;
           position: relative;
           margin-left: 10px;
           margin-right: 10px;
@@ -129,10 +130,10 @@
           width: calc(100% - 90px);
           word-break: break-word;
           .friend-request-date {
-            font-size: 13px;
-            font-weight: bold;
             color: var(--light);
+            padding-top: 4px;
             &.new {
+              font-weight: bold;
               color: var(--link1);
             }
           }

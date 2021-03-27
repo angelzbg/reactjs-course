@@ -10,7 +10,6 @@ import Header from './Header';
 export default observer(({ toggle, setToggle, notifWrapRef }) => {
   const { time, profileStore, loadingRequests, loadRequests, notifications } = useStore();
   const { list, newCount } = notifications;
-
   return (
     <div className="notif-wrapper" id={wrappersIds.notifMenu} ref={notifWrapRef}>
       <Bell {...{ toggle, setToggle, newCount, profileStore }} />

@@ -40,6 +40,8 @@ export default observer(({ profile, isSelf, setSync, setEditField, editField, sy
         placeholder="City"
         value={value}
         onChange={(e) => setInput(e.target.value)}
+        autoFocus
+        onKeyDown={(e) => (e.key === 'Escape' ? setEditField(false) : null)}
       />
       {!syncing && (
         <>

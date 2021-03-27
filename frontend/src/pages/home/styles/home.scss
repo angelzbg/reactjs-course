@@ -1,32 +1,11 @@
 .home-filters-wrap {
   margin-top: 8px;
   margin-bottom: 12px;
-  .home-sync {
-    width: 32px;
-    height: 32px;
-    position: absolute;
-    top: 9px;
-    right: 4px;
-    cursor: pointer;
-    color: var(--link1);
-    &:hover {
-      color: var(--link2);
-    }
-    svg {
-      width: 30px;
-      height: 30px;
-    }
-    &.syncing {
-      svg {
-        animation: rotation-h-s 0.4s infinite linear;
-      }
-    }
-  }
   .home-filter {
     display: inline-block;
     background-color: var(--medium2);
     color: var(--lightest);
-    width: 200px;
+    width: 308px;
     height: 30px;
     line-height: 30px;
     padding: 0 8px;
@@ -39,7 +18,7 @@
       border: 1px solid var(--medium);
     }
     &:not(:first-child) {
-      margin-left: 5px;
+      margin-left: 4px;
     }
     &.inactive {
       background-color: var(--medium);
@@ -55,6 +34,18 @@
   max-width: 656px;
   position: relative;
   margin-top: 5px;
+
+  &:after {
+    content: '';
+    position: absolute;
+    top: 29px;
+    right: 0;
+    pointer-events: none;
+    background-image: linear-gradient(to right, rgba(255, 255, 255, 0), var(--darker) 90%);
+    width: 14px;
+    height: 240px;
+  }
+
   .wrapper-title {
     font-size: 20px;
     color: var(--light);
@@ -100,6 +91,7 @@
           cursor: pointer;
           text-decoration: none;
           position: relative;
+          transition: background-color 0.3s ease;
           &:hover {
             background-color: var(--medium);
           }
@@ -285,20 +277,5 @@
         }
       }
     }
-  }
-}
-
-@keyframes rotation-h-s {
-  0% {
-    transform: rotate(359deg);
-    color: var(--link2);
-  }
-  50% {
-    transform: rotate(180deg);
-    color: var(--link1);
-  }
-  100% {
-    transform: rotate(0deg);
-    color: var(--link2);
   }
 }

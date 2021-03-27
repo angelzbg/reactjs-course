@@ -101,6 +101,7 @@
     text-decoration: none;
     position: relative;
     margin-top: 9px;
+    transition: background-color 0.3s ease;
     &:hover {
       background-color: var(--medium);
     }

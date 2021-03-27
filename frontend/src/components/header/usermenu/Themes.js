@@ -6,7 +6,6 @@ import { toggles } from '../constants';
 
 export default observer(({ setToggle }) => {
   const { theme, themes, nextTheme } = useStore().themeStore;
-
   return (
     <div className="user-menu-pop">
       <div onMouseLeave={() => nextTheme(theme)}>

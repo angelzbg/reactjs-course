@@ -3,7 +3,7 @@ import { CheckIcon } from '@primer/octicons-react';
 import { toggles } from '../constants';
 import { Link } from 'react-router-dom';
 import no_profile from '../../../images/no_profile.png';
-import { getTimeDifference } from '../../../utils/utils';
+import Moment from 'react-moment';
 
 export default observer(({ item, setToggle, profileStore, time }) => {
   const user = item.users[0];
@@ -23,8 +23,10 @@ export default observer(({ item, setToggle, profileStore, time }) => {
         </div>
       </div>
       <div className="friend-request-text">
-        <b>You</b> and <b>{user.name}</b> are connected.
-        <div className={`friend-request-date ${item.new ? 'new' : ''}`}>{getTimeDifference(item.created, time)}</div>
+        <b>You</b> and <b>{user.name}</b> made a connection.
+        <div className={`friend-request-date ${item.new ? 'new' : ''}`}>
+          <Moment date={item.created} interval={60000} fromNow />
+        </div>
       </div>
     </Link>
   );

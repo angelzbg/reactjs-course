@@ -41,6 +41,8 @@
   border-radius: 20px;
   display: inline-block;
   vertical-align: top;
+  -webkit-transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease;
   color: var(--light);
 }
 
@@ -113,6 +115,8 @@
   display: block;
   text-decoration: none;
   position: relative;
+  -webkit-transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease;
 }
 
 .user-menu-pop .user-menu-item-me:hover {
@@ -178,6 +182,8 @@
   cursor: pointer;
   display: block;
   text-decoration: none;
+  -webkit-transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease;
 }
 
 .user-menu-pop .user-menu-item:hover {

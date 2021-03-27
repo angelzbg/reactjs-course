@@ -16,6 +16,8 @@
   height: 40px;
   border-radius: 50%;
   color: var(--lightest);
+  -webkit-transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease;
 }
 
 .notif-wrapper .bell:hover {
@@ -126,6 +128,8 @@
   color: var(--lightest);
   text-decoration: none;
   display: block;
+  -webkit-transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease;
   border-radius: 8px;
   margin-right: 3px;
 }
@@ -144,7 +148,7 @@
   display: inline-block;
   vertical-align: top;
   margin-bottom: 12px;
-  margin-top: 8px;
+  margin-top: 10px;
   position: relative;
   margin-left: 10px;
   margin-right: 10px;
@@ -153,12 +157,12 @@
 }
 
 .notif-wrapper .notif-container-wrap .notif-container .friend-request-wrap .friend-request-text .friend-request-date {
-  font-size: 13px;
-  font-weight: bold;
   color: var(--light);
+  padding-top: 4px;
 }
 
 .notif-wrapper .notif-container-wrap .notif-container .friend-request-wrap .friend-request-text .friend-request-date.new {
+  font-weight: bold;
   color: var(--link1);
 }
 

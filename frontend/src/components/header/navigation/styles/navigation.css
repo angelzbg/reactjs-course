@@ -22,6 +22,11 @@
   display: block;
 }
 
+.navigation-wrapper .nav-icon-link.inactive {
+  -webkit-transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease;
+}
+
 .navigation-wrapper .nav-icon-link.inactive:hover {
   border-radius: 8px;
   background-color: var(--medium);

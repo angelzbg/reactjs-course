@@ -5,7 +5,7 @@ import events from '../../utils/events';
 import OrganizationCard from './OrganizationCard';
 import Pagination from './Pagination';
 
-export default observer(({ section }) => {
+export default observer(() => {
   const { organizations } = useStore();
 
   useEffect(() => {
@@ -26,7 +26,7 @@ export default observer(({ section }) => {
     <>
       <div className="organizations-wrap">
         {organizations.items.map((item, i) => (
-          <OrganizationCard key={`org-${i}`} {...{ item, i, section }} />
+          <OrganizationCard key={`org-${i}`} {...{ item, i }} />
         ))}
       </div>
       <Pagination />

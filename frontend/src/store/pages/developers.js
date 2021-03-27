@@ -1,5 +1,5 @@
 import { makeAutoObservable, runInAction } from 'mobx';
-import { getTimeDifference, networkCall, notify } from '../../utils/utils';
+import { networkCall, notify } from '../../utils/utils';
 
 export default class DevelopersStore {
   constructor(root) {
@@ -30,6 +30,8 @@ export default class DevelopersStore {
       this.getData();
     } else if (!this.data.length) {
       this.getData();
+    } else if (this.canSync && !['top', 'top-local'].includes(this.filter)) {
+      this.getData(0, 12 /*len*/, false, true);
     }
   };
 
@@ -52,7 +54,6 @@ export default class DevelopersStore {
   };
 
   get items() {
-    const yearAgo = new Date().getTime() - 34712647200;
     return this.data.map((item) => {
       const [requestFrom, requestTo, isFriend] = [
         this.root.requestsFrom[item._id],
@@ -61,11 +62,6 @@ export default class DevelopersStore {
       ];
       return {
         ...item,
-        time: `joined ${
-          yearAgo < item.created
-            ? getTimeDifference(item.created, this.root.time)
-            : new Date(item.created).toLocaleString('en-GB', { timeZone: 'UTC' }).substring(0, 10)
-        }`,
         requestFrom,
         requestTo,
         isFriend,

@@ -7,9 +7,7 @@ export default observer(({ id, filter, setFilter, syncing, sync }) => {
     filterPop: false,
     toggleFilter: (open) => (observable.filterPop = open ?? !observable.filterPop),
   }));
-
   const { filterPop, toggleFilter } = observable;
-
   return (
     <div className="comments-filter-profile">
       <div className="comments-filter" onMouseEnter={() => toggleFilter()} onMouseLeave={() => toggleFilter()}>

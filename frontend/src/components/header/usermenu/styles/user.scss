@@ -38,6 +38,7 @@
     border-radius: 20px;
     display: inline-block;
     vertical-align: top;
+    transition: background-color 0.3s ease;
     &.logged {
       width: max-content;
     }
@@ -107,6 +108,7 @@
     display: block;
     text-decoration: none;
     position: relative;
+    transition: background-color 0.3s ease;
 
     &:hover {
       background-color: var(--medium);
@@ -171,6 +173,7 @@
     cursor: pointer;
     display: block;
     text-decoration: none;
+    transition: background-color 0.3s ease;
 
     &:hover {
       background-color: var(--medium);

@@ -1,4 +1,4 @@
-const Input = ({ className, value, name, type, placeholder, setInput }) => (
+const Input = ({ className, value, name, type, placeholder, setInput, autoFocus }) => (
   <input
     autoComplete="new-password"
     className={className}
@@ -7,6 +7,7 @@ const Input = ({ className, value, name, type, placeholder, setInput }) => (
     placeholder={placeholder}
     value={value}
     onChange={(e) => setInput(name, e.target.value)}
+    autoFocus={autoFocus || false}
   />
 );
 

@@ -23,6 +23,7 @@
   border-radius: 8px;
   border: 1px solid var(--medium);
   padding: 5px 8px 4px 8px;
+  width: 195px;
 }
 
 .search-box-wrapper .search-input:nth-child(2) {
@@ -40,6 +41,7 @@
   border: 1px solid var(--medium);
   margin-left: 4px;
   padding: 4px 8px;
+  width: 139px;
 }
 
 .search-box-wrapper .search-enter {
@@ -93,6 +95,8 @@
   text-decoration: none;
   position: relative;
   margin-bottom: 9px;
+  -webkit-transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease;
 }
 
 .search-user-card:hover {
@@ -280,5 +284,76 @@
   font-weight: bold;
   font-size: 14px;
   margin-top: 4px;
+}
+
+.activity-comments-paginate {
+  text-align: center;
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+
+.activity-comments-paginate .activity-comments-show {
+  display: inline-block;
+  width: -webkit-max-content;
+  width: -moz-max-content;
+  width: max-content;
+  cursor: pointer;
+  font-size: 16px;
+  color: var(--link1);
+}
+
+.activity-comments-paginate .activity-comments-show:hover {
+  color: var(--link2);
+}
+
+.activity-comments-paginating {
+  text-align: center;
+  margin-top: 8px;
+  margin-bottom: 8px;
+  height: 19px;
+}
+
+.activity-comments-paginating svg {
+  -webkit-animation: rotation-s-r-p 0.8s infinite linear;
+          animation: rotation-s-r-p 0.8s infinite linear;
+  width: 20px;
+  height: 20px;
+  color: var(--link1);
+}
+
+@-webkit-keyframes rotation-s-r-p {
+  0% {
+    -webkit-transform: rotate(359deg) scale(1);
+            transform: rotate(359deg) scale(1);
+    color: var(--link1);
+  }
+  50% {
+    -webkit-transform: rotate(180deg) scale(1.1);
+            transform: rotate(180deg) scale(1.1);
+    color: var(--link2);
+  }
+  100% {
+    -webkit-transform: rotate(0deg) scale(1);
+            transform: rotate(0deg) scale(1);
+    color: var(--link1);
+  }
+}
+
+@keyframes rotation-s-r-p {
+  0% {
+    -webkit-transform: rotate(359deg) scale(1);
+            transform: rotate(359deg) scale(1);
+    color: var(--link1);
+  }
+  50% {
+    -webkit-transform: rotate(180deg) scale(1.1);
+            transform: rotate(180deg) scale(1.1);
+    color: var(--link2);
+  }
+  100% {
+    -webkit-transform: rotate(0deg) scale(1);
+            transform: rotate(0deg) scale(1);
+    color: var(--link1);
+  }
 }
 /*# sourceMappingURL=search.css.map */

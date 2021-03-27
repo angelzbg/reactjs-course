@@ -3,35 +3,11 @@
   margin-bottom: 12px;
 }
 
-.home-filters-wrap .home-sync {
-  width: 32px;
-  height: 32px;
-  position: absolute;
-  top: 9px;
-  right: 4px;
-  cursor: pointer;
-  color: var(--link1);
-}
-
-.home-filters-wrap .home-sync:hover {
-  color: var(--link2);
-}
-
-.home-filters-wrap .home-sync svg {
-  width: 30px;
-  height: 30px;
-}
-
-.home-filters-wrap .home-sync.syncing svg {
-  -webkit-animation: rotation-h-s 0.4s infinite linear;
-          animation: rotation-h-s 0.4s infinite linear;
-}
-
 .home-filters-wrap .home-filter {
   display: inline-block;
   background-color: var(--medium2);
   color: var(--lightest);
-  width: 200px;
+  width: 308px;
   height: 30px;
   line-height: 30px;
   padding: 0 8px;
@@ -47,7 +23,7 @@
 }
 
 .home-filters-wrap .home-filter:not(:first-child) {
-  margin-left: 5px;
+  margin-left: 4px;
 }
 
 .home-filters-wrap .home-filter.inactive {
@@ -63,6 +39,18 @@
   max-width: 656px;
   position: relative;
   margin-top: 5px;
+}
+
+.horizontal-container-wrapper:after {
+  content: '';
+  position: absolute;
+  top: 29px;
+  right: 0;
+  pointer-events: none;
+  background-image: -webkit-gradient(linear, left top, right top, from(rgba(255, 255, 255, 0)), color-stop(90%, var(--darker)));
+  background-image: linear-gradient(to right, rgba(255, 255, 255, 0), var(--darker) 90%);
+  width: 14px;
+  height: 240px;
 }
 
 .horizontal-container-wrapper .wrapper-title {
@@ -108,6 +96,8 @@
   cursor: pointer;
   text-decoration: none;
   position: relative;
+  -webkit-transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease;
 }
 
 .horizontal-container-wrapper .container-wrap .horizontal-container .card-wrap .user-card:hover {
@@ -320,41 +310,5 @@
 
 .horizontal-container-wrapper .container-wrap .horizontal-container:hover::-webkit-scrollbar-thumb {
   background-color: var(--scroll1);
-}
-
-@-webkit-keyframes rotation-h-s {
-  0% {
-    -webkit-transform: rotate(359deg);
-            transform: rotate(359deg);
-    color: var(--link2);
-  }
-  50% {
-    -webkit-transform: rotate(180deg);
-            transform: rotate(180deg);
-    color: var(--link1);
-  }
-  100% {
-    -webkit-transform: rotate(0deg);
-            transform: rotate(0deg);
-    color: var(--link2);
-  }
-}
-
-@keyframes rotation-h-s {
-  0% {
-    -webkit-transform: rotate(359deg);
-            transform: rotate(359deg);
-    color: var(--link2);
-  }
-  50% {
-    -webkit-transform: rotate(180deg);
-            transform: rotate(180deg);
-    color: var(--link1);
-  }
-  100% {
-    -webkit-transform: rotate(0deg);
-            transform: rotate(0deg);
-    color: var(--link2);
-  }
 }
 /*# sourceMappingURL=home.css.map */

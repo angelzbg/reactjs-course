@@ -1,14 +1,12 @@
 import { Fragment } from 'react';
-import { useStore } from '../../../store/store';
 import { observer, useLocalObservable } from 'mobx-react';
 import { StarFillIcon, StarIcon } from '@primer/octicons-react';
 import { ratingFilter } from '../constants';
-import { getTimeDifference } from '../../../utils/utils';
 import no_profile from '../../../images/no_profile.png';
 import ProfilePop from './ProfilePop';
+import Moment from 'react-moment';
 
 export default observer(({ ratings, filter }) => {
-  const { time } = useStore();
   const observable = useLocalObservable(() => ({
     profilePop: '',
     toggleProfile: (id) => (observable.profilePop = id ?? ''),
@@ -34,7 +32,9 @@ export default observer(({ ratings, filter }) => {
                   <span key={`star-p-${_id}-${i}`}>{(i < stars ? StarFillIcon : StarIcon)({ size: 'small' })}</span>
                 ))}
               </div>
-              <div className="when">{getTimeDifference(created, time)}</div>
+              <div className="when">
+                <Moment date={created} interval={60000} fromNow />
+              </div>
               {profilePop === user._id && <ProfilePop {...{ user, toggleProfile }} />}
             </div>
             {i !== ratings.length - 1 && <div className="border" />}

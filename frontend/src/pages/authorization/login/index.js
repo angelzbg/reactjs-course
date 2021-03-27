@@ -6,10 +6,12 @@ import { loginFields } from '../constants';
 import { FieldsObservable } from '../../../utils/utils';
 import FormField from '../../../components/elements/FormField';
 import { networkCodes } from '../../../utils/constants';
+import { useEffect } from 'react';
 
 export default observer(() => {
   const { user, auth } = useStore();
   const fieldsObs = FieldsObservable(loginFields);
+  useEffect(() => (document.title = `Sign In - Webby`), []);
 
   const onSubmit = async (event) => {
     event.preventDefault();
@@ -20,8 +22,6 @@ export default observer(() => {
       }
     }
   };
-
-  document.title = 'Sign In - Webby';
 
   if (user) {
     return <Redirect to="/" />;
