@@ -45,7 +45,7 @@
   display: inline-block;
   width: 280px;
   background-color: var(--dark);
-  border-radius: 6px;
+  border-radius: 10px;
   height: 331px;
   margin-right: 10px;
   -webkit-box-shadow: 0 1px 4px var(--shadow1), 0 0 40px var(--shadow2);
