@@ -23,7 +23,8 @@ export default class ProfileStore {
     runInAction(() => {
       this.profile = response.okay ?? null;
       this.loadingProfile = false;
-      const isFriend = !!this.root.user && this.root.friendsIds.includes(this.profile._id);
+
+      const isFriend = !!this.root.user && this.root.friendsIds.includes(this.profile?._id);
       if (isFriend) {
         let index;
         const found = this.root.friends.find(
@@ -32,6 +33,26 @@ export default class ProfileStore {
         if (found) {
           Object.assign(found.users[index], this.profile);
         }
+      }
+
+      const foundDev = this.root.developers.data.find(({ _id }) => _id === this.profile?._id);
+      if (foundDev) {
+        Object.assign(foundDev, this.profile);
+      }
+
+      const foundOrg = this.root.organizations.data.find(({ _id }) => _id === this.profile?._id);
+      if (foundOrg) {
+        Object.assign(foundOrg, this.profile);
+      }
+
+      const foundSearch = this.root.searchStore.results.find(({ _id }) => _id === this.profile?._id);
+      if (foundSearch) {
+        Object.assign(foundSearch, this.profile);
+      }
+
+      const foundRequest = this.root.requests.find(({ sender: { _id } }) => _id === this.profile?._id);
+      if (foundRequest) {
+        Object.assign(foundRequest.sender, this.profile);
       }
     });
 
