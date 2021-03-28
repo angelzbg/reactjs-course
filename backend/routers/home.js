@@ -13,12 +13,12 @@ router.get('/api/home', async (req, res) => {
     User.find({ type: 'Developer' }, selected, {
       skip: 0,
       limit: 10,
-      sort: { rating: -1 },
+      sort: { rating: -1, votes: -1 },
     }),
     User.find({ type: 'Organization' }, selected, {
       skip: 0,
       limit: 10,
-      sort: { rating: -1 },
+      sort: { rating: -1, votes: -1 },
     }),
     User.find({ type: 'Developer' }, selected, {
       skip: 0,
@@ -35,12 +35,12 @@ router.get('/api/home', async (req, res) => {
           User.find({ type: 'Developer', city: { $regex: city, $options: 'i' } }, selected, {
             skip: 0,
             limit: 10,
-            sort: { rating: -1 },
+            sort: { rating: -1, votes: -1 },
           }),
           User.find({ type: 'Organization', city: { $regex: city, $options: 'i' } }, selected, {
             skip: 0,
             limit: 10,
-            sort: { rating: -1 },
+            sort: { rating: -1, votes: -1 },
           }),
           User.find({ type: 'Developer', city: { $regex: city, $options: 'i' } }, selected, {
             skip: 0,

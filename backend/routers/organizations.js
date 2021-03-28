@@ -48,9 +48,9 @@ router.post('/api/organizations', async (req, res) => {
 
   const sorts = {
     new: { created: -1 },
-    top: { rating: -1 },
+    top: { rating: -1, votes: -1 },
     'new-local': { created: -1 },
-    'top-local': { rating: -1 },
+    'top-local': { rating: -1, votes: -1 },
   };
 
   const selected = ['avatar', 'city', 'name', 'created', 'rating', 'ratingRound', 'stars', 'type', 'votes'];
