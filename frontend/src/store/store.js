@@ -63,9 +63,11 @@ class Store {
   };
 
   get activeChats() {
-    return this.activeChatIds
-      .map((id) => this.friends.find(({ _id }) => _id === id))
-      .map((friend) => ({ ...friend, chatUser: friend.users.find(({ _id }) => _id !== this.user._id) }));
+    return this.user
+      ? this.activeChatIds
+          .map((id) => this.friends.find(({ _id }) => _id === id))
+          .map((friend) => ({ ...friend, chatUser: friend.users.find(({ _id }) => _id !== this.user._id) }))
+      : [];
   }
 
   sendMessage = async (chatId = '', content = '') => {
