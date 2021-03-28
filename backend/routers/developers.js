@@ -58,7 +58,7 @@ router.post('/api/developers', async (req, res) => {
   const result = await User.find(
     {
       type: 'Developer',
-      ...(city && authFilters.includes(filter) ? { city } : {}),
+      ...(city && authFilters.includes(filter) ? { city: { $regex: city, $options: 'i' } } : {}),
       ...(['new', 'new-local'].includes(filter)
         ? {
             created: {

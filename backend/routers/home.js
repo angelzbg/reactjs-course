@@ -32,22 +32,22 @@ router.get('/api/home', async (req, res) => {
     }),
     ...(city
       ? [
-          User.find({ type: 'Developer', city }, selected, {
+          User.find({ type: 'Developer', city: { $regex: city, $options: 'i' } }, selected, {
             skip: 0,
             limit: 10,
             sort: { rating: -1 },
           }),
-          User.find({ type: 'Organization', city }, selected, {
+          User.find({ type: 'Organization', city: { $regex: city, $options: 'i' } }, selected, {
             skip: 0,
             limit: 10,
             sort: { rating: -1 },
           }),
-          User.find({ type: 'Developer', city }, selected, {
+          User.find({ type: 'Developer', city: { $regex: city, $options: 'i' } }, selected, {
             skip: 0,
             limit: 10,
             sort: { created: -1 },
           }),
-          User.find({ type: 'Organization', city }, selected, {
+          User.find({ type: 'Organization', city: { $regex: city, $options: 'i' } }, selected, {
             skip: 0,
             limit: 10,
             sort: { created: -1 },

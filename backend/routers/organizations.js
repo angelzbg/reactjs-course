@@ -58,7 +58,7 @@ router.post('/api/organizations', async (req, res) => {
   const result = await User.find(
     {
       type: 'Organization',
-      ...(city && authFilters.includes(filter) ? { city } : {}),
+      ...(city && authFilters.includes(filter) ? { city: { $regex: city, $options: 'i' } } : {}),
       ...(['new', 'new-local'].includes(filter)
         ? {
             created: {
