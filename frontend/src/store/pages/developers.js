@@ -94,7 +94,9 @@ export default class DevelopersStore {
     } else {
       runInAction(() => {
         this.data = isLoad ? response.okay : isSync ? response.okay.concat(this.data) : this.data.concat(response.okay);
-        this.allowPaginate = response.okay.length === limit;
+        if (isLoad || (!isLoad && !isSync)) {
+          this.allowPaginate = response.okay.length === limit;
+        }
       });
     }
 
