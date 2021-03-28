@@ -50,7 +50,7 @@ export default class AuthStore {
         this.root.requests = [];
         this.root.activityStore.comments = [];
         this.root.chats = {};
-        this.root.activeChatId = null;
+        this.root.activeChatIds = [];
         this.root.isLoading = false;
       });
     }
