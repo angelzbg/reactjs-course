@@ -1,7 +1,7 @@
 # ReactJS - Mar 2021
 
 # Webby - live demo: [webby-app.herokuapp.com](https://webby-app.herokuapp.com/#/)
-Webby allows developers and organizations to connected, comment, rate and even private chat with each other.<br/>
+Webby allows developers and organizations to connect, comment, rate and even private chat with each other.<br/>
 In Webby people can register one of the following type of profiles:
 * Developer
 * Organization
