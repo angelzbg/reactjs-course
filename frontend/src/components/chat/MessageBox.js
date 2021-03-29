@@ -26,7 +26,7 @@ export default observer((props) => {
             contentEditable={!isSending}
             onInput={({ target: { textContent } }) => {
               setContent(textContent);
-              setTimeout(() => Events.trigger('scroll-to-bottom-chat', chatId), 20);
+              setTimeout(() => Events.trigger('scroll-to-bottom-chat', { chatId }), 20);
             }}
             onKeyDownCapture={(e) => {
               (() =>
@@ -46,7 +46,7 @@ export default observer((props) => {
               e.target.focus();
               document.execCommand('selectAll', false, null);
               document.getSelection().collapseToEnd();
-              setTimeout(() => Events.trigger('scroll-to-bottom-chat', chatId), 20);
+              setTimeout(() => Events.trigger('scroll-to-bottom-chat', { chatId }), 20);
             }}
           />
         </div>

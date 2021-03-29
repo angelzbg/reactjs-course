@@ -10,14 +10,14 @@ export default observer(() => {
   const { activeChats } = store;
 
   useEffect(() => {
-    Events.listen('scroll-to-bottom-chat', 'chat-listener', (chatId) => {
+    Events.listen('scroll-to-bottom-chat', 'chat-listener', ({ chatId, initial }) => {
       const container = document.getElementById(chatId);
-      if (container && container.scrollHeight !== container.scrollTop) {
+      if (container && (initial || container.scrollHeight !== container.scrollTop)) {
         container.scrollTop = container.scrollHeight;
       }
     });
 
-    Events.listen('scroll-top-chat', 'chat-listener', (chatId) => {
+    Events.listen('scroll-top-chat', 'chat-listener', ({ chatId }) => {
       const container = document.getElementById(chatId);
       if (container) {
         container.scrollTo({ top: 20, behavior: 'smooth' });

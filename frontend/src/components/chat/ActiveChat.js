@@ -28,7 +28,7 @@ export default observer(({ activeChat, idx }) => {
     }
 
     if (!loadingChats) {
-      Events.trigger('scroll-to-bottom-chat', chatId);
+      Events.trigger('scroll-to-bottom-chat', { chatId });
     }
   }, [store, activeChat, chatId, loadingChats]);
 

@@ -21,7 +21,7 @@ const useChatObservable = (store, messageRef) => {
         }
       }
       runInAction(() => (observable.isSending = false));
-      Events.trigger('scroll-to-bottom-chat', chatId);
+      Events.trigger('scroll-to-bottom-chat', { chatId });
       Events.trigger('focus-chat', chatId);
     },
     isSending: false,

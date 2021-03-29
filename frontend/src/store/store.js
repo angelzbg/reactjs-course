@@ -104,12 +104,14 @@ class Store {
           this.chats[chatId] = response.okay.concat(this.chats[chatId]);
           if (response.okay.length < 10) {
             this.cantLoadChatsIds[chatId] = true;
-          } else {
-            setTimeout(() => Events.trigger(initial ? 'scroll-to-bottom-chat' : 'scroll-top-chat', chatId), 100);
           }
         } else {
           this.cantLoadChatsIds[chatId] = true;
         }
+        setTimeout(
+          () => Events.trigger(initial ? 'scroll-to-bottom-chat' : 'scroll-top-chat', { chatId, initial }),
+          100
+        );
       });
     } else {
       notify(response);
@@ -185,7 +187,7 @@ class Store {
             this.chatHighlights[message.chatId] = true;
           }
         });
-        setTimeout(() => Events.trigger('scroll-to-bottom-chat', message.chatId), 20);
+        setTimeout(() => Events.trigger('scroll-to-bottom-chat', { chatId: message.chatId }), 20);
       });
 
       this.socket.on('connect', () => {
