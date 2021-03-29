@@ -21,6 +21,14 @@ Authorized visitors have access to filters by location in home page, developers 
 ![MERN](https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/MERN-logo.png/320px-MERN-logo.png "Mongo DB, Express JS, React JS, Node JS")
 ![CLOUDINARY](https://res.cloudinary.com/dx3uz8xbb/image/upload/v1617029995/output-onlinepngtools_2_rqaqbc.png "Cloudinary")
 ![SOCKETIO](https://res.cloudinary.com/dx3uz8xbb/image/upload/v1617030145/output-onlinepngtools_3_j6tecy.png "Socket.io")
+<br/>
+<img src="https://res.cloudinary.com/dx3uz8xbb/image/upload/v1617032507/iteachrecruiters-mern-stack-diagram_ixq6qs.png" style="width: 100%;" alt="Architecture"/>
+<br/>
+* Error handling and data validation :heavy_check_mark:
+* Good UI and UX ?
+* Use a state management solution (MobX) :heavy_check_mark:
+* Use a file storage cloud API (Cloudinary) :heavy_check_mark:
+
 
 ## Preview:
 
