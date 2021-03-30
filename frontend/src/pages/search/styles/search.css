@@ -7,10 +7,8 @@
           animation: opacity-keyframe 0.5s ease-out;
   padding: 10px;
   width: 636px;
-  position: -webkit-sticky;
-  position: sticky;
-  top: 8px;
-  margin-bottom: 16px;
+  margin-top: 8px;
+  margin-bottom: 8px;
 }
 
 .search-box-wrapper .search-input {
