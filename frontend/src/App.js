@@ -1,5 +1,5 @@
 import './styles/app.css';
-import { HashRouter, Route, Switch } from 'react-router-dom';
+import { HashRouter, Redirect, Route, Switch } from 'react-router-dom';
 import AppLoader from './components/loaders/AppLoader';
 import Notifications from './components/notifications';
 import Header from './components/header';
@@ -31,6 +31,7 @@ const App = () => (
           <Route path="/organizations/:section?" component={Organizations} />
           <Route path="/search" component={Search} />
           <Route path="/activity/:section?" component={Activity} />
+          <Redirect to="/" />
         </Switch>
       </div>
       <Notifications />
