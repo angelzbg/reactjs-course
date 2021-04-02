@@ -1,6 +1,6 @@
 # ReactJS - Mar 2021
 
-# Webby - live demo: [webby-app.herokuapp.com](https://webby-app.herokuapp.com/#/)
+# Webby - live demo: [webby-app.herokuapp.com](https://webby-app.herokuapp.com)
 Webby allows developers and organizations to connect, comment, rate and even private chat with each other.<br/>
 In Webby people can register one of the following type of profiles:
 * Developer
@@ -33,3 +33,10 @@ Authorized visitors have access to filters by location in home page, developers 
 ## Preview:
 
 <img src="https://res.cloudinary.com/dx3uz8xbb/image/upload/v1617030529/%D0%97%D0%B0%D1%81%D0%BD%D0%B5%D0%BC%D0%B0%D0%BD%D0%B5_otcy80.png" style="width: 100%;" alt=""/>
+
+## How to run in local environment:
+* install MongoDB from here [https://www.mongodb.com/try/download/community](https://www.mongodb.com/try/download/community)
+* natigate to backend/ -> `npm i` -> `npm run start`
+* navigate to frontend/ -> `npm i` -> `npm run start`
+* Open [http://localhost](http://localhost) to view it in the browser.
+# Live demo with MongoDB Atlas and Cloudinary on Heroku: [webby-app.herokuapp.com](https://webby-app.herokuapp.com)
