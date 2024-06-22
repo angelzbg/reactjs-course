@@ -39,4 +39,4 @@ Authorized visitors have access to filters by location in home page, developers 
 * natigate to backend/ -> `npm i` -> `npm run start`
 * navigate to frontend/ -> `npm i` -> `npm run start`
 * Open [http://localhost](http://localhost) to view it in the browser.
-# Live demo with MongoDB Atlas and Cloudinary on Heroku: [webby-app.herokuapp.com](https://webby-app.herokuapp.com)
+# Live demo with MongoDB Atlas and Cloudinary on Heroku: [reactjs-course-private.onrender.com/](https://reactjs-course-private.onrender.com/)
